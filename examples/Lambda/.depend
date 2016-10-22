@@ -1,0 +1,6 @@
+Lambda_inf.vo Lambda_inf.glob Lambda_inf.v.beautified: Lambda_inf.v
+Lambda_inf.vio: Lambda_inf.v
+Lambda_ott.vo Lambda_ott.glob Lambda_ott.v.beautified: Lambda_ott.v
+Lambda_ott.vio: Lambda_ott.v
+Lambda_proofs.vo Lambda_proofs.glob Lambda_proofs.v.beautified: Lambda_proofs.v
+Lambda_proofs.vio: Lambda_proofs.v

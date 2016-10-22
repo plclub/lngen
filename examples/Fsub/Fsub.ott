@@ -1,0 +1,264 @@
+metavar typvar, X, Y, Z ::= {{ repr-locally-nameless }}
+metavar expvar, x, y, z ::= {{ repr-locally-nameless }}
+
+grammar
+
+typ, T, S, U :: typ_ ::=
+  | top            ::   :: top
+  | X              ::   :: var
+  | T1 -> T2       ::   :: arrow
+  | \ X <: T1 . T2 ::   :: all  (+ bind X in T2 +)
+  | T1 + T2        ::   :: sum
+  | ( T )          :: S :: paren {{ coq ([[e]]) }}
+  | { T2 / X } T1  :: M :: subst {{ coq (open_typ_wrt_typ [[X T1]] [[T2]]) }}
+
+exp, e, f, g :: exp_ ::=
+  | x                                   ::   :: var
+  | \ x : T . e                         ::   :: abs  (+ bind x in e +)
+  | e1 e2                               ::   :: app
+  | \ X <: T . e                        ::   :: tabs (+ bind X in e +)
+  | e [ T ]                             ::   :: tapp
+  | let x = e1 in e2                    ::   :: let (+ bind x in e2 +)
+  | inl e                               ::   :: inl
+  | inr e                               ::   :: inr
+  | case e of inl x -> e2 | inr y -> e3 ::   :: case (+ bind x in e2 +) (+ bind y in e3 +)
+  | ( e )                               :: S :: paren  {{ coq ([[e]]) }}
+  | { e2 / x } e1                       :: M :: subst1 {{ coq (open_exp_wrt_exp [[x e1]] [[e2]]) }}
+  | { T2 / X } e1                       :: M :: subst2 {{ coq (open_exp_wrt_typ [[X e1]] [[T2]]) }}
+
+binding, b :: bind_ ::=
+  | <: T ::   :: sub
+  | : T  ::   :: typ
+
+substitutions
+  single T X :: subst_typ_in
+  single e x :: subst_exp_in
+
+freevars
+  T X :: fv_typ_in
+  e x :: fv_exp_in
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+grammar
+
+env, E, F, G:: '' ::= {{ coq list (atom*binding) }}
+  | empty   ::   :: empty {{ coq nil }}
+  | E , x b ::   :: cons1 {{ coq ([[x]]~[[b]] ++ [[E]]) }}
+  | E , X b ::   :: cons2 {{ coq ([[X]]~[[b]] ++ [[E]]) }}
+
+value, v :: value_ ::=
+  | \ x : T . e  ::   :: abs  (+ bind x in e +)
+  | \ X <: T . e ::   :: tabs (+ bind X in e +)
+  | inl v        ::   :: inl
+  | inr v        ::   :: inr
+
+formula :: formula_ ::=
+  | judgement       ::   :: judgement
+  | ( x b ) in E    ::   :: binds1 {{ coq binds ([[x]]) ([[b]]) ([[E]]) }}
+  | ( X b ) in E    ::   :: binds2 {{ coq binds ([[X]]) ([[b]]) ([[E]]) }}
+  | uniq E          ::   :: uniq   {{ coq uniq ([[E]]) }}
+  | x `notin` dom E ::   :: fresh1 {{ coq ([[x]] `notin` dom ([[E]])) }}
+  | X `notin` dom E ::   :: fresh2 {{ coq ([[X]] `notin` dom ([[E]])) }}
+
+subrules
+  v <:: e
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+defns
+Jwf_typ :: '' ::=
+
+defn
+E |- T :: :: wf_typ :: 'wf_typ_' by
+
+--------- :: top
+E |- top
+
+(X <: U) in E
+-------------- :: var
+E |- X
+
+E |- T1
+E |- T2
+-------------- :: arrow
+E |- T1 -> T2
+
+E |- T1
+E, X <: T1 |- T2
+-------------------- :: all
+E |- \ X <: T1 . T2
+
+E |- T1
+E |- T2
+------------- :: sum
+E |- T1 + T2
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+defns
+Jwf_env :: '' ::=
+
+defn
+|- E :: :: wf_env :: 'wf_env_' by
+
+--------- :: empty
+|- empty
+
+|- E
+E |- T
+X `notin` dom E
+---------------- :: sub
+|- E , X <: T
+
+|- E
+E |- T
+x `notin` dom E
+---------------- :: typ
+|- E , x : T
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+defns
+Jsub :: '' ::=
+
+defn
+E |- T1 <: T2 :: :: sub :: 'sub_' by
+
+|- E
+E |- S
+-------------- :: top
+E |- S <: top
+
+|- E
+E |- X
+------------ :: refl_tvar
+E |- X <: X
+
+(X <: U) in E
+E |- U <: T
+-------------- :: trans_tvar
+E |- X <: T
+
+E |- T1 <: S1
+E |- S2 <: T2
+-------------------------- :: arrow
+E |- S1 -> S2 <: T1 -> T2
+
+E |- T1 <: S1
+E, X <: T1 |- S2 <: T2
+---------------------------- :: all
+E |- \X<:S1.S2 <: \X<:T1.T2
+
+E |- S1 <: T1
+E |- S2 <: T2
+------------------------ :: sum
+E |- S1 + S2 <: T1 + T2
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+defns
+Jtyping :: '' ::=
+
+defn
+E |- e : T :: :: typing :: 'typing_' by
+
+|- E
+(x:T) in E
+----------- :: var
+E |- x : T
+
+E, x : T1 |- e : T2
+--------------------------- :: abs
+E |- \x : T1. e : T1 -> T2
+
+E |- e1 : T1 -> T2
+E |- e2 : T1
+--------------------- :: app
+E |- e1 e2 : T2
+
+E, X <: T1 |- e : T2
+-------------------------- :: tabs
+E |- \X<:T1.e : \X<:T1.T2
+
+E |- e1 : \X<:T1.T2
+E |- T <: T1
+--------------------------- :: tapp
+E |- e1 [ T ] : {T / X} T2
+
+E |- e : S
+E |- S <: T
+------------ :: sub
+E |- e : T
+
+E |- e1 : T1
+E, x : T1 |- e2 : T2
+--------------------------- :: let
+E |- let x = e1 in e2 : T2
+
+E |- e1 : T1
+E |- T2
+---------------------- :: inl
+E |- inl e1 : T1 + T2
+
+E |- e1 : T2
+E |- T1
+---------------------- :: inr
+E |- inr e1 : T1 + T2
+
+E |- e1 : T1 + T2
+E, x : T1 |- e2 : T
+E, y : T2 |- e3 : T
+---------------------------------------------- :: case
+E |- case e1 of inl x -> e2 | inr y -> e3 : T
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+defns
+Jop :: '' ::=
+
+defn
+e1 --> e2 :: :: red :: 'red_' by
+
+e1 --> e1'
+----------------- :: app_1
+e1 e2 --> e1' e2
+
+e2 --> e2'
+----------------- :: app_2
+v1 e2 --> v1 e2'
+
+e1 --> e1'
+----------------------- :: tapp_1
+e1 [ T ] --> e1' [ T ]
+
+------------------------------- :: abs
+(\x:T. e1) v2  --> {v2 / x} e1
+
+------------------------------------ :: tabs
+(\X<:T1. e1) [ T2 ] --> {T2 / X} e1
+
+e1 --> e1'
+--------------------------------------- :: let_1
+let x = e1 in e2 --> let x = e1' in e2
+
+--------------------------------- :: let
+let x = v1 in e2 --> {v1 / x} e2
+
+e1 --> e1'
+------------------- :: inl_1
+inl e1 --> inl e1'
+
+e1 --> e1'
+------------------- :: inr_1
+inr e1 --> inr e1'
+
+e1 --> e1'
+------------------------------------------------------------------------------- :: case_1
+case e1 of inl x -> e2 | inr y -> e3 --> case e1' of inl x -> e2 | inr y -> e3
+
+--------------------------------------------------------- :: case_inl
+case inl v1 of inl x -> e2 | inr y -> e3 --> {v1 / x} e2
+
+--------------------------------------------------------- :: case_inr
+case inr v1 of inl x -> e2 | inr y -> e3 --> {v1 / y} e3

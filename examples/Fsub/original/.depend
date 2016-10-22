@@ -1,0 +1,4 @@
+Fsub_Definitions.vo: Fsub_Definitions.v metatheory/Metatheory.vo
+Fsub_Infrastructure.vo: Fsub_Infrastructure.v Fsub_Definitions.vo
+Fsub_Lemmas.vo: Fsub_Lemmas.v Fsub_Infrastructure.vo
+Fsub_Soundness.vo: Fsub_Soundness.v Fsub_Lemmas.vo

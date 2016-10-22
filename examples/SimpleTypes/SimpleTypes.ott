@@ -1,0 +1,82 @@
+metavar expvar, x, y, z ::= {{ repr-locally-nameless }}
+
+grammar
+
+typ, T, S :: '' ::=
+  | base     ::   :: base
+  | T1 -> T2 ::   :: arrow
+
+exp, e, f, g :: '' ::=
+  | x             ::   :: var
+  | \ x : T . e   ::   :: abs (+ bind x in e +)
+  | e1 e2         ::   :: app
+  | ( e )         :: S :: paren {{ coq ([[e]]) }}
+  | { e2 / x } e1 :: M :: subst {{ coq (open_exp_wrt_exp [[x e1]] [[e2]]) }}
+
+substitutions
+  single e x :: subst
+
+freevars
+  e x :: fv
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+grammar
+
+typing_env, G, F, E :: '' ::= {{ coq list (atom*typ) }}
+  | empty     ::   :: empty {{ coq nil }}
+  | G , x : T ::   :: cons  {{ coq ([[x]]~[[T]] ++ [[G]]) }}
+
+value, v :: value_ ::=
+  | \ x : T . e :: :: abs (+ bind x in e +)
+
+formula :: formula_ ::=
+  | judgement      ::   :: judgement
+  | ( x : T ) in G ::   :: binds {{ coq binds ([[x]]) ([[T]]) ([[G]]) }}
+  | uniq G         ::   :: uniq  {{ coq uniq ([[G]]) }}
+
+subrules
+  v <:: e
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+defns
+Jtyping :: '' ::=
+
+defn
+G |- e : T
+:: :: typing :: typing_ by
+
+(x:T) in G
+uniq G
+----------- :: var
+G |- x : T
+
+G, x : T1 |- e : T2
+------------------------ :: abs
+G |- \x:T1.e : T1 -> T2
+
+G |- e1 : T1 -> T2
+G |- e2 : T1
+------------------- :: app
+G |- e1 e2 : T2
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+defns
+Jop :: '' ::=
+
+defn
+e1 --> e2
+:: :: step :: step_ by
+
+e1 --> e1'
+----------------- :: app_1
+e1 e2 --> e1' e2
+
+e2 --> e2'
+----------------- :: app_2
+v1 e2 --> v1 e2'
+
+----------------------------- :: beta
+(\x:T.e1) v2 --> {v2 / x} e1

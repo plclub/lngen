@@ -1,0 +1,6 @@
+Fsub_inf.vo Fsub_inf.glob Fsub_inf.v.beautified: Fsub_inf.v
+Fsub_inf.vio: Fsub_inf.v
+Fsub_ott.vo Fsub_ott.glob Fsub_ott.v.beautified: Fsub_ott.v
+Fsub_ott.vio: Fsub_ott.v
+Fsub_proofs.vo Fsub_proofs.glob Fsub_proofs.v.beautified: Fsub_proofs.v
+Fsub_proofs.vio: Fsub_proofs.v

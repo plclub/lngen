@@ -1,0 +1,45 @@
+metavar expvar, x, y, z ::= {{ repr-locally-nameless }}
+
+grammar
+
+exp, e, f, g :: '' ::=
+  | x             ::   :: var
+  | e1 e2         ::   :: app
+  | \ x . e       ::   :: abs (+ bind x in e +)
+  | ( e )         :: S :: paren {{ coq ([[e]]) }}
+  | { e2 / x } e1 :: M :: subst {{ coq (open_exp_wrt_exp [[x e1]] [[e2]]) }}
+
+substitutions
+  single e x :: subst
+
+freevars
+  e x :: fv
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+grammar
+
+value, v :: 'value_' ::=
+  | \ x . e :: :: abs (+ bind x in e +)
+
+subrules
+  v <:: e
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+defns
+Jop :: '' ::=
+
+defn
+e1 --> e2 :: :: reduce :: 'red_' by
+
+--------------------------- :: beta
+(\x.e1) e2  --> {e2 / x} e1
+
+e1 --> e1'
+--------------------------- :: app_fun
+e1 e2 --> e1' e2
+
+e2 --> e2'
+--------------------------- :: app_arg
+v1 e2 --> v1 e2'

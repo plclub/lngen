@@ -1,0 +1,21 @@
+- ASTCheck can always do more sanity checks.
+    * Constructor name collisions.
+    * SubstFun and FvFun validity.
+    * More?
+
+- Lemma names are too long!
+    * Maybe something like [subst_intro_...] would be better.
+    * Maybe they should not be so dependent on function and predicate names?
+
+- Need (or should have) the following combinations of lemmas:
+    * {open, close, subst} x
+    * {`in`, `notin`} x
+    * {conclusion has open/close/subst, premise has open/close/subst},
+      a.k.a., {normal, inv}
+
+- Missing lemmas or ones that need to be moved (probably an incomplete list):
+    * subst_degree_inv
+    * subst_fresh_same (inv version, too? should be in the Fv file?)
+    * subst_fresh (inv version, too? should be in the Fv file?)
+    * subst_lc (should be in the Lc file?)
+-
