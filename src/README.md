@@ -52,3 +52,10 @@ The   `Main`   module  ties   everything   together.    The  `AST`   and
       |
       v
     [final output]
+
+Dependencies
+============
+- [Parsec](https://hackage.haskell.org/package/parsec)
+- [SYB](http://hackage.haskell.org/package/syb)
+
+You can fulfill the dependencies with `cabal install parsec syb`.
