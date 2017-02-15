@@ -437,7 +437,7 @@ destructNotin = "destruct_notin"
    applicable hypothesis. -}
 
 eapplyFirst :: String
-eapplyFirst = "eapply_first_hyp"
+eapplyFirst = "eapply_first_lt_hyp"
 
 {- | The general purpose tactic for solving goals about finite sets. -}
 
