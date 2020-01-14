@@ -1,6 +1,7 @@
-Add LoadPath "metatheory".
+
 Require Export Coq.Program.Equality.
 Require Export SimpleTypes_inf.
+Require Import String.
 
 Ltac gather_atoms ::=
   let A := gather_atoms_with (fun x : vars => x) in
@@ -18,7 +19,7 @@ Lemma typing_regular_1 : forall G e T,
   lc_exp e.
 Proof. induction 1; eauto. Qed.
 
-Hint Resolve typing_regular_1.
+Hint Resolve typing_regular_1 : core.
 
 Lemma typing_regular_2 : forall G e T,
   typing G e T ->
@@ -28,21 +29,21 @@ Proof.
   pick fresh z. lapply (H0 z); solve_uniq.
 Qed.
 
-Hint Resolve typing_regular_2.
+Hint Resolve typing_regular_2 : core.
 
 Lemma step_regular_1 : forall e1 e2,
   step e1 e2 ->
   lc_exp e1.
 Proof. induction 1; eauto. Qed.
 
-Hint Resolve step_regular_1.
+Hint Resolve step_regular_1 : core.
 
 Lemma step_regular_2 : forall e1 e2,
   step e1 e2 ->
   lc_exp e1.
 Proof. induction 1; eauto. Qed.
 
-Hint Resolve step_regular_2.
+Hint Resolve step_regular_2 : core.
 
 
 (* *********************************************************************** *)
@@ -56,7 +57,7 @@ Proof.
   intros until 1. dependent induction H; intros; eauto.
   Case "typing_abs".
    pick fresh x and apply typing_abs.
-   rewrite_env ((x ~ T1 ++ F) ++ E ++ G0).
+   rewrite_env ((x ~ T1 ++ F) ++ E ++ G).
    apply_first_hyp; simpl_env; auto.
 Qed.
 
@@ -67,7 +68,7 @@ Lemma typing_subst : forall F G e u S T x,
 Proof with eauto.
   intros until 1. dependent induction H; intros; simpl subst_exp...
   Case "typing_var".
-    destruct (x == x0); try subst x0.
+    destruct (x0 == x); try subst x0.
     SCase "x = x0".
       analyze_binds_uniq H.
       apply typing_weakening with (F := nil)...
@@ -75,7 +76,7 @@ Proof with eauto.
       analyze_binds_uniq H...
   Case "typing_abs".
     pick fresh z and apply typing_abs.
-    rewrite_env ((z ~ T1 ++ F) ++ G0).
+    rewrite_env ((z ~ T1 ++ F) ++ G).
     rewrite subst_exp_open_exp_wrt_exp_var...
     apply H0 with (S0 := S)...
 Qed.

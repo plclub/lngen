@@ -18,3 +18,8 @@ cabal.sandbox.config
 .stack-work/
 src/highlight.js
 src/style.css
+*.glob
+*.vo
+.coqdeps.d
+*.mk.conf
+CoqSrc.mk

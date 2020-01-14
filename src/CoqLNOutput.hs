@@ -59,8 +59,8 @@ coqOfAST ott loadpath ast =
                   \Require Import Coq.Logic.FunctionalExtensionality.\n\
                   \Require Import Coq.Program.Equality.\n\
                   \\n\
-                  \Require Export Metatheory.\n\
-                  \Require Export LibLNgen.\n" ++
+                  \Require Export Metalib.Metatheory.\n\
+                  \Require Export Metalib.LibLNgen.\n" ++
                   (case ott of
                      Nothing -> ""
                      Just s  -> "\nRequire Export " ++ s ++ ".\n") ++

@@ -102,7 +102,7 @@ processBody aaa nt1s =
 
       g aa nt1 _ mv2 =
           do { body <- bodyName aa nt1 mv2
-             ; return $ "Hint Unfold " ++ body ++ ".\n\n"
+             ; return $ "Hint Unfold " ++ body ++ " : core.\n\n"
              }
 
 

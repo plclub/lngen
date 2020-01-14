@@ -248,7 +248,7 @@ lc_exists_hint aaa nt1s =
              ; names <- local $ mapM name bargs
              ; return $ printf "Hint Extern 1 (%s (%s%s)) =>\n\
                                \%s\
-                               \  apply (%s%s).\n\
+                               \  apply (%s%s) : core.\n\
                                \\n"
                                lc (toName c) (sepStrings " " ("":map (\_ -> "_") args))
                                (concat picks :: String)

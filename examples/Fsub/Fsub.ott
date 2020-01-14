@@ -9,7 +9,7 @@ typ, T, S, U :: typ_ ::=
   | T1 -> T2       ::   :: arrow
   | \ X <: T1 . T2 ::   :: all  (+ bind X in T2 +)
   | T1 + T2        ::   :: sum
-  | ( T )          :: S :: paren {{ coq ([[e]]) }}
+  | ( T )          :: S :: paren {{ coq ([[T]]) }}
   | { T2 / X } T1  :: M :: subst {{ coq (open_typ_wrt_typ [[X T1]] [[T2]]) }}
 
 exp, e, f, g :: exp_ ::=

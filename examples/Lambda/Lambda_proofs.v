@@ -1,7 +1,6 @@
-Add LoadPath "metatheory".
 Require Import Coq.Logic.FunctionalExtensionality.
 Require Import Coq.Program.Equality.
-Require Import Metatheory.
+Require Import Metalib.Metatheory.
 Require Import Lambda_inf.
 Require Import Lambda_ott.
 
@@ -211,20 +210,25 @@ Proof.
   f_equal.
 
   (* Argument 1: Go through contortions to apply [subst_spec]. *)
-  apply functional_extensionality; intros z.
-  set (t := (existT _ (open_exp_wrt_exp (close_exp_wrt_exp x e1) (var_f z)) (l z))).
-  match goal with |- ?lhs = _ => change lhs with (gm_rec t) end.
-  f_equal; unfold t; simpl.
-  apply Term_eq.
-  rewrite subst_exp_spec.
-  reflexivity.
+  + simpl.
+    apply functional_extensionality; intros z.  
+
+    set (t := (existT _ (open_exp_wrt_exp (close_exp_wrt_exp x e1) (var_f z)) (l z))).
+    set (u := (existT _ (subst_exp (var_f z) x e1) (subst_exp_lc_set_exp e1 (var_f z) x lcp1 (lc_set_var_f z)))).
+
+    match goal with |- ?lhs = _ => change lhs with (gm_rec t) end.
+    match goal with |- _ = ?rhs => change rhs with (gm_rec u) end.
+    f_equal. unfold t. unfold u.
+    apply Term_eq.
+    rewrite subst_exp_spec.
+    reflexivity. 
 
   (* Argument 2: Straightforward. *)
-  apply functional_extensionality; intros.
-  simpl.
-  apply Term_eq.
-  rewrite subst_exp_spec.
-  reflexivity.
+  + apply functional_extensionality; intros.
+    simpl.
+    apply Term_eq.
+    rewrite subst_exp_spec.
+    reflexivity.
 Qed.
 
 End FiveAxiomsRecursion.

@@ -1,10 +1,9 @@
-Add LoadPath "metatheory".
 Require Import Coq.Arith.Wf_nat.
 Require Import Coq.Logic.FunctionalExtensionality.
 Require Import Coq.Program.Equality.
 
-Require Export Metatheory.
-Require Export LibLNgen.
+Require Export Metalib.Metatheory.
+Require Export Metalib.LibLNgen.
 
 Require Export Lambda_ott.
 
@@ -125,7 +124,7 @@ Hint Constructors lc_set_exp : core lngen.
 
 Definition body_exp_wrt_exp e1 := forall x1, lc_exp (open_exp_wrt_exp e1 (var_f x1)).
 
-Hint Unfold body_exp_wrt_exp.
+Hint Unfold body_exp_wrt_exp : core.
 
 
 (* *********************************************************************** *)
@@ -684,7 +683,7 @@ clear i1; intros i1 H1;
 apply_mutual_ind exp_mutind;
 default_simp;
 (* non-trivial cases *)
-constructor; default_simp; eapply_first_hyp;
+constructor; default_simp; eapply_first_lt_hyp;
 (* instantiate the size *)
 match goal with
   | |- _ = _ => reflexivity
@@ -726,7 +725,7 @@ Qed.
 Hint Extern 1 (lc_exp (abs _)) =>
   let x1 := fresh in
   pick_fresh x1;
-  apply (lc_abs_exists x1).
+  apply (lc_abs_exists x1) : core.
 
 Lemma lc_body_exp_wrt_exp :
 forall e1 e2,
@@ -813,7 +812,7 @@ try solve [assert False by default_simp; tauto];
 (* non-trivial cases *)
 constructor; default_simp;
 try first [apply lc_set_exp_of_lc_exp];
-default_simp; eapply_first_hyp;
+default_simp; eapply_first_lt_hyp;
 (* instantiate the size *)
 match goal with
   | |- _ = _ => reflexivity
@@ -1244,7 +1243,6 @@ pose proof subst_exp_fresh_same_mutual as H; intuition eauto.
 Qed.
 
 Hint Resolve subst_exp_fresh_same : lngen.
-Hint Rewrite subst_exp_fresh_same using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -1270,7 +1268,6 @@ pose proof subst_exp_fresh_mutual as H; intuition eauto.
 Qed.
 
 Hint Resolve subst_exp_fresh : lngen.
-Hint Rewrite subst_exp_fresh using solve [auto] : lngen.
 
 Lemma subst_exp_lc_exp :
 forall e1 e2 x1,

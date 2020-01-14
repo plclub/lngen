@@ -1,10 +1,9 @@
-Add LoadPath "metatheory".
 Require Import Coq.Arith.Wf_nat.
 Require Import Coq.Logic.FunctionalExtensionality.
 Require Import Coq.Program.Equality.
 
-Require Export Metatheory.
-Require Export LibLNgen.
+Require Export Metalib.Metatheory.
+Require Export Metalib.LibLNgen.
 
 Require Export LF_hhp93_ott.
 
@@ -275,13 +274,13 @@ Definition body_family_wrt_object A1 := forall x1, lc_family (open_family_wrt_ob
 
 Definition body_object_wrt_object M1 := forall x1, lc_object (open_object_wrt_object M1 (object_var_f x1)).
 
-Hint Unfold body_family_wrt_object.
+Hint Unfold body_family_wrt_object : core.
 
-Hint Unfold body_object_wrt_object.
+Hint Unfold body_object_wrt_object : core.
 
 Definition body_kind_wrt_object K1 := forall x1, lc_kind (open_kind_wrt_object K1 (object_var_f x1)).
 
-Hint Unfold body_kind_wrt_object.
+Hint Unfold body_kind_wrt_object : core.
 
 
 (* *********************************************************************** *)
@@ -1689,7 +1688,7 @@ clear i1; intros i1 H1;
 apply_mutual_ind family_object_mutind;
 default_simp;
 (* non-trivial cases *)
-constructor; default_simp; eapply_first_hyp;
+constructor; default_simp; eapply_first_lt_hyp;
 (* instantiate the size *)
 match goal with
   | |- _ = _ => reflexivity
@@ -1740,7 +1739,7 @@ clear i1; intros i1 H1;
 apply_mutual_ind kind_mutind;
 default_simp;
 (* non-trivial cases *)
-constructor; default_simp; eapply_first_hyp;
+constructor; default_simp; eapply_first_lt_hyp;
 (* instantiate the size *)
 match goal with
   | |- _ = _ => reflexivity
@@ -1818,22 +1817,22 @@ Qed.
 Hint Extern 1 (lc_family (family_pi _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
-  apply (lc_family_pi_exists x1).
+  apply (lc_family_pi_exists x1) : core.
 
 Hint Extern 1 (lc_family (family_abs _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
-  apply (lc_family_abs_exists x1).
+  apply (lc_family_abs_exists x1) : core.
 
 Hint Extern 1 (lc_object (object_abs _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
-  apply (lc_object_abs_exists x1).
+  apply (lc_object_abs_exists x1) : core.
 
 Hint Extern 1 (lc_kind (kind_pi _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
-  apply (lc_kind_pi_exists x1).
+  apply (lc_kind_pi_exists x1) : core.
 
 Lemma lc_body_family_wrt_object :
 forall A1 M1,
@@ -2050,7 +2049,7 @@ try first [apply lc_set_family_of_lc_family
  | apply lc_set_object_of_lc_object
  | apply lc_set_family_of_lc_family
  | apply lc_set_object_of_lc_object];
-default_simp; eapply_first_hyp;
+default_simp; eapply_first_lt_hyp;
 (* instantiate the size *)
 match goal with
   | |- _ = _ => reflexivity
@@ -2106,7 +2105,7 @@ constructor; default_simp;
 try first [apply lc_set_family_of_lc_family
  | apply lc_set_kind_of_lc_kind
  | apply lc_set_object_of_lc_object];
-default_simp; eapply_first_hyp;
+default_simp; eapply_first_lt_hyp;
 (* instantiate the size *)
 match goal with
   | |- _ = _ => reflexivity
@@ -3146,7 +3145,6 @@ pose proof subst_family_fresh_same_subst_object_fresh_same_mutual as H; intuitio
 Qed.
 
 Hint Resolve subst_family_fresh_same : lngen.
-Hint Rewrite subst_family_fresh_same using solve [auto] : lngen.
 
 Lemma subst_object_fresh_same :
 forall M2 M1 x1,
@@ -3157,7 +3155,6 @@ pose proof subst_family_fresh_same_subst_object_fresh_same_mutual as H; intuitio
 Qed.
 
 Hint Resolve subst_object_fresh_same : lngen.
-Hint Rewrite subst_object_fresh_same using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -3181,7 +3178,6 @@ pose proof subst_kind_fresh_same_mutual as H; intuition eauto.
 Qed.
 
 Hint Resolve subst_kind_fresh_same : lngen.
-Hint Rewrite subst_kind_fresh_same using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -3211,7 +3207,6 @@ pose proof subst_family_fresh_subst_object_fresh_mutual as H; intuition eauto.
 Qed.
 
 Hint Resolve subst_family_fresh : lngen.
-Hint Rewrite subst_family_fresh using solve [auto] : lngen.
 
 Lemma subst_object_fresh :
 forall M2 M1 x1 x2,
@@ -3223,7 +3218,6 @@ pose proof subst_family_fresh_subst_object_fresh_mutual as H; intuition eauto.
 Qed.
 
 Hint Resolve subst_object_fresh : lngen.
-Hint Rewrite subst_object_fresh using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -3249,7 +3243,6 @@ pose proof subst_kind_fresh_mutual as H; intuition eauto.
 Qed.
 
 Hint Resolve subst_kind_fresh : lngen.
-Hint Rewrite subst_kind_fresh using solve [auto] : lngen.
 
 Lemma subst_family_lc_family :
 forall A1 M1 x1,

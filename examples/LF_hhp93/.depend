@@ -1,4 +1,4 @@
-LF_hhp93_inf.vo LF_hhp93_inf.glob LF_hhp93_inf.v.beautified: LF_hhp93_inf.v
-LF_hhp93_inf.vio: LF_hhp93_inf.v
+LF_hhp93_inf.vo LF_hhp93_inf.glob LF_hhp93_inf.v.beautified: LF_hhp93_inf.v LF_hhp93_ott.vo
+LF_hhp93_inf.vio: LF_hhp93_inf.v LF_hhp93_ott.vio
 LF_hhp93_ott.vo LF_hhp93_ott.glob LF_hhp93_ott.v.beautified: LF_hhp93_ott.v
 LF_hhp93_ott.vio: LF_hhp93_ott.v

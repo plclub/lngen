@@ -1,0 +1,4 @@
+-R . SimpleTypes
+SimpleTypes_inf.v
+SimpleTypes_ott.v
+SimpleTypes_proofs.v

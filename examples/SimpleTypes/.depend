@@ -1,6 +1,6 @@
-SimpleTypes_inf.vo SimpleTypes_inf.glob SimpleTypes_inf.v.beautified: SimpleTypes_inf.v
-SimpleTypes_inf.vio: SimpleTypes_inf.v
+SimpleTypes_inf.vo SimpleTypes_inf.glob SimpleTypes_inf.v.beautified: SimpleTypes_inf.v SimpleTypes_ott.vo
+SimpleTypes_inf.vio: SimpleTypes_inf.v SimpleTypes_ott.vio
 SimpleTypes_ott.vo SimpleTypes_ott.glob SimpleTypes_ott.v.beautified: SimpleTypes_ott.v
 SimpleTypes_ott.vio: SimpleTypes_ott.v
-SimpleTypes_proofs.vo SimpleTypes_proofs.glob SimpleTypes_proofs.v.beautified: SimpleTypes_proofs.v
-SimpleTypes_proofs.vio: SimpleTypes_proofs.v
+SimpleTypes_proofs.vo SimpleTypes_proofs.glob SimpleTypes_proofs.v.beautified: SimpleTypes_proofs.v SimpleTypes_inf.vo
+SimpleTypes_proofs.vio: SimpleTypes_proofs.v SimpleTypes_inf.vio
