@@ -38,8 +38,22 @@ Dependencies
 Building LNgen
 ==============
 
-Run `make` in this directory.  Successful compilation will leave in this
-directory an executable called `lngen`.
+You can use either the Haskell tools `cabal` or `stack` to build lngen.
+	  
+To compile and run with cabal (new style, uses system GHC)
+
+	  cabal new-build
+	  cabal new-exec lngen  <command line flags, see below>
+
+To compile and run with stack (downloads GHC 8.0.1)
+
+     stack build
+	  stack exec lngen <command line flags, see below>
+
+To compile with cabal (old style, installs lngen in your path):
+
+     cabal v1-build
+	  lngen
 
 
 Using LNgen
