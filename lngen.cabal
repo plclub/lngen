@@ -1,5 +1,5 @@
 name:                lngen
-version:             0.0.2
+version:             0.3.1
 synopsis:            Tool for generating Locally Nameless definitions and proofs in Coq, working together with Ott.
 description:         Check out <https://github.com/plclub/lngen#readme the readme> for documentation.
 homepage:            https://github.com/plclub/lngen

@@ -21,7 +21,7 @@ import Parser           ( parseOttFile )
 {- | LNgen's version number. -}
 
 version :: String
-version = "0.3"
+version = "0.3.1"
 
 
 {- ----------------------------------------------------------------------- -}
