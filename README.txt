@@ -47,12 +47,12 @@ To compile and run with cabal (new style, uses system GHC)
 
 To compile and run with stack (downloads GHC 8.0.1)
 
-     stack build
+          stack build
 	  stack exec lngen <command line flags, see below>
 
 To compile with cabal (old style, installs lngen in your path):
 
-     cabal v1-build
+          cabal v1-build
 	  lngen
 
 
