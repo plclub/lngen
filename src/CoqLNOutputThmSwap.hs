@@ -40,13 +40,13 @@ swap_distrib aaa nt1s =
           do { swap <- swapImplName aa nt1
              ; return $ swap ++ "_distrib"
              }
-
+      thm :: ASTAnalysis -> NtRoot -> M String
       thm aa nt1 =
           do { ab   <- newName "ab"
              ; c    <- newName "c"
              ; d    <- newName "d"
              ; e    <- newName nt1
-             ; swap <- swapImplName aa nt1
+             ; swap <- swapImplName aa nt1 
              ; return $ printf
                "forall %s %s %s %s,\n\
                \  %s %s (%s (%s, %s) %s) =\n\
@@ -126,7 +126,7 @@ swap_same aaa nt1s =
           do { swap <- swapImplName aa nt1
              ; return $ swap ++ "_same"
              }
-
+      thm :: ASTAnalysis -> NtRoot -> M String
       thm aa nt1 =
           do { a    <- newName "a"
              ; e    <- newName nt1

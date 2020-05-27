@@ -1,11 +1,15 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 {- | This module implements the errors and monads that are used to
    structure many of the computations in this program. -}
 
 module ComputationMonad where
 
-import Control.Monad.Error
+import Control.Monad.Except
+import Control.Monad.Fail as Fail
 import Control.Monad.State
 import Data.Map ( Map )
 import qualified Data.Map as Map
@@ -58,9 +62,6 @@ data ProgramError
     -- An unknown, or generic, error.
     | GenericError String
 
-instance Error ProgramError where
-    strMsg = GenericError
-
 instance Show ProgramError where
     -- Errors encountered during AST sanity checking.
     show (ASTDupBinderL v)    = toPosS v ++ ": " ++ show v ++ " already binds in something"
@@ -89,13 +90,18 @@ instance Show ProgramError where
    in the state keeps track of the most recent suffix that was handed
    out. -}
 
-type M = ErrorT ProgramError (State ([ProgFlag], Map String Int))
+newtype M a = M { getM :: ExceptT ProgramError (State ([ProgFlag], Map String Int)) a }
+   deriving (Functor, Applicative, Monad, MonadError ProgramError, MonadState ([ProgFlag], Map String Int))
+
+
+instance MonadFail M where
+   fail s = throwError (GenericError s)
 
 {- | Runs a computation that lives in 'M'. -}
 
 runM :: [ProgFlag] -> M a -> a
 runM flags =
-    getResult . fst . flip runState (flags, Map.empty) . runErrorT
+    getResult . fst . flip runState (flags, Map.empty) . runExceptT . getM
 
 {- | Another name for 'throwError'. -}
 

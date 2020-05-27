@@ -48,7 +48,6 @@ size_close_rec aaa nt1s =
              ; size_fn  <- sizeName aa nt1
              ; return $ size_fn ++ "_" ++ close_fn
              }
-
       thm aa nt1 _ mv2 =
           do { k        <- newName bvarRoot
              ; x        <- newName mv2

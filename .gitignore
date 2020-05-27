@@ -23,3 +23,5 @@ src/style.css
 .coqdeps.d
 *.mk.conf
 CoqSrc.mk
+*~
+stack.yaml.lock

@@ -5,6 +5,7 @@
 module CoqLNOutputCommon where
 
 import Data.Map as Map
+import Control.Monad.Fail as Fail
 
 import AST
 import ASTAnalysis
@@ -186,7 +187,7 @@ fvName aa nt1 mv2 =
       Just n -> do { suffix <- ntType aa nt1
                    ; return $ n ++ "_" ++ suffix
                    }
-      Nothing -> fail $ "No 'freevars' declaration for: " ++ (ntOfMv aa mv2) ++ " " ++ mv2 ++ "."
+      Nothing -> Fail.fail $ "No 'freevars' declaration for: " ++ (ntOfMv aa mv2) ++ " " ++ mv2 ++ "."
 
 {- | Returns the name of the @open@ function, where the function is
    defined by induction on the first given nonterminal. -}
@@ -222,7 +223,7 @@ substName aa nt1 mv2 =
       Just n -> do { suffix <- ntType aa nt1
                    ; return $ n ++ "_" ++ suffix
                    }
-      Nothing -> fail $ "No 'substitutions' declaration for: " ++ (ntOfMv aa mv2) ++ " " ++ mv2 ++ "."
+      Nothing -> Fail.fail $ "No 'substitutions' declaration for: " ++ (ntOfMv aa mv2) ++ " " ++ mv2 ++ "."
 
 
 {- ----------------------------------------------------------------------- -}

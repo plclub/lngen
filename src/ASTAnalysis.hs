@@ -42,6 +42,7 @@ import Data.Map            ( Map )
 import qualified Data.Map as Map
 import Data.Maybe          ( fromJust, isJust, mapMaybe )
 import Text.ParserCombinators.Parsec ( SourcePos )
+import Control.Monad.Fail as Fail
 
 import AST
 import ComputationMonad
@@ -503,7 +504,7 @@ getBoundVarConstr aa nt mv =
     do { (Syntax pos _ cs) <- getSyntax aa nt
        ; case filter isBvar cs of
               [c] -> return c
-              _   -> fail $ show pos ++ ": Internal error (getBoundVarConstr)."
+              _   -> Fail.fail $ show pos ++ ": Internal error (getBoundVarConstr)."
        }
 
     where
@@ -518,7 +519,7 @@ getFreeVarConstr aa nt mv =
     do { (Syntax pos _ cs) <- getSyntax aa nt
        ; case filter isFvar cs of
               [c] -> return c
-              _   -> fail $ show pos ++ ": Internal error (getFreeVarConstr)."
+              _   -> Fail.fail $ show pos ++ ": Internal error (getFreeVarConstr)."
        }
 
     where

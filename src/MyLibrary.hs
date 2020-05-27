@@ -3,11 +3,12 @@
 
 module MyLibrary where
 
-import Data.List  ( intersperse, nub, sortBy )
+import Data.List  ( intercalate, nub, minimumBy )
 import Data.Map   ( Map )
 import qualified Data.Map as Map
 import Data.Maybe ( catMaybes )
 import Text.ParserCombinators.Parsec ( GenParser, manyTill )
+import Control.Monad.Fail as Fail
 
 
 {- ----------------------------------------------------------------------- -}
@@ -46,7 +47,7 @@ getResult (Left err)  = error (show err)
 mapLookup :: (MonadFail m, Ord k, Show k) => k -> Map k a -> m a
 mapLookup k m = case Map.lookup k m of
                   Just x  -> return x
-                  Nothing -> fail $ "mapLookup: " ++ show k ++
+                  Nothing -> Fail.fail $ "mapLookup: " ++ show k ++
                                     " not found in: " ++ show (Map.keys m)
 
 {- | A variant on 'mapM' for when the function returns as a 'Maybe' value. -}
@@ -66,11 +67,11 @@ nmap f = nub . map f
    between the elements of the second argument. -}
 
 sepStrings :: String -> [String] -> String
-sepStrings s = concat . intersperse s
+sepStrings = intercalate
 
 {- | Returns the shortest string in the given list.  Ties are broken
    by choosing the string that appears first in the input.  The input
    list must be non-empty. -}
 
 shortestStr :: [String] -> String
-shortestStr = head . sortBy (\x y -> compare (length x) (length y))
+shortestStr = minimumBy (\x y -> compare (length x) (length y))

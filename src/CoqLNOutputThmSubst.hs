@@ -284,6 +284,7 @@ subst_constr aaa nt1s =
                   ; return $ local $ thm aaa nt1 nt2 mv2 c
                   }
     where
+
       thm aa nt1 nt2 mv2 c@(SConstr pos _ _ args _) =
           do { subst_fn <- substName aa nt1 mv2
              ; lc       <- lcName aa nt2
