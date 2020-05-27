@@ -43,7 +43,7 @@ getResult (Left err)  = error (show err)
 {- | A variant of 'Map.lookup' that either @return@s its result in the
    given monad or @fail@s. -}
 
-mapLookup :: (Monad m, Ord k, Show k) => k -> Map k a -> m a
+mapLookup :: (MonadFail m, Ord k, Show k) => k -> Map k a -> m a
 mapLookup k m = case Map.lookup k m of
                   Just x  -> return x
                   Nothing -> fail $ "mapLookup: " ++ show k ++

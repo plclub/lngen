@@ -2,7 +2,7 @@
 
 module CoqLNOutputThmLc where
 
-import Data.List   ( concatMap )
+
 import Data.Maybe  ( catMaybes )
 import Text.Printf ( printf )
 

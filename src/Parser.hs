@@ -69,7 +69,7 @@ var :: Parser UnknownSym
 var = lexeme $ do { pos <- getPosition
                   ; r   <- root
                   ; s   <- suffix
-                  ; space
+                  ; _   <- space
                   ; return $ UnknownSym pos r s
                   }
 
@@ -104,15 +104,15 @@ nameHom = do { n <- name ; ignoreHoms ; return n }
 
 ignoreHom :: Parser ()
 ignoreHom =
-    do { text "{{" <?> "homomorphism \"{{ ... }}\""
-       ; anyChar `manyTill` text "}}"
+    do { _ <- text "{{" <?> "homomorphism \"{{ ... }}\""
+       ; _ <- anyChar `manyTill` text "}}"
        ; return ()
        }
 
 {- | Consumes zero or more homomorphisms from the input stream. -}
 
 ignoreHoms :: Parser ()
-ignoreHoms = do { many ignoreHom ; return () }
+ignoreHoms = do { _ <- many ignoreHom ; return () }
 
 
 {- ----------------------------------------------------------------------- -}
@@ -126,7 +126,7 @@ metavarDecl =
     do { pos <- getPosition
        ; reserved "metavar" <?> "metavariable declaration \"metavar ...\""
        ; names <- nameHom `sepBy1` (text "," <?> "\",\" and another name")
-       ; text "::="
+       ; _ <- text "::="
        ; homs <- many metavarHom
        ; return (MetavarDecl pos names (catMaybes homs ++ defaults))
        }
@@ -134,13 +134,13 @@ metavarDecl =
       defaults = [ CoqMvImplHom "atom" ]
 
       metavarHom =
-          do { text "{{" <?> "homomorphism \"{{ ... }}\""
+          do { _ <- text "{{" <?> "homomorphism \"{{ ... }}\""
              ; do { reserved "phantom"
-                  ; text "}}"
+                  ; _ <- text "}}"
                   ; return $ Just $ MvPhantom
                   }
                <|>
-               do { anyChar `manyTill` text "}}"
+               do { _ <- anyChar `manyTill` text "}}"
                   ; return Nothing
                   }
              }
@@ -157,10 +157,10 @@ rule :: Parser PreRule
 rule =
     do { pos <- getPosition
        ; es <- nameHom `sepBy1` (text "," <?> "\",\" and another name")
-       ; text "::"
+       ; _ <- text "::"
        ; n <- ruleName
-       ; text "::="
-       ; many ignoreHom
+       ; _ <- text "::="
+       ; _ <- many ignoreHom
        ; prods <- many production
        ; return $ Rule pos es n prods
        }
@@ -169,7 +169,7 @@ rule =
           lexeme (try (many1 (letter <|> char '_' <?> "")) <?> "name")
           <|>
           -- BEA: Seems like unnecessary flexbility in the input language.
-          lexeme (do { char '\''
+          lexeme (do { _ <- char '\''
                      ; (letter <|> char '_') `manyTill` char '\''
                      })
 
@@ -180,13 +180,13 @@ rule =
 production :: Parser PreProduction
 production =
     do { pos <- getPosition
-       ; text "|"
+       ; _ <- text "|"
        ; es <- element `manyTill` text "::"
        ; flag <- many productionFlag
-       ; text "::"
+       ; _ <- text "::"
        ; constr <- identifier
        ; bs <- many bindingSpec
-       ; many ignoreHom
+       ; _  <- many ignoreHom
        ; return $ Production pos es flag constr bs
        }
     where
@@ -221,14 +221,14 @@ element =
 bindingSpec :: Parser PreBindingSpec
 bindingSpec =
     do { pos <- getPosition
-       ; text "(+"
+       ; _ <- text "(+"
        ; b <- do { reserved "bind"
                  ; v1 <- var
                  ; reserved "in"
                  ; v2 <- var
                  ; return $ BindDecl pos v1 v2
                  }
-       ; text "+)"
+       ; _ <- text "+)"
        ; return b
        }
 
@@ -248,7 +248,7 @@ substitutions =
           do { reserved "single"
              ; nt <- name
              ; mv <- name
-             ; text "::"
+             ; _ <- text "::"
              ; n <- name
              ; return $ SingleSubstFun nt mv n
              }
@@ -264,7 +264,7 @@ freevars =
       freevar =
           do { nt <- name
              ; mv <- name
-             ; text "::"
+             ; _ <- text "::"
              ; n <- name
              ; return $ FvFun nt mv n
              }
@@ -276,22 +276,22 @@ freevars =
 indexVarDecl :: Parser ()
 indexVarDecl =
     do { reserved "indexvar" <?> "indexvar declaration \"indexvar ...\""
-       ; nameHom `sepBy1` (text "," <?> "\",\" and another name")
-       ; text "::="
-       ; many ignoreHom
+       ; _ <- nameHom `sepBy1` (text "," <?> "\",\" and another name")
+       ; _ <- text "::="
+       ; _ <- many ignoreHom
        ; return ()
        }
 
 embed :: Parser ()
 embed =
     do { reserved "embed"
-       ; many ignoreHom
+       ; _ <- many ignoreHom
        ; return ()
        }
 
 ignoreBlocks :: Parser ()
 ignoreBlocks =
-    do { many (indexVarDecl <|> embed)
+    do { _ <- many (indexVarDecl <|> embed)
        ; return ()
        }
 

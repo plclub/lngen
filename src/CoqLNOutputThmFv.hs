@@ -1,5 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
-{-# OPTIONS_GHC -fcontext-stack=50 #-}
+{-# OPTIONS_GHC -freduction-depth=50 #-}
 
 module CoqLNOutputThmFv where
 

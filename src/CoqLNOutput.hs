@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -fcontext-stack=50 #-}
+{-# OPTIONS_GHC -freduction-depth=50 #-}
 
 {- | This module defines the functions necessary to transform an 'AST'
    into a 'String' containing output for the Coq proof assistant.
@@ -40,7 +40,7 @@ coqOfAST ott loadpath ast =
        ; lcStrs     <- mapM (local . processLc aa) nts
        ; ntStrs     <- mapM (local . processNt aa) nts
        ; sizeStrs   <- mapM (local . processSize aa) nts
-       ; swapStrs   <- mapM (local . processSwap aa) nts
+       ; _swapStrs   <- mapM (local . processSwap aa) nts
        ; tacticStrs <- local $ processTactics aa
 
        ; degree_thms      <- degreeThms aa nts
@@ -49,7 +49,7 @@ coqOfAST ott loadpath ast =
        ; open_close_thms  <- openCloseThms aa nts
        ; open_close_thms2 <- openCloseThms2 aa nts
        ; size_thms        <- sizeThms aa nts
-       ; swap_thms        <- swapThms aa nts
+       ; _swap_thms        <- swapThms aa nts
        ; subst_thms       <- substThms aa nts
 
        ; return $ (case loadpath of

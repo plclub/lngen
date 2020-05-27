@@ -488,17 +488,17 @@ genSubordRel ntg = concatMap buildTuples vertices
 
 {- | The lookup @return@s the result in the monad or else @fail@s. -}
 
-getMvDecl :: Monad m => ASTAnalysis -> MvRoot -> m MetavarDecl
+getMvDecl :: MonadFail m => ASTAnalysis -> MvRoot -> m MetavarDecl
 getMvDecl aa = flip mapLookup (mvMap aa)
 
 {- | The lookup @return@s the result in the monad or else @fail@s. -}
 
-getSyntax :: Monad m => ASTAnalysis -> NtRoot -> m Syntax
+getSyntax :: MonadFail m => ASTAnalysis -> NtRoot -> m Syntax
 getSyntax aa = flip mapLookup (syntaxMap aa)
 
 {- | The lookup @return@s the result in the monad or else @fail@s. -}
 
-getBoundVarConstr :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m SConstr
+getBoundVarConstr :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m SConstr
 getBoundVarConstr aa nt mv =
     do { (Syntax pos _ cs) <- getSyntax aa nt
        ; case filter isBvar cs of
@@ -513,7 +513,7 @@ getBoundVarConstr aa nt mv =
 
 {- | The lookup @return@s the result in the monad or else @fail@s. -}
 
-getFreeVarConstr :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m SConstr
+getFreeVarConstr :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m SConstr
 getFreeVarConstr aa nt mv =
     do { (Syntax pos _ cs) <- getSyntax aa nt
        ; case filter isFvar cs of

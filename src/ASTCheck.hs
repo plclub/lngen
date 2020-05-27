@@ -7,7 +7,7 @@
 module ASTCheck ( astOfPreAST ) where
 
 import Control.Monad       ( foldM, when )
-import Control.Monad.Error ( MonadError )
+import Control.Monad.Except ( MonadError )
 import Data.List           ( nub, intersect )
 -- import Monad               ( when )
 

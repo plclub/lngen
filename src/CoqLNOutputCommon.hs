@@ -135,22 +135,22 @@ atomType = "atom"
 
 {- | Returns the canonical short name for the given metavariable root. -}
 
-mvRoot :: Monad m => ASTAnalysis -> MvRoot -> m Name
+mvRoot :: MonadFail m => ASTAnalysis -> MvRoot -> m Name
 mvRoot aa mv = return $ canonRoot aa mv
 
 {- | Returns the canonical short name for the given nonterminal root. -}
 
-ntRoot :: Monad m => ASTAnalysis -> NtRoot -> m Name
+ntRoot :: MonadFail m => ASTAnalysis -> NtRoot -> m Name
 ntRoot aa nt = return $ canonRoot aa nt
 
 {- | Returns the canonical type for the given metavariable root. -}
 
-mvType :: Monad m => ASTAnalysis -> MvRoot -> m Name
+mvType :: MonadFail m => ASTAnalysis -> MvRoot -> m Name
 mvType aa mv = getMvDecl aa mv >>= \decl -> return (toName decl)
 
 {- | Returns the canonical type for the given nonterminal root. -}
 
-ntType :: Monad m => ASTAnalysis -> NtRoot -> m Name
+ntType :: MonadFail m => ASTAnalysis -> NtRoot -> m Name
 ntType aa nt = getSyntax aa nt >>= \decl -> return (toName decl)
 
 
@@ -163,7 +163,7 @@ ntType aa nt = getSyntax aa nt >>= \decl -> return (toName decl)
 -- XXX BEA: I should use @mv2@ to generate the name, but the current
 -- Ott backend doesn't properly handle the underlying case.
 
-closeName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+closeName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 closeName aa nt1 mv2 =
     do { n1 <- ntType aa nt1
        ; m2 <- ntType aa (ntOfMv aa mv2)
@@ -173,14 +173,14 @@ closeName aa nt1 mv2 =
 {- | Returns the name of the @close_rec@ function, where the function
    is defined by induction on the first given nonterminal. -}
 
-closeRecName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+closeRecName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 closeRecName aa nt1 mv2 =
     closeName aa nt1 mv2 >>= \n -> return $ n ++ "_rec"
 
 {- | Returns the name of the @fv@ function, where the function is
    defined by induction on the first given nonterminal. -}
 
-fvName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+fvName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 fvName aa nt1 mv2 =
     case Map.lookup (ntOfMv aa mv2, mv2) (fvMap aa) of
       Just n -> do { suffix <- ntType aa nt1
@@ -194,7 +194,7 @@ fvName aa nt1 mv2 =
 -- XXX BEA: I should use @mv2@ to generate the name, but the current
 -- Ott backend doesn't properly handle the underlying case.
 
-openName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+openName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 openName aa nt1 mv2 =
     do { n1 <- ntType aa nt1
        ; m2 <- ntType aa (ntOfMv aa mv2)
@@ -204,19 +204,19 @@ openName aa nt1 mv2 =
 {- | Returns the name of the @open_rec@ function, where the function
    is defined by induction the first given nonterminal. -}
 
-openRecName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+openRecName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 openRecName aa nt1 mv2 =
     openName aa nt1 mv2 >>= \n -> return $ n ++ "_rec"
 
 {- | Returns the name of the @size@ function. -}
 
-sizeName :: Monad m => ASTAnalysis -> NtRoot -> m Name
+sizeName :: MonadFail m => ASTAnalysis -> NtRoot -> m Name
 sizeName aa nt = ntType aa nt >>= \n -> return $ "size_" ++ n
 
 {- | Returns the name of the @subst@ function, where the function is
    defined by induction on the second given nonterminal. -}
 
-substName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+substName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 substName aa nt1 mv2 =
     case Map.lookup (ntOfMv aa mv2, mv2) (substMap aa) of
       Just n -> do { suffix <- ntType aa nt1
@@ -261,7 +261,7 @@ schemeRecName = (++ "_rec'")
 {- | Returns the name of the body predicate, where the main term is
    given by the first nonterminal. -}
 
-bodyName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+bodyName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 bodyName aa nt1 mv2 =
     do { n1 <- ntType aa nt1
        ; m2 <- ntType aa (ntOfMv aa mv2)
@@ -274,7 +274,7 @@ bodyName aa nt1 mv2 =
 -- XXX BEA: I should use @mv2@ to generate the name, but the current
 -- Ott backend doesn't properly handle the underlying case.
 
-degreeName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+degreeName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 degreeName aa nt1 mv2 =
     do { n1 <- ntType aa nt1
        ; m2 <- ntType aa (ntOfMv aa mv2)
@@ -287,7 +287,7 @@ degreeName aa nt1 mv2 =
 -- XXX BEA: I should use @mv2@ to generate the name, but the current
 -- Ott backend doesn't properly handle the underlying case.
 
-degreeConstrName :: Monad m => ASTAnalysis -> SConstr -> NtRoot -> MvRoot -> m Name
+degreeConstrName :: MonadFail m => ASTAnalysis -> SConstr -> NtRoot -> MvRoot -> m Name
 degreeConstrName aa sc _ mv2 =
     do { m2 <- ntType aa (ntOfMv aa mv2)
        ; return $ "degree_wrt_" ++ m2 ++ "_" ++ (toName sc)
@@ -299,7 +299,7 @@ degreeConstrName aa sc _ mv2 =
 -- XXX BEA: I should use @mv2@ to generate the name, but the current
 -- Ott backend doesn't properly handle the underlying case.
 
-degreeSetName :: Monad m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
+degreeSetName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 degreeSetName aa nt1 mv2 =
     do { n1 <- ntType aa nt1
        ; m2 <- ntType aa (ntOfMv aa mv2)
@@ -312,7 +312,7 @@ degreeSetName aa nt1 mv2 =
 -- XXX BEA: I should use @mv2@ to generate the name, but the current
 -- Ott backend doesn't properly handle the underlying case.
 
-degreeSetConstrName :: Monad m => ASTAnalysis -> SConstr -> NtRoot -> MvRoot -> m Name
+degreeSetConstrName :: MonadFail m => ASTAnalysis -> SConstr -> NtRoot -> MvRoot -> m Name
 degreeSetConstrName aa sc _ mv2 =
     do { m2 <- ntType aa (ntOfMv aa mv2)
        ; return $ "degree_set_wrt_" ++ m2 ++ "_" ++ (toName sc)
@@ -321,41 +321,41 @@ degreeSetConstrName aa sc _ mv2 =
 {- | Returns the name of the local closure predicate for the given
    nonterminal.  (For @Prop@.) -}
 
-lcName :: Monad m => ASTAnalysis -> NtRoot -> m Name
+lcName :: MonadFail m => ASTAnalysis -> NtRoot -> m Name
 lcName aa nt = ntType aa nt >>= \n -> return $ "lc_" ++ n
 
 {- | Returns the name of the local closure "universal" constructor for
    the given constructor, which is assumed to be for the given
    nonterminal.  (For @Prop@.) -}
 
-lcConstrName :: Monad m => SConstr -> m Name
+lcConstrName :: MonadFail m => SConstr -> m Name
 lcConstrName sc = return $ "lc_" ++ (toName sc)
 
 {- | Returns the name of the local closure "exists" constructor for
    the given constructor, which is assumed to be for the given
    nonterminal.  (For @Prop@.) -}
 
-lcExConstrName :: Monad m => SConstr -> m Name
+lcExConstrName :: MonadFail m => SConstr -> m Name
 lcExConstrName sc = lcConstrName sc >>= \n -> return $ n ++ "_ex"
 
 {- | Returns the name of the local closure predicate for the given
    nonterminal.  (For @Set@.) -}
 
-lcSetName :: Monad m => ASTAnalysis -> NtRoot -> m Name
+lcSetName :: MonadFail m => ASTAnalysis -> NtRoot -> m Name
 lcSetName aa nt = getSyntax aa nt >>= \n -> return $ "lc_set_" ++ (toName n)
 
 {- | Returns the name of the local closure "universal" constructor for
    the given constructor, which is assumed to be for the given
    nonterminal.  (For @Set@.) -}
 
-lcSetConstrName :: Monad m => SConstr -> m Name
+lcSetConstrName :: MonadFail m => SConstr -> m Name
 lcSetConstrName sc = return $ "lc_set_" ++ (toName sc)
 
 {- | Returns the name of the local closure "exists" constructor for
    the given constructor, which is assumed to be for the given
    nonterminal.  (For @Set@.) -}
 
-lcSetExConstrName :: Monad m => SConstr -> m Name
+lcSetExConstrName :: MonadFail m => SConstr -> m Name
 lcSetExConstrName sc = lcConstrName sc >>= \n -> return $ n ++ "_ex"
 
 
@@ -379,7 +379,7 @@ swapDistrib = "swap_distrib"
 
 {- | The name of the swapping function for the given nonterminal. -}
 
-swapImplName :: Monad m => ASTAnalysis -> NtRoot -> m Name
+swapImplName :: MonadFail m => ASTAnalysis -> NtRoot -> m Name
 swapImplName aa nt = ntType aa nt >>= \n -> return $ "swap_" ++ n
 
 {- | The name of the \"swap_invol\" type class field. -}
