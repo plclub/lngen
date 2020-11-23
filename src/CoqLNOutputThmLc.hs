@@ -133,7 +133,7 @@ lc_body aaa nt1s =
                                   \%s %s;\n\
                                   \%s %s;\n\
                                   \%s;\n\
-                                  \eauto with %s."
+                                  \eauto 7 with %s."
                                   body
                                   defaultSimp
                                   x
@@ -197,7 +197,7 @@ lc_exists aaa nt1s =
              ; base <- lcConstrName c
              ; tac  <- lc_exists_tacticName aa nt1s
              ; let name  = base ++ "_exists"
-             ; let proof = printf "intros; %s; eauto with %s." tac hintDb
+             ; let proof = printf "intros; %s; eauto 6 with %s." tac hintDb
              ; lemmaText NoResolve NoRewrite NoHide [hintDb] name stmt proof
              }
 

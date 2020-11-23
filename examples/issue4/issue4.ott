@@ -1,0 +1,42 @@
+metavar effvar, r ::= {{ repr-locally-nameless }}
+metavar expvar, x ::= {{ repr-locally-nameless }}
+metavar typvar, X ::= {{ repr-locally-nameless }}
+
+grammar
+
+eff, R :: eff_ ::=
+  | top                ::  :: top
+  | r                  ::  :: var
+  | R1 <+> R2          :: :: dummy
+
+typ, T, S :: 'typ_' ::=
+  | base               ::   :: base
+  | X                  ::   :: var
+  | R T                ::   :: eff
+ 
+exp, e, f, g :: 'exp_' ::=
+  | x                  ::   :: var
+  | \ x : T . e        ::   :: abs  (+ bind x in e +)
+  | \ r . e            ::   :: rabs (+ bind r in e +)
+  | \ X . e            ::   :: tabs (+ bind X in e +)
+
+substitutions
+  single e x :: subst_ee
+
+  single T X :: subst_tt
+  single e X :: subst_te
+
+  single R r :: subst_rr
+  single T r :: subst_rt
+  single e r :: subst_re
+
+ 
+freevars
+  e x  :: fv_ee
+
+  T X  :: fv_tt
+  e X  :: fv_te
+
+  R r  :: fv_rr
+  T r  :: fv_rt
+  e r  :: fv_re
