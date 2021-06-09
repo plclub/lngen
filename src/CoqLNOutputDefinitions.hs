@@ -102,7 +102,7 @@ processBody aaa nt1s =
 
       g aa nt1 _ mv2 =
           do { body <- bodyName aa nt1 mv2
-             ; return $ "Hint Unfold " ++ body ++ " : core.\n\n"
+             ; return $ "#[global] Hint Unfold " ++ body ++ " : core.\n\n"
              }
 
 
@@ -270,7 +270,7 @@ processDegreeHints aaa nt1s =
           do { names1 <- degreeName aa nt1 mv2
              -- ; names2 <- degreeSetName aa nt1 mv2
              ; return $ printf
-               "Hint Constructors %s : core %s.\n\n"
+               "#[global] Hint Constructors %s : core %s.\n\n"
                names1 hintDb
              }
 
@@ -395,7 +395,7 @@ processLc aa nts' =
       isCountable (SConstr _ _ _ _ (Bound _)) = False
       isCountable (SConstr _ _ _ _ _)         = True
 
-      hint = \s -> printf "Hint Constructors %s : core %s.\n\n" s hintDb
+      hint = \s -> printf "#[global] Hint Constructors %s : core %s.\n\n" s hintDb
 
       def :: NtRoot -> M String
       def nt =
@@ -605,7 +605,7 @@ processTactics _ =
     do { return $ printf
          "(** Additional hint declarations. *)\n\
          \\n\
-         \Hint Resolve @plus_le_compat : %s.\n\
+         \#[global] Hint Resolve @plus_le_compat : %s.\n\
          \\n\
          \(** Redefine some tactics. *)\n\
          \\n\
