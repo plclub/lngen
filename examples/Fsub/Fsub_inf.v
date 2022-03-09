@@ -2858,7 +2858,7 @@ forall X1 T1 T2,
   lc_typ (open_typ_wrt_typ T2 (typ_var_f X1)) ->
   lc_typ (typ_all T1 T2).
 Proof.
-intros; typ_lc_exists_tac; eauto with lngen.
+intros; typ_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 Lemma lc_exp_abs_exists :
@@ -2867,7 +2867,7 @@ forall x1 T1 e1,
   lc_exp (open_exp_wrt_exp e1 (exp_var_f x1)) ->
   lc_exp (exp_abs T1 e1).
 Proof.
-intros; exp_lc_exists_tac; eauto with lngen.
+intros; exp_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 Lemma lc_exp_tabs_exists :
@@ -2876,7 +2876,7 @@ forall X1 T1 e1,
   lc_exp (open_exp_wrt_typ e1 (typ_var_f X1)) ->
   lc_exp (exp_tabs T1 e1).
 Proof.
-intros; exp_lc_exists_tac; eauto with lngen.
+intros; exp_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 Lemma lc_exp_let_exists :
@@ -2885,7 +2885,7 @@ forall x1 e1 e2,
   lc_exp (open_exp_wrt_exp e2 (exp_var_f x1)) ->
   lc_exp (exp_let e1 e2).
 Proof.
-intros; exp_lc_exists_tac; eauto with lngen.
+intros; exp_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 Lemma lc_exp_case_exists :
@@ -2895,7 +2895,7 @@ forall x1 y1 e1 e2 e3,
   lc_exp (open_exp_wrt_exp e3 (exp_var_f y1)) ->
   lc_exp (exp_case e1 e2 e3).
 Proof.
-intros; exp_lc_exists_tac; eauto with lngen.
+intros; exp_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 #[export] Hint Extern 1 (lc_typ (typ_all _ _)) =>
@@ -2937,7 +2937,7 @@ let X1 := fresh "x" in
 pick_fresh X1;
 specialize_all X1;
 typ_lc_exists_tac;
-eauto with lngen.
+eauto 7 with lngen.
 Qed.
 
 #[export] Hint Resolve lc_body_typ_wrt_typ : lngen.
@@ -2954,7 +2954,7 @@ let X1 := fresh "x" in
 pick_fresh X1;
 specialize_all X1;
 binding_lc_exists_tac;
-eauto with lngen.
+eauto 7 with lngen.
 Qed.
 
 #[export] Hint Resolve lc_body_binding_wrt_typ : lngen.
@@ -2971,7 +2971,7 @@ let X1 := fresh "x" in
 pick_fresh X1;
 specialize_all X1;
 exp_lc_exists_tac;
-eauto with lngen.
+eauto 7 with lngen.
 Qed.
 
 #[export] Hint Resolve lc_body_exp_wrt_typ : lngen.
@@ -2988,7 +2988,7 @@ let x1 := fresh "x" in
 pick_fresh x1;
 specialize_all x1;
 exp_lc_exists_tac;
-eauto with lngen.
+eauto 7 with lngen.
 Qed.
 
 #[export] Hint Resolve lc_body_exp_wrt_exp : lngen.
