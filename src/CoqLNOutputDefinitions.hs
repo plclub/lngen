@@ -455,11 +455,15 @@ processNt :: ASTAnalysis -> [NtRoot] -> M String
 processNt aa nts =
     do { names     <- mapM (ntType aa) nts
        ; counts    <- mapM count nts
-       ; schemeInd <- local $ schemeIndDecl names (sum counts)
-       ; schemeRec <- local $ schemeRecDecl names (sum counts)
-       ; return $ printf "%s%s"
-         schemeInd
-         schemeRec
+       ; let n = sum counts
+       ; if n > 0 then do {
+                          ; schemeInd <- local $ schemeIndDecl names n
+                          ; schemeRec <- local $ schemeRecDecl names n
+                          ; return $ printf "%s%s"
+                            schemeInd
+                            schemeRec
+                          }
+         else return ""
        }
     where
       count nt1 =
@@ -499,8 +503,11 @@ coreNtText aa nt =
 
 processSize :: ASTAnalysis -> [NtRoot] -> M String
 processSize aa nts =
-    do { defs <- mapM (local . def) nts
-       ; return $ printf "Fixpoint %s.\n\n" (sepStrings "\n\nwith " defs)
+    do { defsAndBools <- mapM (local . def) nts
+       ; let (defs,bools) = unzip defsAndBools
+       ; if (head bools) 
+           then return $ printf "Fixpoint %s.\n\n" (sepStrings "\n\nwith " defs)
+           else return $ printf "Definition %s.\n\n" (sepStrings "\n\nwith " defs)
        }
     where
       def nt =
@@ -509,14 +516,18 @@ processSize aa nts =
              ; etype           <- ntType aa nt
              ; (Syntax _ _ cs) <- getSyntax aa nt
              ; branches        <- mapM (local . branch) cs
-             ; return $ printf
-               "%s (%s : %s) {struct %s} : nat :=\n\
-               \  match %s with\n\
-               \%s\n\
-               \  end"
-               size_fn e etype e
-               e
-               (sepStrings "\n" branches)
+             ; if length branches > 0
+               then return (printf
+                      "%s (%s : %s) {struct %s} : nat :=\n\
+                      \  match %s with\n\
+                      \%s\n\
+                      \  end"
+                      size_fn e etype e
+                      e
+                      (sepStrings "\n" branches), True)
+               else return (printf
+                      "%s (%s : %s) : nat := 1\n"
+                      size_fn e etype, False)
              }
 
       branch c@(SConstr _ _ _ ts _) =

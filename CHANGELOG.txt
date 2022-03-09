@@ -1,13 +1,16 @@
 0.3.2
   March 2022
-  compiles with GHC 8.10.7
-  compatible with Metalib-8.15.0
-  output compiles with Coq 8.15.0
-  - #[export] Hints
-  - remove @ from plus_le_compat
-  - Combined Scheme
-  - suppress warning about non-Fixpoint
-  - up eauto [issue 4]
+  * compiles with GHC 8.10.7
+  * compatible with Metalib-8.15.0
+  * output compiles with Coq 8.15.0
+    - #[export] Hints
+    - remove @ from plus_le_compat
+    - Combined Scheme
+    - suppress warning about non-Fixpoint
+  * issue 4: eauto limit raise
+  * better treatment of nonterminals with only meta productions 
+    - scheme generation supressed
+    - size defined to be 1
 
 0.3.1
   May 2020
