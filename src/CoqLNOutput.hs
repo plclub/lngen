@@ -65,6 +65,8 @@ coqOfAST ott loadpath ast =
                      Nothing -> ""
                      Just s  -> "\nRequire Export " ++ s ++ ".\n") ++
                   "\n\
+                  \Local Set Warnings \"-non-recursive\". \n\
+                  \\n\
                   \(** NOTE: Auxiliary theorems are hidden in generated documentation.\n\
                   \    In general, there is a [_rec] version of every lemma involving\n\
                   \    [open] and [close]. *)\n\

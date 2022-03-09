@@ -19,7 +19,7 @@ Lemma typing_regular_1 : forall G e T,
   lc_exp e.
 Proof. induction 1; eauto. Qed.
 
-Hint Resolve typing_regular_1 : core.
+#[export] Hint Resolve typing_regular_1 : core.
 
 Lemma typing_regular_2 : forall G e T,
   typing G e T ->
@@ -29,21 +29,21 @@ Proof.
   pick fresh z. lapply (H0 z); solve_uniq.
 Qed.
 
-Hint Resolve typing_regular_2 : core.
+#[export] Hint Resolve typing_regular_2 : core.
 
 Lemma step_regular_1 : forall e1 e2,
   step e1 e2 ->
   lc_exp e1.
 Proof. induction 1; eauto. Qed.
 
-Hint Resolve step_regular_1 : core.
+#[export] Hint Resolve step_regular_1 : core.
 
 Lemma step_regular_2 : forall e1 e2,
   step e1 e2 ->
   lc_exp e1.
 Proof. induction 1; eauto. Qed.
 
-Hint Resolve step_regular_2 : core.
+#[export] Hint Resolve step_regular_2 : core.
 
 
 (* *********************************************************************** *)
@@ -78,7 +78,7 @@ Proof with eauto.
     pick fresh z and apply typing_abs.
     rewrite_env ((z ~ T1 ++ F) ++ G).
     rewrite subst_exp_open_exp_wrt_exp_var...
-    apply H0 with (S0 := S)...
+    apply H0 with (S := S)...
 Qed.
 
 Lemma preservation : forall G e1 e2 T,

@@ -246,7 +246,7 @@ lc_exists_hint aaa nt1s =
              ; let bargs = filter hasBindingArg args
              ; picks <- local $ mapM pick bargs
              ; names <- local $ mapM name bargs
-             ; return $ printf "Hint Extern 1 (%s (%s%s)) =>\n\
+             ; return $ printf "#[export] Hint Extern 1 (%s (%s%s)) =>\n\
                                \%s\
                                \  apply (%s%s) : core.\n\
                                \\n"

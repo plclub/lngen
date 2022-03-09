@@ -40,7 +40,7 @@ Coercion exp_var_f : expvar >-> exp.
 
 Notation empty := (@nil (atom * binding)).
 
-Hint Extern 1 (binds _ (?F (subst_typ_in_typ ?X ?U ?T)) _) =>
+#[export] Hint Extern 1 (binds _ (?F (subst_typ_in_typ ?X ?U ?T)) _) =>
   unsimpl (subst_typ_in_binding X U (F T)) : core.
 
 
@@ -170,7 +170,7 @@ Qed.
     [uniq_from_wf_env] serves as a bridge that allows us to use the
     environments library. *)
 
-Hint Resolve uniq_from_wf_env : core.
+#[export] Hint Resolve uniq_from_wf_env : core.
 
 Lemma wf_typ_from_binds_typ : forall x U E,
   wf_env E ->
@@ -405,20 +405,20 @@ Qed.
     The other three hints try outright to solve their respective
     goals. *)
 
-Hint Extern 1 (wf_env ?E) =>
+#[export] Hint Extern 1 (wf_env ?E) =>
   match goal with
   | H: sub _ _ _ |- _ => apply (proj1 (sub_regular _ _ _ H))
   | H: typing _ _ _ |- _ => apply (proj1 (typing_regular _ _ _ H))
   end : core.
 
-Hint Extern 1 (wf_typ ?E ?T) =>
+#[export] Hint Extern 1 (wf_typ ?E ?T) =>
   match goal with
   | H: typing E _ T |- _ => apply (proj2 (proj2 (typing_regular _ _ _ H)))
   | H: sub E T _ |- _ => apply (proj1 (proj2 (sub_regular _ _ _ H)))
   | H: sub E _ T |- _ => apply (proj2 (proj2 (sub_regular _ _ _ H)))
   end : core.
 
-Hint Extern 1 (lc_typ ?T) =>
+#[export] Hint Extern 1 (lc_typ ?T) =>
   let go E := apply (type_from_wf_typ E); auto in
   match goal with
   | H: typing ?E _ T |- _ => go E
@@ -426,7 +426,7 @@ Hint Extern 1 (lc_typ ?T) =>
   | H: sub ?E _ T |- _ => go E
   end : core.
 
-Hint Extern 1 (lc_exp ?e) =>
+#[export] Hint Extern 1 (lc_exp ?e) =>
   match goal with
   | H: typing _ ?e _ |- _ => apply (proj1 (proj2 (typing_regular _ _ _ H)))
   | H: red ?e _ |- _ => apply (proj1 (red_regular _ _ H))

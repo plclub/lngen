@@ -7,6 +7,8 @@ Require Export Metalib.LibLNgen.
 
 Require Export LF_hhp93_ott.
 
+Local Set Warnings "-non-recursive". 
+
 (** NOTE: Auxiliary theorems are hidden in generated documentation.
     In general, there is a [_rec] version of every lemma involving
     [open] and [close]. *)
@@ -18,30 +20,20 @@ Require Export LF_hhp93_ott.
 Scheme family_ind' := Induction for family Sort Prop
   with object_ind' := Induction for object Sort Prop.
 
-Definition family_object_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 =>
-  (conj (family_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11)
-  (object_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11)).
+Combined Scheme family_object_mutind from family_ind',object_ind'.
 
 Scheme family_rec' := Induction for family Sort Set
   with object_rec' := Induction for object Sort Set.
 
-Definition family_object_mutrec :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 =>
-  (pair (family_rec' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11)
-  (object_rec' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11)).
+Combined Scheme family_object_mutrec from family_rec',object_rec'.
 
 Scheme kind_ind' := Induction for kind Sort Prop.
 
-Definition kind_mutind :=
-  fun H1 H2 H3 =>
-  kind_ind' H1 H2 H3.
+Combined Scheme kind_mutind from kind_ind'.
 
 Scheme kind_rec' := Induction for kind Sort Set.
 
-Definition kind_mutrec :=
-  fun H1 H2 H3 =>
-  kind_rec' H1 H2 H3.
+Combined Scheme kind_mutrec from kind_rec'.
 
 
 (* *********************************************************************** *)
@@ -145,14 +137,11 @@ with degree_object_wrt_object : nat -> object -> Prop :=
 Scheme degree_family_wrt_object_ind' := Induction for degree_family_wrt_object Sort Prop
   with degree_object_wrt_object_ind' := Induction for degree_object_wrt_object Sort Prop.
 
-Definition degree_family_wrt_object_degree_object_wrt_object_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 =>
-  (conj (degree_family_wrt_object_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11)
-  (degree_object_wrt_object_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11)).
+Combined Scheme degree_family_wrt_object_degree_object_wrt_object_mutind from degree_family_wrt_object_ind',degree_object_wrt_object_ind'.
 
-Hint Constructors degree_family_wrt_object : core lngen.
+#[export] Hint Constructors degree_family_wrt_object : core lngen.
 
-Hint Constructors degree_object_wrt_object : core lngen.
+#[export] Hint Constructors degree_object_wrt_object : core lngen.
 
 Inductive degree_kind_wrt_object : nat -> kind -> Prop :=
   | degree_wrt_object_kind_type : forall n1,
@@ -164,11 +153,9 @@ Inductive degree_kind_wrt_object : nat -> kind -> Prop :=
 
 Scheme degree_kind_wrt_object_ind' := Induction for degree_kind_wrt_object Sort Prop.
 
-Definition degree_kind_wrt_object_mutind :=
-  fun H1 H2 H3 =>
-  degree_kind_wrt_object_ind' H1 H2 H3.
+Combined Scheme degree_kind_wrt_object_mutind from degree_kind_wrt_object_ind'.
 
-Hint Constructors degree_kind_wrt_object : core lngen.
+#[export] Hint Constructors degree_kind_wrt_object : core lngen.
 
 
 (* *********************************************************************** *)
@@ -207,34 +194,25 @@ with lc_set_object : object -> Set :=
 Scheme lc_family_ind' := Induction for lc_family Sort Prop
   with lc_object_ind' := Induction for lc_object Sort Prop.
 
-Definition lc_family_lc_object_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 =>
-  (conj (lc_family_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10)
-  (lc_object_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10)).
+Combined Scheme lc_family_lc_object_mutind from lc_family_ind',lc_object_ind'.
 
 Scheme lc_set_family_ind' := Induction for lc_set_family Sort Prop
   with lc_set_object_ind' := Induction for lc_set_object Sort Prop.
 
-Definition lc_set_family_lc_set_object_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 =>
-  (conj (lc_set_family_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10)
-  (lc_set_object_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10)).
+Combined Scheme lc_set_family_lc_set_object_mutind from lc_set_family_ind',lc_set_object_ind'.
 
 Scheme lc_set_family_rec' := Induction for lc_set_family Sort Set
   with lc_set_object_rec' := Induction for lc_set_object Sort Set.
 
-Definition lc_set_family_lc_set_object_mutrec :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 =>
-  (pair (lc_set_family_rec' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10)
-  (lc_set_object_rec' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10)).
+Combined Scheme lc_set_family_lc_set_object_mutrec from lc_set_family_rec',lc_set_object_rec'.
 
-Hint Constructors lc_family : core lngen.
+#[export] Hint Constructors lc_family : core lngen.
 
-Hint Constructors lc_object : core lngen.
+#[export] Hint Constructors lc_object : core lngen.
 
-Hint Constructors lc_set_family : core lngen.
+#[export] Hint Constructors lc_set_family : core lngen.
 
-Hint Constructors lc_set_object : core lngen.
+#[export] Hint Constructors lc_set_object : core lngen.
 
 Inductive lc_set_kind : kind -> Set :=
   | lc_set_kind_type :
@@ -246,25 +224,19 @@ Inductive lc_set_kind : kind -> Set :=
 
 Scheme lc_kind_ind' := Induction for lc_kind Sort Prop.
 
-Definition lc_kind_mutind :=
-  fun H1 H2 H3 =>
-  lc_kind_ind' H1 H2 H3.
+Combined Scheme lc_kind_mutind from lc_kind_ind'.
 
 Scheme lc_set_kind_ind' := Induction for lc_set_kind Sort Prop.
 
-Definition lc_set_kind_mutind :=
-  fun H1 H2 H3 =>
-  lc_set_kind_ind' H1 H2 H3.
+Combined Scheme lc_set_kind_mutind from lc_set_kind_ind'.
 
 Scheme lc_set_kind_rec' := Induction for lc_set_kind Sort Set.
 
-Definition lc_set_kind_mutrec :=
-  fun H1 H2 H3 =>
-  lc_set_kind_rec' H1 H2 H3.
+Combined Scheme lc_set_kind_mutrec from lc_set_kind_rec'.
 
-Hint Constructors lc_kind : core lngen.
+#[export] Hint Constructors lc_kind : core lngen.
 
-Hint Constructors lc_set_kind : core lngen.
+#[export] Hint Constructors lc_set_kind : core lngen.
 
 
 (* *********************************************************************** *)
@@ -274,13 +246,13 @@ Definition body_family_wrt_object A1 := forall x1, lc_family (open_family_wrt_ob
 
 Definition body_object_wrt_object M1 := forall x1, lc_object (open_object_wrt_object M1 (object_var_f x1)).
 
-Hint Unfold body_family_wrt_object : core.
+#[export] Hint Unfold body_family_wrt_object : core.
 
-Hint Unfold body_object_wrt_object : core.
+#[export] Hint Unfold body_object_wrt_object : core.
 
 Definition body_kind_wrt_object K1 := forall x1, lc_kind (open_kind_wrt_object K1 (object_var_f x1)).
 
-Hint Unfold body_kind_wrt_object : core.
+#[export] Hint Unfold body_kind_wrt_object : core.
 
 
 (* *********************************************************************** *)
@@ -288,7 +260,7 @@ Hint Unfold body_kind_wrt_object : core.
 
 (** Additional hint declarations. *)
 
-Hint Resolve @plus_le_compat : lngen.
+#[export] Hint Resolve plus_le_compat : lngen.
 
 (** Redefine some tactics. *)
 
@@ -324,7 +296,7 @@ Proof.
 pose proof size_family_min_size_object_min_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_family_min : lngen.
+#[export] Hint Resolve size_family_min : lngen.
 
 Lemma size_object_min :
 forall M1, 1 <= size_object M1.
@@ -332,7 +304,7 @@ Proof.
 pose proof size_family_min_size_object_min_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_object_min : lngen.
+#[export] Hint Resolve size_object_min : lngen.
 
 (* begin hide *)
 
@@ -351,7 +323,7 @@ Proof.
 pose proof size_kind_min_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_kind_min : lngen.
+#[export] Hint Resolve size_kind_min : lngen.
 
 (* begin hide *)
 
@@ -376,8 +348,8 @@ Proof.
 pose proof size_family_close_family_wrt_object_rec_size_object_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_family_close_family_wrt_object_rec : lngen.
-Hint Rewrite size_family_close_family_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve size_family_close_family_wrt_object_rec : lngen.
+#[export] Hint Rewrite size_family_close_family_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -390,8 +362,8 @@ Proof.
 pose proof size_family_close_family_wrt_object_rec_size_object_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_object_close_object_wrt_object_rec : lngen.
-Hint Rewrite size_object_close_object_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve size_object_close_object_wrt_object_rec : lngen.
+#[export] Hint Rewrite size_object_close_object_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -416,8 +388,8 @@ Proof.
 pose proof size_kind_close_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_kind_close_kind_wrt_object_rec : lngen.
-Hint Rewrite size_kind_close_kind_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve size_kind_close_kind_wrt_object_rec : lngen.
+#[export] Hint Rewrite size_kind_close_kind_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -428,8 +400,8 @@ Proof.
 unfold close_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_family_close_family_wrt_object : lngen.
-Hint Rewrite size_family_close_family_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve size_family_close_family_wrt_object : lngen.
+#[export] Hint Rewrite size_family_close_family_wrt_object using solve [auto] : lngen.
 
 Lemma size_object_close_object_wrt_object :
 forall M1 x1,
@@ -438,8 +410,8 @@ Proof.
 unfold close_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_object_close_object_wrt_object : lngen.
-Hint Rewrite size_object_close_object_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve size_object_close_object_wrt_object : lngen.
+#[export] Hint Rewrite size_object_close_object_wrt_object using solve [auto] : lngen.
 
 Lemma size_kind_close_kind_wrt_object :
 forall K1 x1,
@@ -448,8 +420,8 @@ Proof.
 unfold close_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_kind_close_kind_wrt_object : lngen.
-Hint Rewrite size_kind_close_kind_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve size_kind_close_kind_wrt_object : lngen.
+#[export] Hint Rewrite size_kind_close_kind_wrt_object using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -474,7 +446,7 @@ Proof.
 pose proof size_family_open_family_wrt_object_rec_size_object_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_family_open_family_wrt_object_rec : lngen.
+#[export] Hint Resolve size_family_open_family_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -487,7 +459,7 @@ Proof.
 pose proof size_family_open_family_wrt_object_rec_size_object_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_object_open_object_wrt_object_rec : lngen.
+#[export] Hint Resolve size_object_open_object_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -512,7 +484,7 @@ Proof.
 pose proof size_kind_open_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_kind_open_kind_wrt_object_rec : lngen.
+#[export] Hint Resolve size_kind_open_kind_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -523,7 +495,7 @@ Proof.
 unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_family_open_family_wrt_object : lngen.
+#[export] Hint Resolve size_family_open_family_wrt_object : lngen.
 
 Lemma size_object_open_object_wrt_object :
 forall M1 M2,
@@ -532,7 +504,7 @@ Proof.
 unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_object_open_object_wrt_object : lngen.
+#[export] Hint Resolve size_object_open_object_wrt_object : lngen.
 
 Lemma size_kind_open_kind_wrt_object :
 forall K1 M1,
@@ -541,7 +513,7 @@ Proof.
 unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_kind_open_kind_wrt_object : lngen.
+#[export] Hint Resolve size_kind_open_kind_wrt_object : lngen.
 
 (* begin hide *)
 
@@ -566,8 +538,8 @@ Proof.
 pose proof size_family_open_family_wrt_object_rec_var_size_object_open_object_wrt_object_rec_var_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_family_open_family_wrt_object_rec_var : lngen.
-Hint Rewrite size_family_open_family_wrt_object_rec_var using solve [auto] : lngen.
+#[export] Hint Resolve size_family_open_family_wrt_object_rec_var : lngen.
+#[export] Hint Rewrite size_family_open_family_wrt_object_rec_var using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -580,8 +552,8 @@ Proof.
 pose proof size_family_open_family_wrt_object_rec_var_size_object_open_object_wrt_object_rec_var_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_object_open_object_wrt_object_rec_var : lngen.
-Hint Rewrite size_object_open_object_wrt_object_rec_var using solve [auto] : lngen.
+#[export] Hint Resolve size_object_open_object_wrt_object_rec_var : lngen.
+#[export] Hint Rewrite size_object_open_object_wrt_object_rec_var using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -606,8 +578,8 @@ Proof.
 pose proof size_kind_open_kind_wrt_object_rec_var_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_kind_open_kind_wrt_object_rec_var : lngen.
-Hint Rewrite size_kind_open_kind_wrt_object_rec_var using solve [auto] : lngen.
+#[export] Hint Resolve size_kind_open_kind_wrt_object_rec_var : lngen.
+#[export] Hint Rewrite size_kind_open_kind_wrt_object_rec_var using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -618,8 +590,8 @@ Proof.
 unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_family_open_family_wrt_object_var : lngen.
-Hint Rewrite size_family_open_family_wrt_object_var using solve [auto] : lngen.
+#[export] Hint Resolve size_family_open_family_wrt_object_var : lngen.
+#[export] Hint Rewrite size_family_open_family_wrt_object_var using solve [auto] : lngen.
 
 Lemma size_object_open_object_wrt_object_var :
 forall M1 x1,
@@ -628,8 +600,8 @@ Proof.
 unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_object_open_object_wrt_object_var : lngen.
-Hint Rewrite size_object_open_object_wrt_object_var using solve [auto] : lngen.
+#[export] Hint Resolve size_object_open_object_wrt_object_var : lngen.
+#[export] Hint Rewrite size_object_open_object_wrt_object_var using solve [auto] : lngen.
 
 Lemma size_kind_open_kind_wrt_object_var :
 forall K1 x1,
@@ -638,8 +610,8 @@ Proof.
 unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve size_kind_open_kind_wrt_object_var : lngen.
-Hint Rewrite size_kind_open_kind_wrt_object_var using solve [auto] : lngen.
+#[export] Hint Resolve size_kind_open_kind_wrt_object_var : lngen.
+#[export] Hint Rewrite size_kind_open_kind_wrt_object_var using solve [auto] : lngen.
 
 
 (* *********************************************************************** *)
@@ -672,7 +644,7 @@ Proof.
 pose proof degree_family_wrt_object_S_degree_object_wrt_object_S_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_family_wrt_object_S : lngen.
+#[export] Hint Resolve degree_family_wrt_object_S : lngen.
 
 Lemma degree_object_wrt_object_S :
 forall n1 M1,
@@ -682,7 +654,7 @@ Proof.
 pose proof degree_family_wrt_object_S_degree_object_wrt_object_S_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_object_wrt_object_S : lngen.
+#[export] Hint Resolve degree_object_wrt_object_S : lngen.
 
 (* begin hide *)
 
@@ -705,7 +677,7 @@ Proof.
 pose proof degree_kind_wrt_object_S_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_kind_wrt_object_S : lngen.
+#[export] Hint Resolve degree_kind_wrt_object_S : lngen.
 
 Lemma degree_family_wrt_object_O :
 forall n1 A1,
@@ -715,7 +687,7 @@ Proof.
 induction n1; default_simp.
 Qed.
 
-Hint Resolve degree_family_wrt_object_O : lngen.
+#[export] Hint Resolve degree_family_wrt_object_O : lngen.
 
 Lemma degree_object_wrt_object_O :
 forall n1 M1,
@@ -725,7 +697,7 @@ Proof.
 induction n1; default_simp.
 Qed.
 
-Hint Resolve degree_object_wrt_object_O : lngen.
+#[export] Hint Resolve degree_object_wrt_object_O : lngen.
 
 Lemma degree_kind_wrt_object_O :
 forall n1 K1,
@@ -735,7 +707,7 @@ Proof.
 induction n1; default_simp.
 Qed.
 
-Hint Resolve degree_kind_wrt_object_O : lngen.
+#[export] Hint Resolve degree_kind_wrt_object_O : lngen.
 
 (* begin hide *)
 
@@ -763,7 +735,7 @@ Proof.
 pose proof degree_family_wrt_object_close_family_wrt_object_rec_degree_object_wrt_object_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_family_wrt_object_close_family_wrt_object_rec : lngen.
+#[export] Hint Resolve degree_family_wrt_object_close_family_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -777,7 +749,7 @@ Proof.
 pose proof degree_family_wrt_object_close_family_wrt_object_rec_degree_object_wrt_object_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_object_wrt_object_close_object_wrt_object_rec : lngen.
+#[export] Hint Resolve degree_object_wrt_object_close_object_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -804,7 +776,7 @@ Proof.
 pose proof degree_kind_wrt_object_close_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_kind_wrt_object_close_kind_wrt_object_rec : lngen.
+#[export] Hint Resolve degree_kind_wrt_object_close_kind_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -816,7 +788,7 @@ Proof.
 unfold close_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve degree_family_wrt_object_close_family_wrt_object : lngen.
+#[export] Hint Resolve degree_family_wrt_object_close_family_wrt_object : lngen.
 
 Lemma degree_object_wrt_object_close_object_wrt_object :
 forall M1 x1,
@@ -826,7 +798,7 @@ Proof.
 unfold close_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve degree_object_wrt_object_close_object_wrt_object : lngen.
+#[export] Hint Resolve degree_object_wrt_object_close_object_wrt_object : lngen.
 
 Lemma degree_kind_wrt_object_close_kind_wrt_object :
 forall K1 x1,
@@ -836,7 +808,7 @@ Proof.
 unfold close_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve degree_kind_wrt_object_close_kind_wrt_object : lngen.
+#[export] Hint Resolve degree_kind_wrt_object_close_kind_wrt_object : lngen.
 
 (* begin hide *)
 
@@ -864,7 +836,7 @@ Proof.
 pose proof degree_family_wrt_object_close_family_wrt_object_rec_inv_degree_object_wrt_object_close_object_wrt_object_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_family_wrt_object_close_family_wrt_object_rec_inv : lngen.
+#[export] Hint Immediate degree_family_wrt_object_close_family_wrt_object_rec_inv : lngen.
 
 (* end hide *)
 
@@ -878,7 +850,7 @@ Proof.
 pose proof degree_family_wrt_object_close_family_wrt_object_rec_inv_degree_object_wrt_object_close_object_wrt_object_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_object_wrt_object_close_object_wrt_object_rec_inv : lngen.
+#[export] Hint Immediate degree_object_wrt_object_close_object_wrt_object_rec_inv : lngen.
 
 (* end hide *)
 
@@ -905,7 +877,7 @@ Proof.
 pose proof degree_kind_wrt_object_close_kind_wrt_object_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_kind_wrt_object_close_kind_wrt_object_rec_inv : lngen.
+#[export] Hint Immediate degree_kind_wrt_object_close_kind_wrt_object_rec_inv : lngen.
 
 (* end hide *)
 
@@ -917,7 +889,7 @@ Proof.
 unfold close_family_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate degree_family_wrt_object_close_family_wrt_object_inv : lngen.
+#[export] Hint Immediate degree_family_wrt_object_close_family_wrt_object_inv : lngen.
 
 Lemma degree_object_wrt_object_close_object_wrt_object_inv :
 forall M1 x1,
@@ -927,7 +899,7 @@ Proof.
 unfold close_object_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate degree_object_wrt_object_close_object_wrt_object_inv : lngen.
+#[export] Hint Immediate degree_object_wrt_object_close_object_wrt_object_inv : lngen.
 
 Lemma degree_kind_wrt_object_close_kind_wrt_object_inv :
 forall K1 x1,
@@ -937,7 +909,7 @@ Proof.
 unfold close_kind_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate degree_kind_wrt_object_close_kind_wrt_object_inv : lngen.
+#[export] Hint Immediate degree_kind_wrt_object_close_kind_wrt_object_inv : lngen.
 
 (* begin hide *)
 
@@ -968,7 +940,7 @@ Proof.
 pose proof degree_family_wrt_object_open_family_wrt_object_rec_degree_object_wrt_object_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_family_wrt_object_open_family_wrt_object_rec : lngen.
+#[export] Hint Resolve degree_family_wrt_object_open_family_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -983,7 +955,7 @@ Proof.
 pose proof degree_family_wrt_object_open_family_wrt_object_rec_degree_object_wrt_object_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_object_wrt_object_open_object_wrt_object_rec : lngen.
+#[export] Hint Resolve degree_object_wrt_object_open_object_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -1012,7 +984,7 @@ Proof.
 pose proof degree_kind_wrt_object_open_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_kind_wrt_object_open_kind_wrt_object_rec : lngen.
+#[export] Hint Resolve degree_kind_wrt_object_open_kind_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -1025,7 +997,7 @@ Proof.
 unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve degree_family_wrt_object_open_family_wrt_object : lngen.
+#[export] Hint Resolve degree_family_wrt_object_open_family_wrt_object : lngen.
 
 Lemma degree_object_wrt_object_open_object_wrt_object :
 forall M1 M2,
@@ -1036,7 +1008,7 @@ Proof.
 unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve degree_object_wrt_object_open_object_wrt_object : lngen.
+#[export] Hint Resolve degree_object_wrt_object_open_object_wrt_object : lngen.
 
 Lemma degree_kind_wrt_object_open_kind_wrt_object :
 forall K1 M1,
@@ -1047,7 +1019,7 @@ Proof.
 unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve degree_kind_wrt_object_open_kind_wrt_object : lngen.
+#[export] Hint Resolve degree_kind_wrt_object_open_kind_wrt_object : lngen.
 
 (* begin hide *)
 
@@ -1075,7 +1047,7 @@ Proof.
 pose proof degree_family_wrt_object_open_family_wrt_object_rec_inv_degree_object_wrt_object_open_object_wrt_object_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_family_wrt_object_open_family_wrt_object_rec_inv : lngen.
+#[export] Hint Immediate degree_family_wrt_object_open_family_wrt_object_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1089,7 +1061,7 @@ Proof.
 pose proof degree_family_wrt_object_open_family_wrt_object_rec_inv_degree_object_wrt_object_open_object_wrt_object_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_object_wrt_object_open_object_wrt_object_rec_inv : lngen.
+#[export] Hint Immediate degree_object_wrt_object_open_object_wrt_object_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1116,7 +1088,7 @@ Proof.
 pose proof degree_kind_wrt_object_open_kind_wrt_object_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_kind_wrt_object_open_kind_wrt_object_rec_inv : lngen.
+#[export] Hint Immediate degree_kind_wrt_object_open_kind_wrt_object_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1128,7 +1100,7 @@ Proof.
 unfold open_family_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate degree_family_wrt_object_open_family_wrt_object_inv : lngen.
+#[export] Hint Immediate degree_family_wrt_object_open_family_wrt_object_inv : lngen.
 
 Lemma degree_object_wrt_object_open_object_wrt_object_inv :
 forall M1 M2,
@@ -1138,7 +1110,7 @@ Proof.
 unfold open_object_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate degree_object_wrt_object_open_object_wrt_object_inv : lngen.
+#[export] Hint Immediate degree_object_wrt_object_open_object_wrt_object_inv : lngen.
 
 Lemma degree_kind_wrt_object_open_kind_wrt_object_inv :
 forall K1 M1,
@@ -1148,7 +1120,7 @@ Proof.
 unfold open_kind_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate degree_kind_wrt_object_open_kind_wrt_object_inv : lngen.
+#[export] Hint Immediate degree_kind_wrt_object_open_kind_wrt_object_inv : lngen.
 
 
 (* *********************************************************************** *)
@@ -1186,7 +1158,7 @@ Proof.
 pose proof close_family_wrt_object_rec_inj_close_object_wrt_object_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate close_family_wrt_object_rec_inj : lngen.
+#[export] Hint Immediate close_family_wrt_object_rec_inj : lngen.
 
 (* end hide *)
 
@@ -1200,7 +1172,7 @@ Proof.
 pose proof close_family_wrt_object_rec_inj_close_object_wrt_object_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate close_object_wrt_object_rec_inj : lngen.
+#[export] Hint Immediate close_object_wrt_object_rec_inj : lngen.
 
 (* end hide *)
 
@@ -1230,7 +1202,7 @@ Proof.
 pose proof close_kind_wrt_object_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate close_kind_wrt_object_rec_inj : lngen.
+#[export] Hint Immediate close_kind_wrt_object_rec_inj : lngen.
 
 (* end hide *)
 
@@ -1242,7 +1214,7 @@ Proof.
 unfold close_family_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate close_family_wrt_object_inj : lngen.
+#[export] Hint Immediate close_family_wrt_object_inj : lngen.
 
 Lemma close_object_wrt_object_inj :
 forall M1 M2 x1,
@@ -1252,7 +1224,7 @@ Proof.
 unfold close_object_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate close_object_wrt_object_inj : lngen.
+#[export] Hint Immediate close_object_wrt_object_inj : lngen.
 
 Lemma close_kind_wrt_object_inj :
 forall K1 K2 x1,
@@ -1262,7 +1234,7 @@ Proof.
 unfold close_kind_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate close_kind_wrt_object_inj : lngen.
+#[export] Hint Immediate close_kind_wrt_object_inj : lngen.
 
 (* begin hide *)
 
@@ -1290,8 +1262,8 @@ Proof.
 pose proof close_family_wrt_object_rec_open_family_wrt_object_rec_close_object_wrt_object_rec_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_family_wrt_object_rec_open_family_wrt_object_rec : lngen.
-Hint Rewrite close_family_wrt_object_rec_open_family_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve close_family_wrt_object_rec_open_family_wrt_object_rec : lngen.
+#[export] Hint Rewrite close_family_wrt_object_rec_open_family_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -1305,8 +1277,8 @@ Proof.
 pose proof close_family_wrt_object_rec_open_family_wrt_object_rec_close_object_wrt_object_rec_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_object_wrt_object_rec_open_object_wrt_object_rec : lngen.
-Hint Rewrite close_object_wrt_object_rec_open_object_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve close_object_wrt_object_rec_open_object_wrt_object_rec : lngen.
+#[export] Hint Rewrite close_object_wrt_object_rec_open_object_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -1333,8 +1305,8 @@ Proof.
 pose proof close_kind_wrt_object_rec_open_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_kind_wrt_object_rec_open_kind_wrt_object_rec : lngen.
-Hint Rewrite close_kind_wrt_object_rec_open_kind_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve close_kind_wrt_object_rec_open_kind_wrt_object_rec : lngen.
+#[export] Hint Rewrite close_kind_wrt_object_rec_open_kind_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -1346,8 +1318,8 @@ Proof.
 unfold close_family_wrt_object; unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve close_family_wrt_object_open_family_wrt_object : lngen.
-Hint Rewrite close_family_wrt_object_open_family_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve close_family_wrt_object_open_family_wrt_object : lngen.
+#[export] Hint Rewrite close_family_wrt_object_open_family_wrt_object using solve [auto] : lngen.
 
 Lemma close_object_wrt_object_open_object_wrt_object :
 forall M1 x1,
@@ -1357,8 +1329,8 @@ Proof.
 unfold close_object_wrt_object; unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve close_object_wrt_object_open_object_wrt_object : lngen.
-Hint Rewrite close_object_wrt_object_open_object_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve close_object_wrt_object_open_object_wrt_object : lngen.
+#[export] Hint Rewrite close_object_wrt_object_open_object_wrt_object using solve [auto] : lngen.
 
 Lemma close_kind_wrt_object_open_kind_wrt_object :
 forall K1 x1,
@@ -1368,8 +1340,8 @@ Proof.
 unfold close_kind_wrt_object; unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve close_kind_wrt_object_open_kind_wrt_object : lngen.
-Hint Rewrite close_kind_wrt_object_open_kind_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve close_kind_wrt_object_open_kind_wrt_object : lngen.
+#[export] Hint Rewrite close_kind_wrt_object_open_kind_wrt_object using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -1394,8 +1366,8 @@ Proof.
 pose proof open_family_wrt_object_rec_close_family_wrt_object_rec_open_object_wrt_object_rec_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_family_wrt_object_rec_close_family_wrt_object_rec : lngen.
-Hint Rewrite open_family_wrt_object_rec_close_family_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve open_family_wrt_object_rec_close_family_wrt_object_rec : lngen.
+#[export] Hint Rewrite open_family_wrt_object_rec_close_family_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -1408,8 +1380,8 @@ Proof.
 pose proof open_family_wrt_object_rec_close_family_wrt_object_rec_open_object_wrt_object_rec_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_object_wrt_object_rec_close_object_wrt_object_rec : lngen.
-Hint Rewrite open_object_wrt_object_rec_close_object_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve open_object_wrt_object_rec_close_object_wrt_object_rec : lngen.
+#[export] Hint Rewrite open_object_wrt_object_rec_close_object_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -1434,8 +1406,8 @@ Proof.
 pose proof open_kind_wrt_object_rec_close_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_kind_wrt_object_rec_close_kind_wrt_object_rec : lngen.
-Hint Rewrite open_kind_wrt_object_rec_close_kind_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve open_kind_wrt_object_rec_close_kind_wrt_object_rec : lngen.
+#[export] Hint Rewrite open_kind_wrt_object_rec_close_kind_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -1446,8 +1418,8 @@ Proof.
 unfold close_family_wrt_object; unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve open_family_wrt_object_close_family_wrt_object : lngen.
-Hint Rewrite open_family_wrt_object_close_family_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve open_family_wrt_object_close_family_wrt_object : lngen.
+#[export] Hint Rewrite open_family_wrt_object_close_family_wrt_object using solve [auto] : lngen.
 
 Lemma open_object_wrt_object_close_object_wrt_object :
 forall M1 x1,
@@ -1456,8 +1428,8 @@ Proof.
 unfold close_object_wrt_object; unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve open_object_wrt_object_close_object_wrt_object : lngen.
-Hint Rewrite open_object_wrt_object_close_object_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve open_object_wrt_object_close_object_wrt_object : lngen.
+#[export] Hint Rewrite open_object_wrt_object_close_object_wrt_object using solve [auto] : lngen.
 
 Lemma open_kind_wrt_object_close_kind_wrt_object :
 forall K1 x1,
@@ -1466,8 +1438,8 @@ Proof.
 unfold close_kind_wrt_object; unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve open_kind_wrt_object_close_kind_wrt_object : lngen.
-Hint Rewrite open_kind_wrt_object_close_kind_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve open_kind_wrt_object_close_kind_wrt_object : lngen.
+#[export] Hint Rewrite open_kind_wrt_object_close_kind_wrt_object using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -1504,7 +1476,7 @@ Proof.
 pose proof open_family_wrt_object_rec_inj_open_object_wrt_object_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate open_family_wrt_object_rec_inj : lngen.
+#[export] Hint Immediate open_family_wrt_object_rec_inj : lngen.
 
 (* end hide *)
 
@@ -1520,7 +1492,7 @@ Proof.
 pose proof open_family_wrt_object_rec_inj_open_object_wrt_object_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate open_object_wrt_object_rec_inj : lngen.
+#[export] Hint Immediate open_object_wrt_object_rec_inj : lngen.
 
 (* end hide *)
 
@@ -1554,7 +1526,7 @@ Proof.
 pose proof open_kind_wrt_object_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate open_kind_wrt_object_rec_inj : lngen.
+#[export] Hint Immediate open_kind_wrt_object_rec_inj : lngen.
 
 (* end hide *)
 
@@ -1568,7 +1540,7 @@ Proof.
 unfold open_family_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate open_family_wrt_object_inj : lngen.
+#[export] Hint Immediate open_family_wrt_object_inj : lngen.
 
 Lemma open_object_wrt_object_inj :
 forall M2 M1 x1,
@@ -1580,7 +1552,7 @@ Proof.
 unfold open_object_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate open_object_wrt_object_inj : lngen.
+#[export] Hint Immediate open_object_wrt_object_inj : lngen.
 
 Lemma open_kind_wrt_object_inj :
 forall K2 K1 x1,
@@ -1592,7 +1564,7 @@ Proof.
 unfold open_kind_wrt_object; eauto with lngen.
 Qed.
 
-Hint Immediate open_kind_wrt_object_inj : lngen.
+#[export] Hint Immediate open_kind_wrt_object_inj : lngen.
 
 
 (* *********************************************************************** *)
@@ -1630,7 +1602,7 @@ Proof.
 pose proof degree_family_wrt_object_of_lc_family_degree_object_wrt_object_of_lc_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_family_wrt_object_of_lc_family : lngen.
+#[export] Hint Resolve degree_family_wrt_object_of_lc_family : lngen.
 
 Lemma degree_object_wrt_object_of_lc_object :
 forall M1,
@@ -1640,7 +1612,7 @@ Proof.
 pose proof degree_family_wrt_object_of_lc_family_degree_object_wrt_object_of_lc_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_object_wrt_object_of_lc_object : lngen.
+#[export] Hint Resolve degree_object_wrt_object_of_lc_object : lngen.
 
 (* begin hide *)
 
@@ -1668,7 +1640,7 @@ Proof.
 pose proof degree_kind_wrt_object_of_lc_kind_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_kind_wrt_object_of_lc_kind : lngen.
+#[export] Hint Resolve degree_kind_wrt_object_of_lc_kind : lngen.
 
 (* begin hide *)
 
@@ -1711,7 +1683,7 @@ pose proof (lc_family_of_degree_lc_object_of_degree_size_mutual (size_family A1)
 intuition eauto.
 Qed.
 
-Hint Resolve lc_family_of_degree : lngen.
+#[export] Hint Resolve lc_family_of_degree : lngen.
 
 Lemma lc_object_of_degree :
 forall M1,
@@ -1723,7 +1695,7 @@ pose proof (lc_family_of_degree_lc_object_of_degree_size_mutual (size_object M1)
 intuition eauto.
 Qed.
 
-Hint Resolve lc_object_of_degree : lngen.
+#[export] Hint Resolve lc_object_of_degree : lngen.
 
 (* begin hide *)
 
@@ -1762,7 +1734,7 @@ pose proof (lc_kind_of_degree_size_mutual (size_kind K1));
 intuition eauto.
 Qed.
 
-Hint Resolve lc_kind_of_degree : lngen.
+#[export] Hint Resolve lc_kind_of_degree : lngen.
 
 Ltac family_object_lc_exists_tac :=
   repeat (match goal with
@@ -1814,22 +1786,22 @@ Proof.
 intros; kind_lc_exists_tac; eauto with lngen.
 Qed.
 
-Hint Extern 1 (lc_family (family_pi _ _)) =>
+#[export] Hint Extern 1 (lc_family (family_pi _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
   apply (lc_family_pi_exists x1) : core.
 
-Hint Extern 1 (lc_family (family_abs _ _)) =>
+#[export] Hint Extern 1 (lc_family (family_abs _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
   apply (lc_family_abs_exists x1) : core.
 
-Hint Extern 1 (lc_object (object_abs _ _)) =>
+#[export] Hint Extern 1 (lc_object (object_abs _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
   apply (lc_object_abs_exists x1) : core.
 
-Hint Extern 1 (lc_kind (kind_pi _ _)) =>
+#[export] Hint Extern 1 (lc_kind (kind_pi _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
   apply (lc_kind_pi_exists x1) : core.
@@ -1849,7 +1821,7 @@ family_object_lc_exists_tac;
 eauto with lngen.
 Qed.
 
-Hint Resolve lc_body_family_wrt_object : lngen.
+#[export] Hint Resolve lc_body_family_wrt_object : lngen.
 
 Lemma lc_body_object_wrt_object :
 forall M1 M2,
@@ -1866,7 +1838,7 @@ family_object_lc_exists_tac;
 eauto with lngen.
 Qed.
 
-Hint Resolve lc_body_object_wrt_object : lngen.
+#[export] Hint Resolve lc_body_object_wrt_object : lngen.
 
 Lemma lc_body_kind_wrt_object :
 forall K1 M1,
@@ -1883,7 +1855,7 @@ kind_lc_exists_tac;
 eauto with lngen.
 Qed.
 
-Hint Resolve lc_body_kind_wrt_object : lngen.
+#[export] Hint Resolve lc_body_kind_wrt_object : lngen.
 
 Lemma lc_body_family_pi_2 :
 forall A1 B1,
@@ -1893,7 +1865,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_family_pi_2 : lngen.
+#[export] Hint Resolve lc_body_family_pi_2 : lngen.
 
 Lemma lc_body_family_abs_2 :
 forall A1 B1,
@@ -1903,7 +1875,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_family_abs_2 : lngen.
+#[export] Hint Resolve lc_body_family_abs_2 : lngen.
 
 Lemma lc_body_object_abs_2 :
 forall A1 M1,
@@ -1913,7 +1885,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_object_abs_2 : lngen.
+#[export] Hint Resolve lc_body_object_abs_2 : lngen.
 
 Lemma lc_body_kind_pi_2 :
 forall A1 K1,
@@ -1923,7 +1895,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_kind_pi_2 : lngen.
+#[export] Hint Resolve lc_body_kind_pi_2 : lngen.
 
 (* begin hide *)
 
@@ -1946,7 +1918,7 @@ Proof.
 pose proof lc_family_unique_lc_object_unique_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_family_unique : lngen.
+#[export] Hint Resolve lc_family_unique : lngen.
 
 Lemma lc_object_unique :
 forall M1 (proof2 proof3 : lc_object M1), proof2 = proof3.
@@ -1954,7 +1926,7 @@ Proof.
 pose proof lc_family_unique_lc_object_unique_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_object_unique : lngen.
+#[export] Hint Resolve lc_object_unique : lngen.
 
 (* begin hide *)
 
@@ -1976,7 +1948,7 @@ Proof.
 pose proof lc_kind_unique_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_kind_unique : lngen.
+#[export] Hint Resolve lc_kind_unique : lngen.
 
 (* begin hide *)
 
@@ -1996,7 +1968,7 @@ Proof.
 pose proof lc_family_of_lc_set_family_lc_object_of_lc_set_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_family_of_lc_set_family : lngen.
+#[export] Hint Resolve lc_family_of_lc_set_family : lngen.
 
 Lemma lc_object_of_lc_set_object :
 forall M1, lc_set_object M1 -> lc_object M1.
@@ -2004,7 +1976,7 @@ Proof.
 pose proof lc_family_of_lc_set_family_lc_object_of_lc_set_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_object_of_lc_set_object : lngen.
+#[export] Hint Resolve lc_object_of_lc_set_object : lngen.
 
 (* begin hide *)
 
@@ -2023,7 +1995,7 @@ Proof.
 pose proof lc_kind_of_lc_set_kind_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_kind_of_lc_set_kind : lngen.
+#[export] Hint Resolve lc_kind_of_lc_set_kind : lngen.
 
 (* begin hide *)
 
@@ -2072,7 +2044,7 @@ pose proof (lc_set_family_of_lc_family_lc_set_object_of_lc_object_size_mutual (s
 intuition eauto.
 Qed.
 
-Hint Resolve lc_set_family_of_lc_family : lngen.
+#[export] Hint Resolve lc_set_family_of_lc_family : lngen.
 
 Lemma lc_set_object_of_lc_object :
 forall M1,
@@ -2084,7 +2056,7 @@ pose proof (lc_set_family_of_lc_family_lc_set_object_of_lc_object_size_mutual (s
 intuition eauto.
 Qed.
 
-Hint Resolve lc_set_object_of_lc_object : lngen.
+#[export] Hint Resolve lc_set_object_of_lc_object : lngen.
 
 (* begin hide *)
 
@@ -2128,7 +2100,7 @@ pose proof (lc_set_kind_of_lc_kind_size_mutual (size_kind K1));
 intuition eauto.
 Qed.
 
-Hint Resolve lc_set_kind_of_lc_kind : lngen.
+#[export] Hint Resolve lc_set_kind_of_lc_kind : lngen.
 
 
 (* *********************************************************************** *)
@@ -2166,8 +2138,8 @@ Proof.
 pose proof close_family_wrt_object_rec_degree_family_wrt_object_close_object_wrt_object_rec_degree_object_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_family_wrt_object_rec_degree_family_wrt_object : lngen.
-Hint Rewrite close_family_wrt_object_rec_degree_family_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve close_family_wrt_object_rec_degree_family_wrt_object : lngen.
+#[export] Hint Rewrite close_family_wrt_object_rec_degree_family_wrt_object using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2182,8 +2154,8 @@ Proof.
 pose proof close_family_wrt_object_rec_degree_family_wrt_object_close_object_wrt_object_rec_degree_object_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_object_wrt_object_rec_degree_object_wrt_object : lngen.
-Hint Rewrite close_object_wrt_object_rec_degree_object_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve close_object_wrt_object_rec_degree_object_wrt_object : lngen.
+#[export] Hint Rewrite close_object_wrt_object_rec_degree_object_wrt_object using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2212,8 +2184,8 @@ Proof.
 pose proof close_kind_wrt_object_rec_degree_kind_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_kind_wrt_object_rec_degree_kind_wrt_object : lngen.
-Hint Rewrite close_kind_wrt_object_rec_degree_kind_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve close_kind_wrt_object_rec_degree_kind_wrt_object : lngen.
+#[export] Hint Rewrite close_kind_wrt_object_rec_degree_kind_wrt_object using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2226,8 +2198,8 @@ Proof.
 unfold close_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve close_family_wrt_object_lc_family : lngen.
-Hint Rewrite close_family_wrt_object_lc_family using solve [auto] : lngen.
+#[export] Hint Resolve close_family_wrt_object_lc_family : lngen.
+#[export] Hint Rewrite close_family_wrt_object_lc_family using solve [auto] : lngen.
 
 Lemma close_object_wrt_object_lc_object :
 forall M1 x1,
@@ -2238,8 +2210,8 @@ Proof.
 unfold close_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve close_object_wrt_object_lc_object : lngen.
-Hint Rewrite close_object_wrt_object_lc_object using solve [auto] : lngen.
+#[export] Hint Resolve close_object_wrt_object_lc_object : lngen.
+#[export] Hint Rewrite close_object_wrt_object_lc_object using solve [auto] : lngen.
 
 Lemma close_kind_wrt_object_lc_kind :
 forall K1 x1,
@@ -2250,8 +2222,8 @@ Proof.
 unfold close_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve close_kind_wrt_object_lc_kind : lngen.
-Hint Rewrite close_kind_wrt_object_lc_kind using solve [auto] : lngen.
+#[export] Hint Resolve close_kind_wrt_object_lc_kind : lngen.
+#[export] Hint Rewrite close_kind_wrt_object_lc_kind using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -2279,8 +2251,8 @@ Proof.
 pose proof open_family_wrt_object_rec_degree_family_wrt_object_open_object_wrt_object_rec_degree_object_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_family_wrt_object_rec_degree_family_wrt_object : lngen.
-Hint Rewrite open_family_wrt_object_rec_degree_family_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve open_family_wrt_object_rec_degree_family_wrt_object : lngen.
+#[export] Hint Rewrite open_family_wrt_object_rec_degree_family_wrt_object using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2294,8 +2266,8 @@ Proof.
 pose proof open_family_wrt_object_rec_degree_family_wrt_object_open_object_wrt_object_rec_degree_object_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_object_wrt_object_rec_degree_object_wrt_object : lngen.
-Hint Rewrite open_object_wrt_object_rec_degree_object_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve open_object_wrt_object_rec_degree_object_wrt_object : lngen.
+#[export] Hint Rewrite open_object_wrt_object_rec_degree_object_wrt_object using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2322,8 +2294,8 @@ Proof.
 pose proof open_kind_wrt_object_rec_degree_kind_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_kind_wrt_object_rec_degree_kind_wrt_object : lngen.
-Hint Rewrite open_kind_wrt_object_rec_degree_kind_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve open_kind_wrt_object_rec_degree_kind_wrt_object : lngen.
+#[export] Hint Rewrite open_kind_wrt_object_rec_degree_kind_wrt_object using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2335,8 +2307,8 @@ Proof.
 unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve open_family_wrt_object_lc_family : lngen.
-Hint Rewrite open_family_wrt_object_lc_family using solve [auto] : lngen.
+#[export] Hint Resolve open_family_wrt_object_lc_family : lngen.
+#[export] Hint Rewrite open_family_wrt_object_lc_family using solve [auto] : lngen.
 
 Lemma open_object_wrt_object_lc_object :
 forall M2 M1,
@@ -2346,8 +2318,8 @@ Proof.
 unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve open_object_wrt_object_lc_object : lngen.
-Hint Rewrite open_object_wrt_object_lc_object using solve [auto] : lngen.
+#[export] Hint Resolve open_object_wrt_object_lc_object : lngen.
+#[export] Hint Rewrite open_object_wrt_object_lc_object using solve [auto] : lngen.
 
 Lemma open_kind_wrt_object_lc_kind :
 forall K1 M1,
@@ -2357,8 +2329,8 @@ Proof.
 unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve open_kind_wrt_object_lc_kind : lngen.
-Hint Rewrite open_kind_wrt_object_lc_kind using solve [auto] : lngen.
+#[export] Hint Resolve open_kind_wrt_object_lc_kind : lngen.
+#[export] Hint Rewrite open_kind_wrt_object_lc_kind using solve [auto] : lngen.
 
 
 (* *********************************************************************** *)
@@ -2390,8 +2362,8 @@ Proof.
 pose proof fv_family_close_family_wrt_object_rec_fv_object_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_family_close_family_wrt_object_rec : lngen.
-Hint Rewrite fv_family_close_family_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_family_close_family_wrt_object_rec : lngen.
+#[export] Hint Rewrite fv_family_close_family_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2404,8 +2376,8 @@ Proof.
 pose proof fv_family_close_family_wrt_object_rec_fv_object_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_object_close_object_wrt_object_rec : lngen.
-Hint Rewrite fv_object_close_object_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_object_close_object_wrt_object_rec : lngen.
+#[export] Hint Rewrite fv_object_close_object_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2430,8 +2402,8 @@ Proof.
 pose proof fv_kind_close_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_kind_close_kind_wrt_object_rec : lngen.
-Hint Rewrite fv_kind_close_kind_wrt_object_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_kind_close_kind_wrt_object_rec : lngen.
+#[export] Hint Rewrite fv_kind_close_kind_wrt_object_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2442,8 +2414,8 @@ Proof.
 unfold close_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_family_close_family_wrt_object : lngen.
-Hint Rewrite fv_family_close_family_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve fv_family_close_family_wrt_object : lngen.
+#[export] Hint Rewrite fv_family_close_family_wrt_object using solve [auto] : lngen.
 
 Lemma fv_object_close_object_wrt_object :
 forall M1 x1,
@@ -2452,8 +2424,8 @@ Proof.
 unfold close_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_object_close_object_wrt_object : lngen.
-Hint Rewrite fv_object_close_object_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve fv_object_close_object_wrt_object : lngen.
+#[export] Hint Rewrite fv_object_close_object_wrt_object using solve [auto] : lngen.
 
 Lemma fv_kind_close_kind_wrt_object :
 forall K1 x1,
@@ -2462,8 +2434,8 @@ Proof.
 unfold close_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_kind_close_kind_wrt_object : lngen.
-Hint Rewrite fv_kind_close_kind_wrt_object using solve [auto] : lngen.
+#[export] Hint Resolve fv_kind_close_kind_wrt_object : lngen.
+#[export] Hint Rewrite fv_kind_close_kind_wrt_object using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -2488,7 +2460,7 @@ Proof.
 pose proof fv_family_open_family_wrt_object_rec_lower_fv_object_open_object_wrt_object_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_family_open_family_wrt_object_rec_lower : lngen.
+#[export] Hint Resolve fv_family_open_family_wrt_object_rec_lower : lngen.
 
 (* end hide *)
 
@@ -2501,7 +2473,7 @@ Proof.
 pose proof fv_family_open_family_wrt_object_rec_lower_fv_object_open_object_wrt_object_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_object_open_object_wrt_object_rec_lower : lngen.
+#[export] Hint Resolve fv_object_open_object_wrt_object_rec_lower : lngen.
 
 (* end hide *)
 
@@ -2526,7 +2498,7 @@ Proof.
 pose proof fv_kind_open_kind_wrt_object_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_kind_open_kind_wrt_object_rec_lower : lngen.
+#[export] Hint Resolve fv_kind_open_kind_wrt_object_rec_lower : lngen.
 
 (* end hide *)
 
@@ -2537,7 +2509,7 @@ Proof.
 unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_family_open_family_wrt_object_lower : lngen.
+#[export] Hint Resolve fv_family_open_family_wrt_object_lower : lngen.
 
 Lemma fv_object_open_object_wrt_object_lower :
 forall M1 M2,
@@ -2546,7 +2518,7 @@ Proof.
 unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_object_open_object_wrt_object_lower : lngen.
+#[export] Hint Resolve fv_object_open_object_wrt_object_lower : lngen.
 
 Lemma fv_kind_open_kind_wrt_object_lower :
 forall K1 M1,
@@ -2555,7 +2527,7 @@ Proof.
 unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_kind_open_kind_wrt_object_lower : lngen.
+#[export] Hint Resolve fv_kind_open_kind_wrt_object_lower : lngen.
 
 (* begin hide *)
 
@@ -2580,7 +2552,7 @@ Proof.
 pose proof fv_family_open_family_wrt_object_rec_upper_fv_object_open_object_wrt_object_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_family_open_family_wrt_object_rec_upper : lngen.
+#[export] Hint Resolve fv_family_open_family_wrt_object_rec_upper : lngen.
 
 (* end hide *)
 
@@ -2593,7 +2565,7 @@ Proof.
 pose proof fv_family_open_family_wrt_object_rec_upper_fv_object_open_object_wrt_object_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_object_open_object_wrt_object_rec_upper : lngen.
+#[export] Hint Resolve fv_object_open_object_wrt_object_rec_upper : lngen.
 
 (* end hide *)
 
@@ -2618,7 +2590,7 @@ Proof.
 pose proof fv_kind_open_kind_wrt_object_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_kind_open_kind_wrt_object_rec_upper : lngen.
+#[export] Hint Resolve fv_kind_open_kind_wrt_object_rec_upper : lngen.
 
 (* end hide *)
 
@@ -2629,7 +2601,7 @@ Proof.
 unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_family_open_family_wrt_object_upper : lngen.
+#[export] Hint Resolve fv_family_open_family_wrt_object_upper : lngen.
 
 Lemma fv_object_open_object_wrt_object_upper :
 forall M1 M2,
@@ -2638,7 +2610,7 @@ Proof.
 unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_object_open_object_wrt_object_upper : lngen.
+#[export] Hint Resolve fv_object_open_object_wrt_object_upper : lngen.
 
 Lemma fv_kind_open_kind_wrt_object_upper :
 forall K1 M1,
@@ -2647,7 +2619,7 @@ Proof.
 unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve fv_kind_open_kind_wrt_object_upper : lngen.
+#[export] Hint Resolve fv_kind_open_kind_wrt_object_upper : lngen.
 
 (* begin hide *)
 
@@ -2673,8 +2645,8 @@ Proof.
 pose proof fv_family_subst_family_fresh_fv_object_subst_object_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_family_subst_family_fresh : lngen.
-Hint Rewrite fv_family_subst_family_fresh using solve [auto] : lngen.
+#[export] Hint Resolve fv_family_subst_family_fresh : lngen.
+#[export] Hint Rewrite fv_family_subst_family_fresh using solve [auto] : lngen.
 
 Lemma fv_object_subst_object_fresh :
 forall M1 M2 x1,
@@ -2684,8 +2656,8 @@ Proof.
 pose proof fv_family_subst_family_fresh_fv_object_subst_object_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_object_subst_object_fresh : lngen.
-Hint Rewrite fv_object_subst_object_fresh using solve [auto] : lngen.
+#[export] Hint Resolve fv_object_subst_object_fresh : lngen.
+#[export] Hint Rewrite fv_object_subst_object_fresh using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -2708,8 +2680,8 @@ Proof.
 pose proof fv_kind_subst_kind_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_kind_subst_kind_fresh : lngen.
-Hint Rewrite fv_kind_subst_kind_fresh using solve [auto] : lngen.
+#[export] Hint Resolve fv_kind_subst_kind_fresh : lngen.
+#[export] Hint Rewrite fv_kind_subst_kind_fresh using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -2732,7 +2704,7 @@ Proof.
 pose proof fv_family_subst_family_lower_fv_object_subst_object_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_family_subst_family_lower : lngen.
+#[export] Hint Resolve fv_family_subst_family_lower : lngen.
 
 Lemma fv_object_subst_object_lower :
 forall M1 M2 x1,
@@ -2741,7 +2713,7 @@ Proof.
 pose proof fv_family_subst_family_lower_fv_object_subst_object_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_object_subst_object_lower : lngen.
+#[export] Hint Resolve fv_object_subst_object_lower : lngen.
 
 (* begin hide *)
 
@@ -2762,7 +2734,7 @@ Proof.
 pose proof fv_kind_subst_kind_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_kind_subst_kind_lower : lngen.
+#[export] Hint Resolve fv_kind_subst_kind_lower : lngen.
 
 (* begin hide *)
 
@@ -2791,7 +2763,7 @@ Proof.
 pose proof fv_family_subst_family_notin_fv_object_subst_object_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_family_subst_family_notin : lngen.
+#[export] Hint Resolve fv_family_subst_family_notin : lngen.
 
 Lemma fv_object_subst_object_notin :
 forall M1 M2 x1 x2,
@@ -2802,7 +2774,7 @@ Proof.
 pose proof fv_family_subst_family_notin_fv_object_subst_object_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_object_subst_object_notin : lngen.
+#[export] Hint Resolve fv_object_subst_object_notin : lngen.
 
 (* begin hide *)
 
@@ -2827,7 +2799,7 @@ Proof.
 pose proof fv_kind_subst_kind_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_kind_subst_kind_notin : lngen.
+#[export] Hint Resolve fv_kind_subst_kind_notin : lngen.
 
 (* begin hide *)
 
@@ -2850,7 +2822,7 @@ Proof.
 pose proof fv_family_subst_family_upper_fv_object_subst_object_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_family_subst_family_upper : lngen.
+#[export] Hint Resolve fv_family_subst_family_upper : lngen.
 
 Lemma fv_object_subst_object_upper :
 forall M1 M2 x1,
@@ -2859,7 +2831,7 @@ Proof.
 pose proof fv_family_subst_family_upper_fv_object_subst_object_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_object_subst_object_upper : lngen.
+#[export] Hint Resolve fv_object_subst_object_upper : lngen.
 
 (* begin hide *)
 
@@ -2880,7 +2852,7 @@ Proof.
 pose proof fv_kind_subst_kind_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_kind_subst_kind_upper : lngen.
+#[export] Hint Resolve fv_kind_subst_kind_upper : lngen.
 
 
 (* *********************************************************************** *)
@@ -2919,7 +2891,7 @@ Proof.
 pose proof subst_family_close_family_wrt_object_rec_subst_object_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_close_family_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_family_close_family_wrt_object_rec : lngen.
 
 Lemma subst_object_close_object_wrt_object_rec :
 forall M2 M1 x1 x2 n1,
@@ -2931,7 +2903,7 @@ Proof.
 pose proof subst_family_close_family_wrt_object_rec_subst_object_close_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_close_object_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_object_close_object_wrt_object_rec : lngen.
 
 (* begin hide *)
 
@@ -2958,7 +2930,7 @@ Proof.
 pose proof subst_kind_close_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_close_kind_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_kind_close_kind_wrt_object_rec : lngen.
 
 Lemma subst_family_close_family_wrt_object :
 forall A1 M1 x1 x2,
@@ -2969,7 +2941,7 @@ Proof.
 unfold close_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_family_close_family_wrt_object : lngen.
+#[export] Hint Resolve subst_family_close_family_wrt_object : lngen.
 
 Lemma subst_object_close_object_wrt_object :
 forall M2 M1 x1 x2,
@@ -2980,7 +2952,7 @@ Proof.
 unfold close_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_object_close_object_wrt_object : lngen.
+#[export] Hint Resolve subst_object_close_object_wrt_object : lngen.
 
 Lemma subst_kind_close_kind_wrt_object :
 forall K1 M1 x1 x2,
@@ -2991,7 +2963,7 @@ Proof.
 unfold close_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_kind_close_kind_wrt_object : lngen.
+#[export] Hint Resolve subst_kind_close_kind_wrt_object : lngen.
 
 (* begin hide *)
 
@@ -3020,7 +2992,7 @@ Proof.
 pose proof subst_family_degree_family_wrt_object_subst_object_degree_object_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_degree_family_wrt_object : lngen.
+#[export] Hint Resolve subst_family_degree_family_wrt_object : lngen.
 
 Lemma subst_object_degree_object_wrt_object :
 forall M1 M2 x1 n1,
@@ -3031,7 +3003,7 @@ Proof.
 pose proof subst_family_degree_family_wrt_object_subst_object_degree_object_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_degree_object_wrt_object : lngen.
+#[export] Hint Resolve subst_object_degree_object_wrt_object : lngen.
 
 (* begin hide *)
 
@@ -3056,7 +3028,7 @@ Proof.
 pose proof subst_kind_degree_kind_wrt_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_degree_kind_wrt_object : lngen.
+#[export] Hint Resolve subst_kind_degree_kind_wrt_object : lngen.
 
 (* begin hide *)
 
@@ -3082,8 +3054,8 @@ Proof.
 pose proof subst_family_fresh_eq_subst_object_fresh_eq_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_fresh_eq : lngen.
-Hint Rewrite subst_family_fresh_eq using solve [auto] : lngen.
+#[export] Hint Resolve subst_family_fresh_eq : lngen.
+#[export] Hint Rewrite subst_family_fresh_eq using solve [auto] : lngen.
 
 Lemma subst_object_fresh_eq :
 forall M2 M1 x1,
@@ -3093,8 +3065,8 @@ Proof.
 pose proof subst_family_fresh_eq_subst_object_fresh_eq_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_fresh_eq : lngen.
-Hint Rewrite subst_object_fresh_eq using solve [auto] : lngen.
+#[export] Hint Resolve subst_object_fresh_eq : lngen.
+#[export] Hint Rewrite subst_object_fresh_eq using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -3117,8 +3089,8 @@ Proof.
 pose proof subst_kind_fresh_eq_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_fresh_eq : lngen.
-Hint Rewrite subst_kind_fresh_eq using solve [auto] : lngen.
+#[export] Hint Resolve subst_kind_fresh_eq : lngen.
+#[export] Hint Rewrite subst_kind_fresh_eq using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -3144,7 +3116,7 @@ Proof.
 pose proof subst_family_fresh_same_subst_object_fresh_same_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_fresh_same : lngen.
+#[export] Hint Resolve subst_family_fresh_same : lngen.
 
 Lemma subst_object_fresh_same :
 forall M2 M1 x1,
@@ -3154,7 +3126,7 @@ Proof.
 pose proof subst_family_fresh_same_subst_object_fresh_same_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_fresh_same : lngen.
+#[export] Hint Resolve subst_object_fresh_same : lngen.
 
 (* begin hide *)
 
@@ -3177,7 +3149,7 @@ Proof.
 pose proof subst_kind_fresh_same_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_fresh_same : lngen.
+#[export] Hint Resolve subst_kind_fresh_same : lngen.
 
 (* begin hide *)
 
@@ -3206,7 +3178,7 @@ Proof.
 pose proof subst_family_fresh_subst_object_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_fresh : lngen.
+#[export] Hint Resolve subst_family_fresh : lngen.
 
 Lemma subst_object_fresh :
 forall M2 M1 x1 x2,
@@ -3217,7 +3189,7 @@ Proof.
 pose proof subst_family_fresh_subst_object_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_fresh : lngen.
+#[export] Hint Resolve subst_object_fresh : lngen.
 
 (* begin hide *)
 
@@ -3242,7 +3214,7 @@ Proof.
 pose proof subst_kind_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_fresh : lngen.
+#[export] Hint Resolve subst_kind_fresh : lngen.
 
 Lemma subst_family_lc_family :
 forall A1 M1 x1,
@@ -3253,7 +3225,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_family_lc_family : lngen.
+#[export] Hint Resolve subst_family_lc_family : lngen.
 
 Lemma subst_object_lc_object :
 forall M1 M2 x1,
@@ -3264,7 +3236,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_object_lc_object : lngen.
+#[export] Hint Resolve subst_object_lc_object : lngen.
 
 Lemma subst_kind_lc_kind :
 forall K1 M1 x1,
@@ -3275,7 +3247,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_kind_lc_kind : lngen.
+#[export] Hint Resolve subst_kind_lc_kind : lngen.
 
 (* begin hide *)
 
@@ -3303,7 +3275,7 @@ Proof.
 pose proof subst_family_open_family_wrt_object_rec_subst_object_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_open_family_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_family_open_family_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -3317,7 +3289,7 @@ Proof.
 pose proof subst_family_open_family_wrt_object_rec_subst_object_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_open_object_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_object_open_object_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -3344,7 +3316,7 @@ Proof.
 pose proof subst_kind_open_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_open_kind_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_kind_open_kind_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -3356,7 +3328,7 @@ Proof.
 unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_family_open_family_wrt_object : lngen.
+#[export] Hint Resolve subst_family_open_family_wrt_object : lngen.
 
 Lemma subst_object_open_object_wrt_object :
 forall M3 M1 M2 x1,
@@ -3366,7 +3338,7 @@ Proof.
 unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_object_open_object_wrt_object : lngen.
+#[export] Hint Resolve subst_object_open_object_wrt_object : lngen.
 
 Lemma subst_kind_open_kind_wrt_object :
 forall K1 M1 M2 x1,
@@ -3376,7 +3348,7 @@ Proof.
 unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_kind_open_kind_wrt_object : lngen.
+#[export] Hint Resolve subst_kind_open_kind_wrt_object : lngen.
 
 Lemma subst_family_open_family_wrt_object_var :
 forall A1 M1 x1 x2,
@@ -3387,7 +3359,7 @@ Proof.
 intros; rewrite subst_family_open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_family_open_family_wrt_object_var : lngen.
+#[export] Hint Resolve subst_family_open_family_wrt_object_var : lngen.
 
 Lemma subst_object_open_object_wrt_object_var :
 forall M2 M1 x1 x2,
@@ -3398,7 +3370,7 @@ Proof.
 intros; rewrite subst_object_open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_object_open_object_wrt_object_var : lngen.
+#[export] Hint Resolve subst_object_open_object_wrt_object_var : lngen.
 
 Lemma subst_kind_open_kind_wrt_object_var :
 forall K1 M1 x1 x2,
@@ -3409,7 +3381,7 @@ Proof.
 intros; rewrite subst_kind_open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_kind_open_kind_wrt_object_var : lngen.
+#[export] Hint Resolve subst_kind_open_kind_wrt_object_var : lngen.
 
 (* begin hide *)
 
@@ -3434,7 +3406,7 @@ Proof.
 pose proof subst_family_spec_rec_subst_object_spec_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_spec_rec : lngen.
+#[export] Hint Resolve subst_family_spec_rec : lngen.
 
 (* end hide *)
 
@@ -3447,7 +3419,7 @@ Proof.
 pose proof subst_family_spec_rec_subst_object_spec_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_spec_rec : lngen.
+#[export] Hint Resolve subst_object_spec_rec : lngen.
 
 (* end hide *)
 
@@ -3472,7 +3444,7 @@ Proof.
 pose proof subst_kind_spec_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_spec_rec : lngen.
+#[export] Hint Resolve subst_kind_spec_rec : lngen.
 
 (* end hide *)
 
@@ -3483,7 +3455,7 @@ Proof.
 unfold close_family_wrt_object; unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_family_spec : lngen.
+#[export] Hint Resolve subst_family_spec : lngen.
 
 Lemma subst_object_spec :
 forall M1 M2 x1,
@@ -3492,7 +3464,7 @@ Proof.
 unfold close_object_wrt_object; unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_object_spec : lngen.
+#[export] Hint Resolve subst_object_spec : lngen.
 
 Lemma subst_kind_spec :
 forall K1 M1 x1,
@@ -3501,7 +3473,7 @@ Proof.
 unfold close_kind_wrt_object; unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_kind_spec : lngen.
+#[export] Hint Resolve subst_kind_spec : lngen.
 
 (* begin hide *)
 
@@ -3530,7 +3502,7 @@ Proof.
 pose proof subst_family_subst_family_subst_object_subst_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_subst_family : lngen.
+#[export] Hint Resolve subst_family_subst_family : lngen.
 
 Lemma subst_object_subst_object :
 forall M1 M2 M3 x2 x1,
@@ -3541,7 +3513,7 @@ Proof.
 pose proof subst_family_subst_family_subst_object_subst_object_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_subst_object : lngen.
+#[export] Hint Resolve subst_object_subst_object : lngen.
 
 (* begin hide *)
 
@@ -3566,7 +3538,7 @@ Proof.
 pose proof subst_kind_subst_kind_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_subst_kind : lngen.
+#[export] Hint Resolve subst_kind_subst_kind : lngen.
 
 (* begin hide *)
 
@@ -3603,7 +3575,7 @@ Proof.
 pose proof subst_family_close_family_wrt_object_rec_open_family_wrt_object_rec_subst_object_close_object_wrt_object_rec_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_close_family_wrt_object_rec_open_family_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_family_close_family_wrt_object_rec_open_family_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -3620,7 +3592,7 @@ Proof.
 pose proof subst_family_close_family_wrt_object_rec_open_family_wrt_object_rec_subst_object_close_object_wrt_object_rec_open_object_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_close_object_wrt_object_rec_open_object_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_object_close_object_wrt_object_rec_open_object_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -3653,7 +3625,7 @@ Proof.
 pose proof subst_kind_close_kind_wrt_object_rec_open_kind_wrt_object_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_close_kind_wrt_object_rec_open_kind_wrt_object_rec : lngen.
+#[export] Hint Resolve subst_kind_close_kind_wrt_object_rec_open_kind_wrt_object_rec : lngen.
 
 (* end hide *)
 
@@ -3668,7 +3640,7 @@ Proof.
 unfold close_family_wrt_object; unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_family_close_family_wrt_object_open_family_wrt_object : lngen.
+#[export] Hint Resolve subst_family_close_family_wrt_object_open_family_wrt_object : lngen.
 
 Lemma subst_object_close_object_wrt_object_open_object_wrt_object :
 forall M2 M1 x1 x2,
@@ -3681,7 +3653,7 @@ Proof.
 unfold close_object_wrt_object; unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_object_close_object_wrt_object_open_object_wrt_object : lngen.
+#[export] Hint Resolve subst_object_close_object_wrt_object_open_object_wrt_object : lngen.
 
 Lemma subst_kind_close_kind_wrt_object_open_kind_wrt_object :
 forall K1 M1 x1 x2,
@@ -3694,7 +3666,7 @@ Proof.
 unfold close_kind_wrt_object; unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_kind_close_kind_wrt_object_open_kind_wrt_object : lngen.
+#[export] Hint Resolve subst_kind_close_kind_wrt_object_open_kind_wrt_object : lngen.
 
 Lemma subst_family_family_pi :
 forall x2 A1 B1 M1 x1,
@@ -3705,7 +3677,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_family_family_pi : lngen.
+#[export] Hint Resolve subst_family_family_pi : lngen.
 
 Lemma subst_family_family_abs :
 forall x2 A1 B1 M1 x1,
@@ -3716,7 +3688,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_family_family_abs : lngen.
+#[export] Hint Resolve subst_family_family_abs : lngen.
 
 Lemma subst_object_object_abs :
 forall x2 A1 M2 M1 x1,
@@ -3727,7 +3699,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_object_object_abs : lngen.
+#[export] Hint Resolve subst_object_object_abs : lngen.
 
 Lemma subst_kind_kind_pi :
 forall x2 A1 K1 M1 x1,
@@ -3738,7 +3710,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_kind_kind_pi : lngen.
+#[export] Hint Resolve subst_kind_kind_pi : lngen.
 
 (* begin hide *)
 
@@ -3764,8 +3736,8 @@ Proof.
 pose proof subst_family_intro_rec_subst_object_intro_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_family_intro_rec : lngen.
-Hint Rewrite subst_family_intro_rec using solve [auto] : lngen.
+#[export] Hint Resolve subst_family_intro_rec : lngen.
+#[export] Hint Rewrite subst_family_intro_rec using solve [auto] : lngen.
 
 Lemma subst_object_intro_rec :
 forall M1 x1 M2 n1,
@@ -3775,8 +3747,8 @@ Proof.
 pose proof subst_family_intro_rec_subst_object_intro_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_object_intro_rec : lngen.
-Hint Rewrite subst_object_intro_rec using solve [auto] : lngen.
+#[export] Hint Resolve subst_object_intro_rec : lngen.
+#[export] Hint Rewrite subst_object_intro_rec using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -3799,8 +3771,8 @@ Proof.
 pose proof subst_kind_intro_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_kind_intro_rec : lngen.
-Hint Rewrite subst_kind_intro_rec using solve [auto] : lngen.
+#[export] Hint Resolve subst_kind_intro_rec : lngen.
+#[export] Hint Rewrite subst_kind_intro_rec using solve [auto] : lngen.
 
 Lemma subst_family_intro :
 forall x1 A1 M1,
@@ -3810,7 +3782,7 @@ Proof.
 unfold open_family_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_family_intro : lngen.
+#[export] Hint Resolve subst_family_intro : lngen.
 
 Lemma subst_object_intro :
 forall x1 M1 M2,
@@ -3820,7 +3792,7 @@ Proof.
 unfold open_object_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_object_intro : lngen.
+#[export] Hint Resolve subst_object_intro : lngen.
 
 Lemma subst_kind_intro :
 forall x1 K1 M1,
@@ -3830,7 +3802,7 @@ Proof.
 unfold open_kind_wrt_object; default_simp.
 Qed.
 
-Hint Resolve subst_kind_intro : lngen.
+#[export] Hint Resolve subst_kind_intro : lngen.
 
 
 (* *********************************************************************** *)

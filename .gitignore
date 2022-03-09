@@ -25,3 +25,8 @@ src/style.css
 CoqSrc.mk
 *~
 stack.yaml.lock
+*.lia.cache
+*.vok
+*.vos
+CoqMakefile.conf
+.CoqSrc.mk.d

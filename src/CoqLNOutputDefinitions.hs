@@ -32,46 +32,39 @@ import MyLibrary ( mapMM, sepStrings )
    at the sort @Prop@. -}
 
 schemeIndDecl :: [Name] -> Int -> M Name
-schemeIndDecl ns i =
-    do { hyps <- sequence $ take (i + length ns) $ repeat (newName "H")
-       ; let args  = sepStrings " " hyps
-       ; let calls = map (\s -> s ++ " " ++ args) $ map schemeIndName ns
+schemeIndDecl ns _i =
+    do { 
+       ; let sns = map schemeIndName ns
        ; return $ printf
          "Scheme %s.\n\
          \\n\
-         \Definition %s :=\n\
-         \  fun %s =>\n\
-         \  %s.\n\
+         \Combined Scheme %s from %s.\n\
          \\n"
          (sepStrings "\n  with " (map f ns))
-         (mutIndName ns) args (foldr1 join calls)
+         (mutIndName ns)
+         (sepStrings "," sns)
        }
     where
-      join = printf "(conj (%s)\n  (%s))"
-
       f n = printf "%s := Induction for %s Sort Prop" (schemeIndName n) n
 
 {- | Constructs the @Scheme@ declarations for the given list of types
    at the sort @Set@. -}
 
 schemeRecDecl :: [Name] -> Int -> M Name
-schemeRecDecl ns i =
-    do { hyps <- sequence $ take (i + length ns) $ repeat (newName "H")
-       ; let args  = sepStrings " " hyps
-       ; let calls = map (\s -> s ++ " " ++ args) $ map schemeRecName ns
+schemeRecDecl ns _i =
+    do { 
+       ; 
+       ; let sns = map schemeRecName ns
        ; return $ printf
          "Scheme %s.\n\
          \\n\
-         \Definition %s :=\n\
-         \  fun %s =>\n\
-         \  %s.\n\
+         \Combined Scheme %s from %s.\n\
          \\n"
          (sepStrings "\n  with " (map f ns))
-         (mutRecName ns) args (foldl1 join calls)
+         (mutRecName ns)
+         (sepStrings "," sns)
        }
     where
-      join = printf "(pair (%s)\n  (%s))"
-
       f n = printf "%s := Induction for %s Sort Set" (schemeRecName n) n
 
 
@@ -102,7 +95,7 @@ processBody aaa nt1s =
 
       g aa nt1 _ mv2 =
           do { body <- bodyName aa nt1 mv2
-             ; return $ "Hint Unfold " ++ body ++ " : core.\n\n"
+             ; return $ "#[export] Hint Unfold " ++ body ++ " : core.\n\n"
              }
 
 
@@ -270,7 +263,7 @@ processDegreeHints aaa nt1s =
           do { names1 <- degreeName aa nt1 mv2
              -- ; names2 <- degreeSetName aa nt1 mv2
              ; return $ printf
-               "Hint Constructors %s : core %s.\n\n"
+               "#[export] Hint Constructors %s : core %s.\n\n"
                names1 hintDb
              }
 
@@ -395,7 +388,7 @@ processLc aa nts' =
       isCountable (SConstr _ _ _ _ (Bound _)) = False
       isCountable (SConstr _ _ _ _ _)         = True
 
-      hint = \s -> printf "Hint Constructors %s : core %s.\n\n" s hintDb
+      hint = \s -> printf "#[export] Hint Constructors %s : core %s.\n\n" s hintDb
 
       def :: NtRoot -> M String
       def nt =
@@ -605,7 +598,7 @@ processTactics _ =
     do { return $ printf
          "(** Additional hint declarations. *)\n\
          \\n\
-         \Hint Resolve @plus_le_compat : %s.\n\
+         \#[export] Hint Resolve plus_le_compat : %s.\n\
          \\n\
          \(** Redefine some tactics. *)\n\
          \\n\

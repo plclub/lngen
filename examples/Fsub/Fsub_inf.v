@@ -7,6 +7,8 @@ Require Export Metalib.LibLNgen.
 
 Require Export Fsub_ott.
 
+Local Set Warnings "-non-recursive". 
+
 (** NOTE: Auxiliary theorems are hidden in generated documentation.
     In general, there is a [_rec] version of every lemma involving
     [open] and [close]. *)
@@ -17,39 +19,27 @@ Require Export Fsub_ott.
 
 Scheme typ_ind' := Induction for typ Sort Prop.
 
-Definition typ_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 =>
-  typ_ind' H1 H2 H3 H4 H5 H6 H7.
+Combined Scheme typ_mutind from typ_ind'.
 
 Scheme typ_rec' := Induction for typ Sort Set.
 
-Definition typ_mutrec :=
-  fun H1 H2 H3 H4 H5 H6 H7 =>
-  typ_rec' H1 H2 H3 H4 H5 H6 H7.
+Combined Scheme typ_mutrec from typ_rec'.
 
 Scheme binding_ind' := Induction for binding Sort Prop.
 
-Definition binding_mutind :=
-  fun H1 H2 H3 =>
-  binding_ind' H1 H2 H3.
+Combined Scheme binding_mutind from binding_ind'.
 
 Scheme binding_rec' := Induction for binding Sort Set.
 
-Definition binding_mutrec :=
-  fun H1 H2 H3 =>
-  binding_rec' H1 H2 H3.
+Combined Scheme binding_mutrec from binding_rec'.
 
 Scheme exp_ind' := Induction for exp Sort Prop.
 
-Definition exp_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 =>
-  exp_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11.
+Combined Scheme exp_mutind from exp_ind'.
 
 Scheme exp_rec' := Induction for exp Sort Set.
 
-Definition exp_mutrec :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 =>
-  exp_rec' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11.
+Combined Scheme exp_mutrec from exp_rec'.
 
 
 (* *********************************************************************** *)
@@ -170,11 +160,9 @@ Inductive degree_typ_wrt_typ : nat -> typ -> Prop :=
 
 Scheme degree_typ_wrt_typ_ind' := Induction for degree_typ_wrt_typ Sort Prop.
 
-Definition degree_typ_wrt_typ_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 =>
-  degree_typ_wrt_typ_ind' H1 H2 H3 H4 H5 H6 H7.
+Combined Scheme degree_typ_wrt_typ_mutind from degree_typ_wrt_typ_ind'.
 
-Hint Constructors degree_typ_wrt_typ : core lngen.
+#[export] Hint Constructors degree_typ_wrt_typ : core lngen.
 
 Inductive degree_binding_wrt_typ : nat -> binding -> Prop :=
   | degree_wrt_typ_bind_sub : forall n1 T1,
@@ -186,11 +174,9 @@ Inductive degree_binding_wrt_typ : nat -> binding -> Prop :=
 
 Scheme degree_binding_wrt_typ_ind' := Induction for degree_binding_wrt_typ Sort Prop.
 
-Definition degree_binding_wrt_typ_mutind :=
-  fun H1 H2 H3 =>
-  degree_binding_wrt_typ_ind' H1 H2 H3.
+Combined Scheme degree_binding_wrt_typ_mutind from degree_binding_wrt_typ_ind'.
 
-Hint Constructors degree_binding_wrt_typ : core lngen.
+#[export] Hint Constructors degree_binding_wrt_typ : core lngen.
 
 Inductive degree_exp_wrt_typ : nat -> exp -> Prop :=
   | degree_wrt_typ_exp_var_f : forall n1 x1,
@@ -266,19 +252,15 @@ Inductive degree_exp_wrt_exp : nat -> exp -> Prop :=
 
 Scheme degree_exp_wrt_typ_ind' := Induction for degree_exp_wrt_typ Sort Prop.
 
-Definition degree_exp_wrt_typ_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 =>
-  degree_exp_wrt_typ_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11.
+Combined Scheme degree_exp_wrt_typ_mutind from degree_exp_wrt_typ_ind'.
 
 Scheme degree_exp_wrt_exp_ind' := Induction for degree_exp_wrt_exp Sort Prop.
 
-Definition degree_exp_wrt_exp_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 =>
-  degree_exp_wrt_exp_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11.
+Combined Scheme degree_exp_wrt_exp_mutind from degree_exp_wrt_exp_ind'.
 
-Hint Constructors degree_exp_wrt_typ : core lngen.
+#[export] Hint Constructors degree_exp_wrt_typ : core lngen.
 
-Hint Constructors degree_exp_wrt_exp : core lngen.
+#[export] Hint Constructors degree_exp_wrt_exp : core lngen.
 
 
 (* *********************************************************************** *)
@@ -304,25 +286,19 @@ Inductive lc_set_typ : typ -> Set :=
 
 Scheme lc_typ_ind' := Induction for lc_typ Sort Prop.
 
-Definition lc_typ_mutind :=
-  fun H1 H2 H3 H4 H5 H6 =>
-  lc_typ_ind' H1 H2 H3 H4 H5 H6.
+Combined Scheme lc_typ_mutind from lc_typ_ind'.
 
 Scheme lc_set_typ_ind' := Induction for lc_set_typ Sort Prop.
 
-Definition lc_set_typ_mutind :=
-  fun H1 H2 H3 H4 H5 H6 =>
-  lc_set_typ_ind' H1 H2 H3 H4 H5 H6.
+Combined Scheme lc_set_typ_mutind from lc_set_typ_ind'.
 
 Scheme lc_set_typ_rec' := Induction for lc_set_typ Sort Set.
 
-Definition lc_set_typ_mutrec :=
-  fun H1 H2 H3 H4 H5 H6 =>
-  lc_set_typ_rec' H1 H2 H3 H4 H5 H6.
+Combined Scheme lc_set_typ_mutrec from lc_set_typ_rec'.
 
-Hint Constructors lc_typ : core lngen.
+#[export] Hint Constructors lc_typ : core lngen.
 
-Hint Constructors lc_set_typ : core lngen.
+#[export] Hint Constructors lc_set_typ : core lngen.
 
 Inductive lc_set_binding : binding -> Set :=
   | lc_set_bind_sub : forall T1,
@@ -334,25 +310,19 @@ Inductive lc_set_binding : binding -> Set :=
 
 Scheme lc_binding_ind' := Induction for lc_binding Sort Prop.
 
-Definition lc_binding_mutind :=
-  fun H1 H2 H3 =>
-  lc_binding_ind' H1 H2 H3.
+Combined Scheme lc_binding_mutind from lc_binding_ind'.
 
 Scheme lc_set_binding_ind' := Induction for lc_set_binding Sort Prop.
 
-Definition lc_set_binding_mutind :=
-  fun H1 H2 H3 =>
-  lc_set_binding_ind' H1 H2 H3.
+Combined Scheme lc_set_binding_mutind from lc_set_binding_ind'.
 
 Scheme lc_set_binding_rec' := Induction for lc_set_binding Sort Set.
 
-Definition lc_set_binding_mutrec :=
-  fun H1 H2 H3 =>
-  lc_set_binding_rec' H1 H2 H3.
+Combined Scheme lc_set_binding_mutrec from lc_set_binding_rec'.
 
-Hint Constructors lc_binding : core lngen.
+#[export] Hint Constructors lc_binding : core lngen.
 
-Hint Constructors lc_set_binding : core lngen.
+#[export] Hint Constructors lc_set_binding : core lngen.
 
 Inductive lc_set_exp : exp -> Set :=
   | lc_set_exp_var_f : forall x1,
@@ -391,25 +361,19 @@ Inductive lc_set_exp : exp -> Set :=
 
 Scheme lc_exp_ind' := Induction for lc_exp Sort Prop.
 
-Definition lc_exp_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 =>
-  lc_exp_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10.
+Combined Scheme lc_exp_mutind from lc_exp_ind'.
 
 Scheme lc_set_exp_ind' := Induction for lc_set_exp Sort Prop.
 
-Definition lc_set_exp_mutind :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 =>
-  lc_set_exp_ind' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10.
+Combined Scheme lc_set_exp_mutind from lc_set_exp_ind'.
 
 Scheme lc_set_exp_rec' := Induction for lc_set_exp Sort Set.
 
-Definition lc_set_exp_mutrec :=
-  fun H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 =>
-  lc_set_exp_rec' H1 H2 H3 H4 H5 H6 H7 H8 H9 H10.
+Combined Scheme lc_set_exp_mutrec from lc_set_exp_rec'.
 
-Hint Constructors lc_exp : core lngen.
+#[export] Hint Constructors lc_exp : core lngen.
 
-Hint Constructors lc_set_exp : core lngen.
+#[export] Hint Constructors lc_set_exp : core lngen.
 
 
 (* *********************************************************************** *)
@@ -417,19 +381,19 @@ Hint Constructors lc_set_exp : core lngen.
 
 Definition body_typ_wrt_typ T1 := forall X1, lc_typ (open_typ_wrt_typ T1 (typ_var_f X1)).
 
-Hint Unfold body_typ_wrt_typ : core.
+#[export] Hint Unfold body_typ_wrt_typ : core.
 
 Definition body_binding_wrt_typ b1 := forall X1, lc_binding (open_binding_wrt_typ b1 (typ_var_f X1)).
 
-Hint Unfold body_binding_wrt_typ : core.
+#[export] Hint Unfold body_binding_wrt_typ : core.
 
 Definition body_exp_wrt_typ e1 := forall X1, lc_exp (open_exp_wrt_typ e1 (typ_var_f X1)).
 
 Definition body_exp_wrt_exp e1 := forall x1, lc_exp (open_exp_wrt_exp e1 (exp_var_f x1)).
 
-Hint Unfold body_exp_wrt_typ : core.
+#[export] Hint Unfold body_exp_wrt_typ : core.
 
-Hint Unfold body_exp_wrt_exp : core.
+#[export] Hint Unfold body_exp_wrt_exp : core.
 
 
 (* *********************************************************************** *)
@@ -437,7 +401,7 @@ Hint Unfold body_exp_wrt_exp : core.
 
 (** Additional hint declarations. *)
 
-Hint Resolve @plus_le_compat : lngen.
+#[export] Hint Resolve plus_le_compat : lngen.
 
 (** Redefine some tactics. *)
 
@@ -472,7 +436,7 @@ Proof.
 pose proof size_typ_min_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_typ_min : lngen.
+#[export] Hint Resolve size_typ_min : lngen.
 
 (* begin hide *)
 
@@ -491,7 +455,7 @@ Proof.
 pose proof size_binding_min_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_binding_min : lngen.
+#[export] Hint Resolve size_binding_min : lngen.
 
 (* begin hide *)
 
@@ -510,7 +474,7 @@ Proof.
 pose proof size_exp_min_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_exp_min : lngen.
+#[export] Hint Resolve size_exp_min : lngen.
 
 (* begin hide *)
 
@@ -533,8 +497,8 @@ Proof.
 pose proof size_typ_close_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_typ_close_typ_wrt_typ_rec : lngen.
-Hint Rewrite size_typ_close_typ_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve size_typ_close_typ_wrt_typ_rec : lngen.
+#[export] Hint Rewrite size_typ_close_typ_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -559,8 +523,8 @@ Proof.
 pose proof size_binding_close_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_binding_close_binding_wrt_typ_rec : lngen.
-Hint Rewrite size_binding_close_binding_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve size_binding_close_binding_wrt_typ_rec : lngen.
+#[export] Hint Rewrite size_binding_close_binding_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -585,8 +549,8 @@ Proof.
 pose proof size_exp_close_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_exp_close_exp_wrt_typ_rec : lngen.
-Hint Rewrite size_exp_close_exp_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve size_exp_close_exp_wrt_typ_rec : lngen.
+#[export] Hint Rewrite size_exp_close_exp_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -611,8 +575,8 @@ Proof.
 pose proof size_exp_close_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_exp_close_exp_wrt_exp_rec : lngen.
-Hint Rewrite size_exp_close_exp_wrt_exp_rec using solve [auto] : lngen.
+#[export] Hint Resolve size_exp_close_exp_wrt_exp_rec : lngen.
+#[export] Hint Rewrite size_exp_close_exp_wrt_exp_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -623,8 +587,8 @@ Proof.
 unfold close_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_typ_close_typ_wrt_typ : lngen.
-Hint Rewrite size_typ_close_typ_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve size_typ_close_typ_wrt_typ : lngen.
+#[export] Hint Rewrite size_typ_close_typ_wrt_typ using solve [auto] : lngen.
 
 Lemma size_binding_close_binding_wrt_typ :
 forall b1 X1,
@@ -633,8 +597,8 @@ Proof.
 unfold close_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_binding_close_binding_wrt_typ : lngen.
-Hint Rewrite size_binding_close_binding_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve size_binding_close_binding_wrt_typ : lngen.
+#[export] Hint Rewrite size_binding_close_binding_wrt_typ using solve [auto] : lngen.
 
 Lemma size_exp_close_exp_wrt_typ :
 forall e1 X1,
@@ -643,8 +607,8 @@ Proof.
 unfold close_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_exp_close_exp_wrt_typ : lngen.
-Hint Rewrite size_exp_close_exp_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve size_exp_close_exp_wrt_typ : lngen.
+#[export] Hint Rewrite size_exp_close_exp_wrt_typ using solve [auto] : lngen.
 
 Lemma size_exp_close_exp_wrt_exp :
 forall e1 x1,
@@ -653,8 +617,8 @@ Proof.
 unfold close_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve size_exp_close_exp_wrt_exp : lngen.
-Hint Rewrite size_exp_close_exp_wrt_exp using solve [auto] : lngen.
+#[export] Hint Resolve size_exp_close_exp_wrt_exp : lngen.
+#[export] Hint Rewrite size_exp_close_exp_wrt_exp using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -677,7 +641,7 @@ Proof.
 pose proof size_typ_open_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_typ_open_typ_wrt_typ_rec : lngen.
+#[export] Hint Resolve size_typ_open_typ_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -702,7 +666,7 @@ Proof.
 pose proof size_binding_open_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_binding_open_binding_wrt_typ_rec : lngen.
+#[export] Hint Resolve size_binding_open_binding_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -727,7 +691,7 @@ Proof.
 pose proof size_exp_open_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_exp_open_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve size_exp_open_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -752,7 +716,7 @@ Proof.
 pose proof size_exp_open_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_exp_open_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve size_exp_open_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -763,7 +727,7 @@ Proof.
 unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_typ_open_typ_wrt_typ : lngen.
+#[export] Hint Resolve size_typ_open_typ_wrt_typ : lngen.
 
 Lemma size_binding_open_binding_wrt_typ :
 forall b1 T1,
@@ -772,7 +736,7 @@ Proof.
 unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_binding_open_binding_wrt_typ : lngen.
+#[export] Hint Resolve size_binding_open_binding_wrt_typ : lngen.
 
 Lemma size_exp_open_exp_wrt_typ :
 forall e1 T1,
@@ -781,7 +745,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_exp_open_exp_wrt_typ : lngen.
+#[export] Hint Resolve size_exp_open_exp_wrt_typ : lngen.
 
 Lemma size_exp_open_exp_wrt_exp :
 forall e1 e2,
@@ -790,7 +754,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve size_exp_open_exp_wrt_exp : lngen.
+#[export] Hint Resolve size_exp_open_exp_wrt_exp : lngen.
 
 (* begin hide *)
 
@@ -813,8 +777,8 @@ Proof.
 pose proof size_typ_open_typ_wrt_typ_rec_var_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_typ_open_typ_wrt_typ_rec_var : lngen.
-Hint Rewrite size_typ_open_typ_wrt_typ_rec_var using solve [auto] : lngen.
+#[export] Hint Resolve size_typ_open_typ_wrt_typ_rec_var : lngen.
+#[export] Hint Rewrite size_typ_open_typ_wrt_typ_rec_var using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -839,8 +803,8 @@ Proof.
 pose proof size_binding_open_binding_wrt_typ_rec_var_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_binding_open_binding_wrt_typ_rec_var : lngen.
-Hint Rewrite size_binding_open_binding_wrt_typ_rec_var using solve [auto] : lngen.
+#[export] Hint Resolve size_binding_open_binding_wrt_typ_rec_var : lngen.
+#[export] Hint Rewrite size_binding_open_binding_wrt_typ_rec_var using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -865,8 +829,8 @@ Proof.
 pose proof size_exp_open_exp_wrt_typ_rec_var_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_exp_open_exp_wrt_typ_rec_var : lngen.
-Hint Rewrite size_exp_open_exp_wrt_typ_rec_var using solve [auto] : lngen.
+#[export] Hint Resolve size_exp_open_exp_wrt_typ_rec_var : lngen.
+#[export] Hint Rewrite size_exp_open_exp_wrt_typ_rec_var using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -891,8 +855,8 @@ Proof.
 pose proof size_exp_open_exp_wrt_exp_rec_var_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve size_exp_open_exp_wrt_exp_rec_var : lngen.
-Hint Rewrite size_exp_open_exp_wrt_exp_rec_var using solve [auto] : lngen.
+#[export] Hint Resolve size_exp_open_exp_wrt_exp_rec_var : lngen.
+#[export] Hint Rewrite size_exp_open_exp_wrt_exp_rec_var using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -903,8 +867,8 @@ Proof.
 unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_typ_open_typ_wrt_typ_var : lngen.
-Hint Rewrite size_typ_open_typ_wrt_typ_var using solve [auto] : lngen.
+#[export] Hint Resolve size_typ_open_typ_wrt_typ_var : lngen.
+#[export] Hint Rewrite size_typ_open_typ_wrt_typ_var using solve [auto] : lngen.
 
 Lemma size_binding_open_binding_wrt_typ_var :
 forall b1 X1,
@@ -913,8 +877,8 @@ Proof.
 unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_binding_open_binding_wrt_typ_var : lngen.
-Hint Rewrite size_binding_open_binding_wrt_typ_var using solve [auto] : lngen.
+#[export] Hint Resolve size_binding_open_binding_wrt_typ_var : lngen.
+#[export] Hint Rewrite size_binding_open_binding_wrt_typ_var using solve [auto] : lngen.
 
 Lemma size_exp_open_exp_wrt_typ_var :
 forall e1 X1,
@@ -923,8 +887,8 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve size_exp_open_exp_wrt_typ_var : lngen.
-Hint Rewrite size_exp_open_exp_wrt_typ_var using solve [auto] : lngen.
+#[export] Hint Resolve size_exp_open_exp_wrt_typ_var : lngen.
+#[export] Hint Rewrite size_exp_open_exp_wrt_typ_var using solve [auto] : lngen.
 
 Lemma size_exp_open_exp_wrt_exp_var :
 forall e1 x1,
@@ -933,8 +897,8 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve size_exp_open_exp_wrt_exp_var : lngen.
-Hint Rewrite size_exp_open_exp_wrt_exp_var using solve [auto] : lngen.
+#[export] Hint Resolve size_exp_open_exp_wrt_exp_var : lngen.
+#[export] Hint Rewrite size_exp_open_exp_wrt_exp_var using solve [auto] : lngen.
 
 
 (* *********************************************************************** *)
@@ -964,7 +928,7 @@ Proof.
 pose proof degree_typ_wrt_typ_S_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_typ_wrt_typ_S : lngen.
+#[export] Hint Resolve degree_typ_wrt_typ_S : lngen.
 
 (* begin hide *)
 
@@ -987,7 +951,7 @@ Proof.
 pose proof degree_binding_wrt_typ_S_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_binding_wrt_typ_S : lngen.
+#[export] Hint Resolve degree_binding_wrt_typ_S : lngen.
 
 (* begin hide *)
 
@@ -1010,7 +974,7 @@ Proof.
 pose proof degree_exp_wrt_typ_S_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_S : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_S : lngen.
 
 (* begin hide *)
 
@@ -1033,7 +997,7 @@ Proof.
 pose proof degree_exp_wrt_exp_S_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_S : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_S : lngen.
 
 Lemma degree_typ_wrt_typ_O :
 forall n1 T1,
@@ -1043,7 +1007,7 @@ Proof.
 induction n1; default_simp.
 Qed.
 
-Hint Resolve degree_typ_wrt_typ_O : lngen.
+#[export] Hint Resolve degree_typ_wrt_typ_O : lngen.
 
 Lemma degree_binding_wrt_typ_O :
 forall n1 b1,
@@ -1053,7 +1017,7 @@ Proof.
 induction n1; default_simp.
 Qed.
 
-Hint Resolve degree_binding_wrt_typ_O : lngen.
+#[export] Hint Resolve degree_binding_wrt_typ_O : lngen.
 
 Lemma degree_exp_wrt_typ_O :
 forall n1 e1,
@@ -1063,7 +1027,7 @@ Proof.
 induction n1; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_O : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_O : lngen.
 
 Lemma degree_exp_wrt_exp_O :
 forall n1 e1,
@@ -1073,7 +1037,7 @@ Proof.
 induction n1; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_O : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_O : lngen.
 
 (* begin hide *)
 
@@ -1098,7 +1062,7 @@ Proof.
 pose proof degree_typ_wrt_typ_close_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_typ_wrt_typ_close_typ_wrt_typ_rec : lngen.
+#[export] Hint Resolve degree_typ_wrt_typ_close_typ_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -1125,7 +1089,7 @@ Proof.
 pose proof degree_binding_wrt_typ_close_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_binding_wrt_typ_close_binding_wrt_typ_rec : lngen.
+#[export] Hint Resolve degree_binding_wrt_typ_close_binding_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -1152,7 +1116,7 @@ Proof.
 pose proof degree_exp_wrt_typ_close_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_close_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_close_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -1179,7 +1143,7 @@ Proof.
 pose proof degree_exp_wrt_typ_close_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_close_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_close_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -1206,7 +1170,7 @@ Proof.
 pose proof degree_exp_wrt_exp_close_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_close_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_close_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -1233,7 +1197,7 @@ Proof.
 pose proof degree_exp_wrt_exp_close_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_close_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_close_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -1245,7 +1209,7 @@ Proof.
 unfold close_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve degree_typ_wrt_typ_close_typ_wrt_typ : lngen.
+#[export] Hint Resolve degree_typ_wrt_typ_close_typ_wrt_typ : lngen.
 
 Lemma degree_binding_wrt_typ_close_binding_wrt_typ :
 forall b1 X1,
@@ -1255,7 +1219,7 @@ Proof.
 unfold close_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve degree_binding_wrt_typ_close_binding_wrt_typ : lngen.
+#[export] Hint Resolve degree_binding_wrt_typ_close_binding_wrt_typ : lngen.
 
 Lemma degree_exp_wrt_typ_close_exp_wrt_typ :
 forall e1 X1,
@@ -1265,7 +1229,7 @@ Proof.
 unfold close_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_close_exp_wrt_typ : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_close_exp_wrt_typ : lngen.
 
 Lemma degree_exp_wrt_typ_close_exp_wrt_exp :
 forall e1 x1 n1,
@@ -1275,7 +1239,7 @@ Proof.
 unfold close_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_close_exp_wrt_exp : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_close_exp_wrt_exp : lngen.
 
 Lemma degree_exp_wrt_exp_close_exp_wrt_typ :
 forall e1 X1 n1,
@@ -1285,7 +1249,7 @@ Proof.
 unfold close_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_close_exp_wrt_typ : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_close_exp_wrt_typ : lngen.
 
 Lemma degree_exp_wrt_exp_close_exp_wrt_exp :
 forall e1 x1,
@@ -1295,7 +1259,7 @@ Proof.
 unfold close_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_close_exp_wrt_exp : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_close_exp_wrt_exp : lngen.
 
 (* begin hide *)
 
@@ -1320,7 +1284,7 @@ Proof.
 pose proof degree_typ_wrt_typ_close_typ_wrt_typ_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_typ_wrt_typ_close_typ_wrt_typ_rec_inv : lngen.
+#[export] Hint Immediate degree_typ_wrt_typ_close_typ_wrt_typ_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1347,7 +1311,7 @@ Proof.
 pose proof degree_binding_wrt_typ_close_binding_wrt_typ_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_binding_wrt_typ_close_binding_wrt_typ_rec_inv : lngen.
+#[export] Hint Immediate degree_binding_wrt_typ_close_binding_wrt_typ_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1374,7 +1338,7 @@ Proof.
 pose proof degree_exp_wrt_typ_close_exp_wrt_typ_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_exp_wrt_typ_close_exp_wrt_typ_rec_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_typ_close_exp_wrt_typ_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1401,7 +1365,7 @@ Proof.
 pose proof degree_exp_wrt_typ_close_exp_wrt_exp_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_exp_wrt_typ_close_exp_wrt_exp_rec_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_typ_close_exp_wrt_exp_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1428,7 +1392,7 @@ Proof.
 pose proof degree_exp_wrt_exp_close_exp_wrt_typ_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_exp_wrt_exp_close_exp_wrt_typ_rec_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_exp_close_exp_wrt_typ_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1455,7 +1419,7 @@ Proof.
 pose proof degree_exp_wrt_exp_close_exp_wrt_exp_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_exp_wrt_exp_close_exp_wrt_exp_rec_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_exp_close_exp_wrt_exp_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1467,7 +1431,7 @@ Proof.
 unfold close_typ_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate degree_typ_wrt_typ_close_typ_wrt_typ_inv : lngen.
+#[export] Hint Immediate degree_typ_wrt_typ_close_typ_wrt_typ_inv : lngen.
 
 Lemma degree_binding_wrt_typ_close_binding_wrt_typ_inv :
 forall b1 X1,
@@ -1477,7 +1441,7 @@ Proof.
 unfold close_binding_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate degree_binding_wrt_typ_close_binding_wrt_typ_inv : lngen.
+#[export] Hint Immediate degree_binding_wrt_typ_close_binding_wrt_typ_inv : lngen.
 
 Lemma degree_exp_wrt_typ_close_exp_wrt_typ_inv :
 forall e1 X1,
@@ -1487,7 +1451,7 @@ Proof.
 unfold close_exp_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate degree_exp_wrt_typ_close_exp_wrt_typ_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_typ_close_exp_wrt_typ_inv : lngen.
 
 Lemma degree_exp_wrt_typ_close_exp_wrt_exp_inv :
 forall e1 x1 n1,
@@ -1497,7 +1461,7 @@ Proof.
 unfold close_exp_wrt_exp; eauto with lngen.
 Qed.
 
-Hint Immediate degree_exp_wrt_typ_close_exp_wrt_exp_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_typ_close_exp_wrt_exp_inv : lngen.
 
 Lemma degree_exp_wrt_exp_close_exp_wrt_typ_inv :
 forall e1 X1 n1,
@@ -1507,7 +1471,7 @@ Proof.
 unfold close_exp_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate degree_exp_wrt_exp_close_exp_wrt_typ_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_exp_close_exp_wrt_typ_inv : lngen.
 
 Lemma degree_exp_wrt_exp_close_exp_wrt_exp_inv :
 forall e1 x1,
@@ -1517,7 +1481,7 @@ Proof.
 unfold close_exp_wrt_exp; eauto with lngen.
 Qed.
 
-Hint Immediate degree_exp_wrt_exp_close_exp_wrt_exp_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_exp_close_exp_wrt_exp_inv : lngen.
 
 (* begin hide *)
 
@@ -1544,7 +1508,7 @@ Proof.
 pose proof degree_typ_wrt_typ_open_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_typ_wrt_typ_open_typ_wrt_typ_rec : lngen.
+#[export] Hint Resolve degree_typ_wrt_typ_open_typ_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -1573,7 +1537,7 @@ Proof.
 pose proof degree_binding_wrt_typ_open_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_binding_wrt_typ_open_binding_wrt_typ_rec : lngen.
+#[export] Hint Resolve degree_binding_wrt_typ_open_binding_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -1602,7 +1566,7 @@ Proof.
 pose proof degree_exp_wrt_typ_open_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_open_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_open_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -1631,7 +1595,7 @@ Proof.
 pose proof degree_exp_wrt_typ_open_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_open_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_open_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -1658,7 +1622,7 @@ Proof.
 pose proof degree_exp_wrt_exp_open_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_open_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_open_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -1687,7 +1651,7 @@ Proof.
 pose proof degree_exp_wrt_exp_open_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_open_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_open_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -1700,7 +1664,7 @@ Proof.
 unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve degree_typ_wrt_typ_open_typ_wrt_typ : lngen.
+#[export] Hint Resolve degree_typ_wrt_typ_open_typ_wrt_typ : lngen.
 
 Lemma degree_binding_wrt_typ_open_binding_wrt_typ :
 forall b1 T1,
@@ -1711,7 +1675,7 @@ Proof.
 unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve degree_binding_wrt_typ_open_binding_wrt_typ : lngen.
+#[export] Hint Resolve degree_binding_wrt_typ_open_binding_wrt_typ : lngen.
 
 Lemma degree_exp_wrt_typ_open_exp_wrt_typ :
 forall e1 T1,
@@ -1722,7 +1686,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_open_exp_wrt_typ : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_open_exp_wrt_typ : lngen.
 
 Lemma degree_exp_wrt_typ_open_exp_wrt_exp :
 forall e1 e2 n1,
@@ -1733,7 +1697,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_open_exp_wrt_exp : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_open_exp_wrt_exp : lngen.
 
 Lemma degree_exp_wrt_exp_open_exp_wrt_typ :
 forall e1 T1 n1,
@@ -1743,7 +1707,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_open_exp_wrt_typ : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_open_exp_wrt_typ : lngen.
 
 Lemma degree_exp_wrt_exp_open_exp_wrt_exp :
 forall e1 e2,
@@ -1754,7 +1718,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_open_exp_wrt_exp : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_open_exp_wrt_exp : lngen.
 
 (* begin hide *)
 
@@ -1779,7 +1743,7 @@ Proof.
 pose proof degree_typ_wrt_typ_open_typ_wrt_typ_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_typ_wrt_typ_open_typ_wrt_typ_rec_inv : lngen.
+#[export] Hint Immediate degree_typ_wrt_typ_open_typ_wrt_typ_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1806,7 +1770,7 @@ Proof.
 pose proof degree_binding_wrt_typ_open_binding_wrt_typ_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_binding_wrt_typ_open_binding_wrt_typ_rec_inv : lngen.
+#[export] Hint Immediate degree_binding_wrt_typ_open_binding_wrt_typ_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1833,7 +1797,7 @@ Proof.
 pose proof degree_exp_wrt_typ_open_exp_wrt_typ_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_exp_wrt_typ_open_exp_wrt_typ_rec_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_typ_open_exp_wrt_typ_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1860,7 +1824,7 @@ Proof.
 pose proof degree_exp_wrt_typ_open_exp_wrt_exp_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_exp_wrt_typ_open_exp_wrt_exp_rec_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_typ_open_exp_wrt_exp_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1887,7 +1851,7 @@ Proof.
 pose proof degree_exp_wrt_exp_open_exp_wrt_typ_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_exp_wrt_exp_open_exp_wrt_typ_rec_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_exp_open_exp_wrt_typ_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1914,7 +1878,7 @@ Proof.
 pose proof degree_exp_wrt_exp_open_exp_wrt_exp_rec_inv_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate degree_exp_wrt_exp_open_exp_wrt_exp_rec_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_exp_open_exp_wrt_exp_rec_inv : lngen.
 
 (* end hide *)
 
@@ -1926,7 +1890,7 @@ Proof.
 unfold open_typ_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate degree_typ_wrt_typ_open_typ_wrt_typ_inv : lngen.
+#[export] Hint Immediate degree_typ_wrt_typ_open_typ_wrt_typ_inv : lngen.
 
 Lemma degree_binding_wrt_typ_open_binding_wrt_typ_inv :
 forall b1 T1,
@@ -1936,7 +1900,7 @@ Proof.
 unfold open_binding_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate degree_binding_wrt_typ_open_binding_wrt_typ_inv : lngen.
+#[export] Hint Immediate degree_binding_wrt_typ_open_binding_wrt_typ_inv : lngen.
 
 Lemma degree_exp_wrt_typ_open_exp_wrt_typ_inv :
 forall e1 T1,
@@ -1946,7 +1910,7 @@ Proof.
 unfold open_exp_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate degree_exp_wrt_typ_open_exp_wrt_typ_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_typ_open_exp_wrt_typ_inv : lngen.
 
 Lemma degree_exp_wrt_typ_open_exp_wrt_exp_inv :
 forall e1 e2 n1,
@@ -1956,7 +1920,7 @@ Proof.
 unfold open_exp_wrt_exp; eauto with lngen.
 Qed.
 
-Hint Immediate degree_exp_wrt_typ_open_exp_wrt_exp_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_typ_open_exp_wrt_exp_inv : lngen.
 
 Lemma degree_exp_wrt_exp_open_exp_wrt_typ_inv :
 forall e1 T1 n1,
@@ -1966,7 +1930,7 @@ Proof.
 unfold open_exp_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate degree_exp_wrt_exp_open_exp_wrt_typ_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_exp_open_exp_wrt_typ_inv : lngen.
 
 Lemma degree_exp_wrt_exp_open_exp_wrt_exp_inv :
 forall e1 e2,
@@ -1976,7 +1940,7 @@ Proof.
 unfold open_exp_wrt_exp; eauto with lngen.
 Qed.
 
-Hint Immediate degree_exp_wrt_exp_open_exp_wrt_exp_inv : lngen.
+#[export] Hint Immediate degree_exp_wrt_exp_open_exp_wrt_exp_inv : lngen.
 
 
 (* *********************************************************************** *)
@@ -2011,7 +1975,7 @@ Proof.
 pose proof close_typ_wrt_typ_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate close_typ_wrt_typ_rec_inj : lngen.
+#[export] Hint Immediate close_typ_wrt_typ_rec_inj : lngen.
 
 (* end hide *)
 
@@ -2041,7 +2005,7 @@ Proof.
 pose proof close_binding_wrt_typ_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate close_binding_wrt_typ_rec_inj : lngen.
+#[export] Hint Immediate close_binding_wrt_typ_rec_inj : lngen.
 
 (* end hide *)
 
@@ -2071,7 +2035,7 @@ Proof.
 pose proof close_exp_wrt_typ_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate close_exp_wrt_typ_rec_inj : lngen.
+#[export] Hint Immediate close_exp_wrt_typ_rec_inj : lngen.
 
 (* end hide *)
 
@@ -2101,7 +2065,7 @@ Proof.
 pose proof close_exp_wrt_exp_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate close_exp_wrt_exp_rec_inj : lngen.
+#[export] Hint Immediate close_exp_wrt_exp_rec_inj : lngen.
 
 (* end hide *)
 
@@ -2113,7 +2077,7 @@ Proof.
 unfold close_typ_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate close_typ_wrt_typ_inj : lngen.
+#[export] Hint Immediate close_typ_wrt_typ_inj : lngen.
 
 Lemma close_binding_wrt_typ_inj :
 forall b1 b2 X1,
@@ -2123,7 +2087,7 @@ Proof.
 unfold close_binding_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate close_binding_wrt_typ_inj : lngen.
+#[export] Hint Immediate close_binding_wrt_typ_inj : lngen.
 
 Lemma close_exp_wrt_typ_inj :
 forall e1 e2 X1,
@@ -2133,7 +2097,7 @@ Proof.
 unfold close_exp_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate close_exp_wrt_typ_inj : lngen.
+#[export] Hint Immediate close_exp_wrt_typ_inj : lngen.
 
 Lemma close_exp_wrt_exp_inj :
 forall e1 e2 x1,
@@ -2143,7 +2107,7 @@ Proof.
 unfold close_exp_wrt_exp; eauto with lngen.
 Qed.
 
-Hint Immediate close_exp_wrt_exp_inj : lngen.
+#[export] Hint Immediate close_exp_wrt_exp_inj : lngen.
 
 (* begin hide *)
 
@@ -2168,8 +2132,8 @@ Proof.
 pose proof close_typ_wrt_typ_rec_open_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_typ_wrt_typ_rec_open_typ_wrt_typ_rec : lngen.
-Hint Rewrite close_typ_wrt_typ_rec_open_typ_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve close_typ_wrt_typ_rec_open_typ_wrt_typ_rec : lngen.
+#[export] Hint Rewrite close_typ_wrt_typ_rec_open_typ_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2196,8 +2160,8 @@ Proof.
 pose proof close_binding_wrt_typ_rec_open_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_binding_wrt_typ_rec_open_binding_wrt_typ_rec : lngen.
-Hint Rewrite close_binding_wrt_typ_rec_open_binding_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve close_binding_wrt_typ_rec_open_binding_wrt_typ_rec : lngen.
+#[export] Hint Rewrite close_binding_wrt_typ_rec_open_binding_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2224,8 +2188,8 @@ Proof.
 pose proof close_exp_wrt_typ_rec_open_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_exp_wrt_typ_rec_open_exp_wrt_typ_rec : lngen.
-Hint Rewrite close_exp_wrt_typ_rec_open_exp_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve close_exp_wrt_typ_rec_open_exp_wrt_typ_rec : lngen.
+#[export] Hint Rewrite close_exp_wrt_typ_rec_open_exp_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2252,8 +2216,8 @@ Proof.
 pose proof close_exp_wrt_exp_rec_open_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_exp_wrt_exp_rec_open_exp_wrt_exp_rec : lngen.
-Hint Rewrite close_exp_wrt_exp_rec_open_exp_wrt_exp_rec using solve [auto] : lngen.
+#[export] Hint Resolve close_exp_wrt_exp_rec_open_exp_wrt_exp_rec : lngen.
+#[export] Hint Rewrite close_exp_wrt_exp_rec_open_exp_wrt_exp_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2265,8 +2229,8 @@ Proof.
 unfold close_typ_wrt_typ; unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve close_typ_wrt_typ_open_typ_wrt_typ : lngen.
-Hint Rewrite close_typ_wrt_typ_open_typ_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve close_typ_wrt_typ_open_typ_wrt_typ : lngen.
+#[export] Hint Rewrite close_typ_wrt_typ_open_typ_wrt_typ using solve [auto] : lngen.
 
 Lemma close_binding_wrt_typ_open_binding_wrt_typ :
 forall b1 X1,
@@ -2276,8 +2240,8 @@ Proof.
 unfold close_binding_wrt_typ; unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve close_binding_wrt_typ_open_binding_wrt_typ : lngen.
-Hint Rewrite close_binding_wrt_typ_open_binding_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve close_binding_wrt_typ_open_binding_wrt_typ : lngen.
+#[export] Hint Rewrite close_binding_wrt_typ_open_binding_wrt_typ using solve [auto] : lngen.
 
 Lemma close_exp_wrt_typ_open_exp_wrt_typ :
 forall e1 X1,
@@ -2287,8 +2251,8 @@ Proof.
 unfold close_exp_wrt_typ; unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve close_exp_wrt_typ_open_exp_wrt_typ : lngen.
-Hint Rewrite close_exp_wrt_typ_open_exp_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve close_exp_wrt_typ_open_exp_wrt_typ : lngen.
+#[export] Hint Rewrite close_exp_wrt_typ_open_exp_wrt_typ using solve [auto] : lngen.
 
 Lemma close_exp_wrt_exp_open_exp_wrt_exp :
 forall e1 x1,
@@ -2298,8 +2262,8 @@ Proof.
 unfold close_exp_wrt_exp; unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve close_exp_wrt_exp_open_exp_wrt_exp : lngen.
-Hint Rewrite close_exp_wrt_exp_open_exp_wrt_exp using solve [auto] : lngen.
+#[export] Hint Resolve close_exp_wrt_exp_open_exp_wrt_exp : lngen.
+#[export] Hint Rewrite close_exp_wrt_exp_open_exp_wrt_exp using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -2322,8 +2286,8 @@ Proof.
 pose proof open_typ_wrt_typ_rec_close_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_typ_wrt_typ_rec_close_typ_wrt_typ_rec : lngen.
-Hint Rewrite open_typ_wrt_typ_rec_close_typ_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve open_typ_wrt_typ_rec_close_typ_wrt_typ_rec : lngen.
+#[export] Hint Rewrite open_typ_wrt_typ_rec_close_typ_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2348,8 +2312,8 @@ Proof.
 pose proof open_binding_wrt_typ_rec_close_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_binding_wrt_typ_rec_close_binding_wrt_typ_rec : lngen.
-Hint Rewrite open_binding_wrt_typ_rec_close_binding_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve open_binding_wrt_typ_rec_close_binding_wrt_typ_rec : lngen.
+#[export] Hint Rewrite open_binding_wrt_typ_rec_close_binding_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2374,8 +2338,8 @@ Proof.
 pose proof open_exp_wrt_typ_rec_close_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_exp_wrt_typ_rec_close_exp_wrt_typ_rec : lngen.
-Hint Rewrite open_exp_wrt_typ_rec_close_exp_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve open_exp_wrt_typ_rec_close_exp_wrt_typ_rec : lngen.
+#[export] Hint Rewrite open_exp_wrt_typ_rec_close_exp_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2400,8 +2364,8 @@ Proof.
 pose proof open_exp_wrt_exp_rec_close_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_exp_wrt_exp_rec_close_exp_wrt_exp_rec : lngen.
-Hint Rewrite open_exp_wrt_exp_rec_close_exp_wrt_exp_rec using solve [auto] : lngen.
+#[export] Hint Resolve open_exp_wrt_exp_rec_close_exp_wrt_exp_rec : lngen.
+#[export] Hint Rewrite open_exp_wrt_exp_rec_close_exp_wrt_exp_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -2412,8 +2376,8 @@ Proof.
 unfold close_typ_wrt_typ; unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve open_typ_wrt_typ_close_typ_wrt_typ : lngen.
-Hint Rewrite open_typ_wrt_typ_close_typ_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve open_typ_wrt_typ_close_typ_wrt_typ : lngen.
+#[export] Hint Rewrite open_typ_wrt_typ_close_typ_wrt_typ using solve [auto] : lngen.
 
 Lemma open_binding_wrt_typ_close_binding_wrt_typ :
 forall b1 X1,
@@ -2422,8 +2386,8 @@ Proof.
 unfold close_binding_wrt_typ; unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve open_binding_wrt_typ_close_binding_wrt_typ : lngen.
-Hint Rewrite open_binding_wrt_typ_close_binding_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve open_binding_wrt_typ_close_binding_wrt_typ : lngen.
+#[export] Hint Rewrite open_binding_wrt_typ_close_binding_wrt_typ using solve [auto] : lngen.
 
 Lemma open_exp_wrt_typ_close_exp_wrt_typ :
 forall e1 X1,
@@ -2432,8 +2396,8 @@ Proof.
 unfold close_exp_wrt_typ; unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve open_exp_wrt_typ_close_exp_wrt_typ : lngen.
-Hint Rewrite open_exp_wrt_typ_close_exp_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve open_exp_wrt_typ_close_exp_wrt_typ : lngen.
+#[export] Hint Rewrite open_exp_wrt_typ_close_exp_wrt_typ using solve [auto] : lngen.
 
 Lemma open_exp_wrt_exp_close_exp_wrt_exp :
 forall e1 x1,
@@ -2442,8 +2406,8 @@ Proof.
 unfold close_exp_wrt_exp; unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve open_exp_wrt_exp_close_exp_wrt_exp : lngen.
-Hint Rewrite open_exp_wrt_exp_close_exp_wrt_exp using solve [auto] : lngen.
+#[export] Hint Resolve open_exp_wrt_exp_close_exp_wrt_exp : lngen.
+#[export] Hint Rewrite open_exp_wrt_exp_close_exp_wrt_exp using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -2475,7 +2439,7 @@ Proof.
 pose proof open_typ_wrt_typ_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate open_typ_wrt_typ_rec_inj : lngen.
+#[export] Hint Immediate open_typ_wrt_typ_rec_inj : lngen.
 
 (* end hide *)
 
@@ -2509,7 +2473,7 @@ Proof.
 pose proof open_binding_wrt_typ_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate open_binding_wrt_typ_rec_inj : lngen.
+#[export] Hint Immediate open_binding_wrt_typ_rec_inj : lngen.
 
 (* end hide *)
 
@@ -2543,7 +2507,7 @@ Proof.
 pose proof open_exp_wrt_typ_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate open_exp_wrt_typ_rec_inj : lngen.
+#[export] Hint Immediate open_exp_wrt_typ_rec_inj : lngen.
 
 (* end hide *)
 
@@ -2577,7 +2541,7 @@ Proof.
 pose proof open_exp_wrt_exp_rec_inj_mutual as H; intuition eauto.
 Qed.
 
-Hint Immediate open_exp_wrt_exp_rec_inj : lngen.
+#[export] Hint Immediate open_exp_wrt_exp_rec_inj : lngen.
 
 (* end hide *)
 
@@ -2591,7 +2555,7 @@ Proof.
 unfold open_typ_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate open_typ_wrt_typ_inj : lngen.
+#[export] Hint Immediate open_typ_wrt_typ_inj : lngen.
 
 Lemma open_binding_wrt_typ_inj :
 forall b2 b1 X1,
@@ -2603,7 +2567,7 @@ Proof.
 unfold open_binding_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate open_binding_wrt_typ_inj : lngen.
+#[export] Hint Immediate open_binding_wrt_typ_inj : lngen.
 
 Lemma open_exp_wrt_typ_inj :
 forall e2 e1 X1,
@@ -2615,7 +2579,7 @@ Proof.
 unfold open_exp_wrt_typ; eauto with lngen.
 Qed.
 
-Hint Immediate open_exp_wrt_typ_inj : lngen.
+#[export] Hint Immediate open_exp_wrt_typ_inj : lngen.
 
 Lemma open_exp_wrt_exp_inj :
 forall e2 e1 x1,
@@ -2627,7 +2591,7 @@ Proof.
 unfold open_exp_wrt_exp; eauto with lngen.
 Qed.
 
-Hint Immediate open_exp_wrt_exp_inj : lngen.
+#[export] Hint Immediate open_exp_wrt_exp_inj : lngen.
 
 
 (* *********************************************************************** *)
@@ -2662,7 +2626,7 @@ Proof.
 pose proof degree_typ_wrt_typ_of_lc_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_typ_wrt_typ_of_lc_typ : lngen.
+#[export] Hint Resolve degree_typ_wrt_typ_of_lc_typ : lngen.
 
 (* begin hide *)
 
@@ -2690,7 +2654,7 @@ Proof.
 pose proof degree_binding_wrt_typ_of_lc_binding_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_binding_wrt_typ_of_lc_binding : lngen.
+#[export] Hint Resolve degree_binding_wrt_typ_of_lc_binding : lngen.
 
 (* begin hide *)
 
@@ -2719,7 +2683,7 @@ Proof.
 pose proof degree_exp_wrt_typ_of_lc_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_typ_of_lc_exp : lngen.
+#[export] Hint Resolve degree_exp_wrt_typ_of_lc_exp : lngen.
 
 (* begin hide *)
 
@@ -2748,7 +2712,7 @@ Proof.
 pose proof degree_exp_wrt_exp_of_lc_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve degree_exp_wrt_exp_of_lc_exp : lngen.
+#[export] Hint Resolve degree_exp_wrt_exp_of_lc_exp : lngen.
 
 (* begin hide *)
 
@@ -2787,7 +2751,7 @@ pose proof (lc_typ_of_degree_size_mutual (size_typ T1));
 intuition eauto.
 Qed.
 
-Hint Resolve lc_typ_of_degree : lngen.
+#[export] Hint Resolve lc_typ_of_degree : lngen.
 
 (* begin hide *)
 
@@ -2826,7 +2790,7 @@ pose proof (lc_binding_of_degree_size_mutual (size_binding b1));
 intuition eauto.
 Qed.
 
-Hint Resolve lc_binding_of_degree : lngen.
+#[export] Hint Resolve lc_binding_of_degree : lngen.
 
 (* begin hide *)
 
@@ -2867,7 +2831,7 @@ pose proof (lc_exp_of_degree_size_mutual (size_exp e1));
 intuition eauto.
 Qed.
 
-Hint Resolve lc_exp_of_degree : lngen.
+#[export] Hint Resolve lc_exp_of_degree : lngen.
 
 Ltac typ_lc_exists_tac :=
   repeat (match goal with
@@ -2934,27 +2898,27 @@ Proof.
 intros; exp_lc_exists_tac; eauto with lngen.
 Qed.
 
-Hint Extern 1 (lc_typ (typ_all _ _)) =>
+#[export] Hint Extern 1 (lc_typ (typ_all _ _)) =>
   let X1 := fresh in
   pick_fresh X1;
   apply (lc_typ_all_exists X1) : core.
 
-Hint Extern 1 (lc_exp (exp_abs _ _)) =>
+#[export] Hint Extern 1 (lc_exp (exp_abs _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
   apply (lc_exp_abs_exists x1) : core.
 
-Hint Extern 1 (lc_exp (exp_tabs _ _)) =>
+#[export] Hint Extern 1 (lc_exp (exp_tabs _ _)) =>
   let X1 := fresh in
   pick_fresh X1;
   apply (lc_exp_tabs_exists X1) : core.
 
-Hint Extern 1 (lc_exp (exp_let _ _)) =>
+#[export] Hint Extern 1 (lc_exp (exp_let _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
   apply (lc_exp_let_exists x1) : core.
 
-Hint Extern 1 (lc_exp (exp_case _ _ _)) =>
+#[export] Hint Extern 1 (lc_exp (exp_case _ _ _)) =>
   let x1 := fresh in
   pick_fresh x1;
   let y1 := fresh in
@@ -2976,7 +2940,7 @@ typ_lc_exists_tac;
 eauto with lngen.
 Qed.
 
-Hint Resolve lc_body_typ_wrt_typ : lngen.
+#[export] Hint Resolve lc_body_typ_wrt_typ : lngen.
 
 Lemma lc_body_binding_wrt_typ :
 forall b1 T1,
@@ -2993,7 +2957,7 @@ binding_lc_exists_tac;
 eauto with lngen.
 Qed.
 
-Hint Resolve lc_body_binding_wrt_typ : lngen.
+#[export] Hint Resolve lc_body_binding_wrt_typ : lngen.
 
 Lemma lc_body_exp_wrt_typ :
 forall e1 T1,
@@ -3010,7 +2974,7 @@ exp_lc_exists_tac;
 eauto with lngen.
 Qed.
 
-Hint Resolve lc_body_exp_wrt_typ : lngen.
+#[export] Hint Resolve lc_body_exp_wrt_typ : lngen.
 
 Lemma lc_body_exp_wrt_exp :
 forall e1 e2,
@@ -3027,7 +2991,7 @@ exp_lc_exists_tac;
 eauto with lngen.
 Qed.
 
-Hint Resolve lc_body_exp_wrt_exp : lngen.
+#[export] Hint Resolve lc_body_exp_wrt_exp : lngen.
 
 Lemma lc_body_typ_all_2 :
 forall T1 T2,
@@ -3037,7 +3001,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_typ_all_2 : lngen.
+#[export] Hint Resolve lc_body_typ_all_2 : lngen.
 
 Lemma lc_body_exp_abs_2 :
 forall T1 e1,
@@ -3047,7 +3011,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_exp_abs_2 : lngen.
+#[export] Hint Resolve lc_body_exp_abs_2 : lngen.
 
 Lemma lc_body_exp_tabs_2 :
 forall T1 e1,
@@ -3057,7 +3021,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_exp_tabs_2 : lngen.
+#[export] Hint Resolve lc_body_exp_tabs_2 : lngen.
 
 Lemma lc_body_exp_let_2 :
 forall e1 e2,
@@ -3067,7 +3031,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_exp_let_2 : lngen.
+#[export] Hint Resolve lc_body_exp_let_2 : lngen.
 
 Lemma lc_body_exp_case_2 :
 forall e1 e2 e3,
@@ -3077,7 +3041,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_exp_case_2 : lngen.
+#[export] Hint Resolve lc_body_exp_case_2 : lngen.
 
 Lemma lc_body_exp_case_3 :
 forall e1 e2 e3,
@@ -3087,7 +3051,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve lc_body_exp_case_3 : lngen.
+#[export] Hint Resolve lc_body_exp_case_3 : lngen.
 
 (* begin hide *)
 
@@ -3109,7 +3073,7 @@ Proof.
 pose proof lc_typ_unique_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_typ_unique : lngen.
+#[export] Hint Resolve lc_typ_unique : lngen.
 
 (* begin hide *)
 
@@ -3131,7 +3095,7 @@ Proof.
 pose proof lc_binding_unique_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_binding_unique : lngen.
+#[export] Hint Resolve lc_binding_unique : lngen.
 
 (* begin hide *)
 
@@ -3153,7 +3117,7 @@ Proof.
 pose proof lc_exp_unique_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_exp_unique : lngen.
+#[export] Hint Resolve lc_exp_unique : lngen.
 
 (* begin hide *)
 
@@ -3172,7 +3136,7 @@ Proof.
 pose proof lc_typ_of_lc_set_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_typ_of_lc_set_typ : lngen.
+#[export] Hint Resolve lc_typ_of_lc_set_typ : lngen.
 
 (* begin hide *)
 
@@ -3191,7 +3155,7 @@ Proof.
 pose proof lc_binding_of_lc_set_binding_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_binding_of_lc_set_binding : lngen.
+#[export] Hint Resolve lc_binding_of_lc_set_binding : lngen.
 
 (* begin hide *)
 
@@ -3210,7 +3174,7 @@ Proof.
 pose proof lc_exp_of_lc_set_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve lc_exp_of_lc_set_exp : lngen.
+#[export] Hint Resolve lc_exp_of_lc_set_exp : lngen.
 
 (* begin hide *)
 
@@ -3252,7 +3216,7 @@ pose proof (lc_set_typ_of_lc_typ_size_mutual (size_typ T1));
 intuition eauto.
 Qed.
 
-Hint Resolve lc_set_typ_of_lc_typ : lngen.
+#[export] Hint Resolve lc_set_typ_of_lc_typ : lngen.
 
 (* begin hide *)
 
@@ -3295,7 +3259,7 @@ pose proof (lc_set_binding_of_lc_binding_size_mutual (size_binding b1));
 intuition eauto.
 Qed.
 
-Hint Resolve lc_set_binding_of_lc_binding : lngen.
+#[export] Hint Resolve lc_set_binding_of_lc_binding : lngen.
 
 (* begin hide *)
 
@@ -3338,7 +3302,7 @@ pose proof (lc_set_exp_of_lc_exp_size_mutual (size_exp e1));
 intuition eauto.
 Qed.
 
-Hint Resolve lc_set_exp_of_lc_exp : lngen.
+#[export] Hint Resolve lc_set_exp_of_lc_exp : lngen.
 
 
 (* *********************************************************************** *)
@@ -3372,8 +3336,8 @@ Proof.
 pose proof close_typ_wrt_typ_rec_degree_typ_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_typ_wrt_typ_rec_degree_typ_wrt_typ : lngen.
-Hint Rewrite close_typ_wrt_typ_rec_degree_typ_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve close_typ_wrt_typ_rec_degree_typ_wrt_typ : lngen.
+#[export] Hint Rewrite close_typ_wrt_typ_rec_degree_typ_wrt_typ using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3402,8 +3366,8 @@ Proof.
 pose proof close_binding_wrt_typ_rec_degree_binding_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_binding_wrt_typ_rec_degree_binding_wrt_typ : lngen.
-Hint Rewrite close_binding_wrt_typ_rec_degree_binding_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve close_binding_wrt_typ_rec_degree_binding_wrt_typ : lngen.
+#[export] Hint Rewrite close_binding_wrt_typ_rec_degree_binding_wrt_typ using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3432,8 +3396,8 @@ Proof.
 pose proof close_exp_wrt_typ_rec_degree_exp_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_exp_wrt_typ_rec_degree_exp_wrt_typ : lngen.
-Hint Rewrite close_exp_wrt_typ_rec_degree_exp_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve close_exp_wrt_typ_rec_degree_exp_wrt_typ : lngen.
+#[export] Hint Rewrite close_exp_wrt_typ_rec_degree_exp_wrt_typ using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3462,8 +3426,8 @@ Proof.
 pose proof close_exp_wrt_exp_rec_degree_exp_wrt_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve close_exp_wrt_exp_rec_degree_exp_wrt_exp : lngen.
-Hint Rewrite close_exp_wrt_exp_rec_degree_exp_wrt_exp using solve [auto] : lngen.
+#[export] Hint Resolve close_exp_wrt_exp_rec_degree_exp_wrt_exp : lngen.
+#[export] Hint Rewrite close_exp_wrt_exp_rec_degree_exp_wrt_exp using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3476,8 +3440,8 @@ Proof.
 unfold close_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve close_typ_wrt_typ_lc_typ : lngen.
-Hint Rewrite close_typ_wrt_typ_lc_typ using solve [auto] : lngen.
+#[export] Hint Resolve close_typ_wrt_typ_lc_typ : lngen.
+#[export] Hint Rewrite close_typ_wrt_typ_lc_typ using solve [auto] : lngen.
 
 Lemma close_binding_wrt_typ_lc_binding :
 forall b1 X1,
@@ -3488,8 +3452,8 @@ Proof.
 unfold close_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve close_binding_wrt_typ_lc_binding : lngen.
-Hint Rewrite close_binding_wrt_typ_lc_binding using solve [auto] : lngen.
+#[export] Hint Resolve close_binding_wrt_typ_lc_binding : lngen.
+#[export] Hint Rewrite close_binding_wrt_typ_lc_binding using solve [auto] : lngen.
 
 Lemma close_exp_wrt_typ_lc_exp :
 forall e1 X1,
@@ -3500,8 +3464,8 @@ Proof.
 unfold close_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve close_exp_wrt_typ_lc_exp : lngen.
-Hint Rewrite close_exp_wrt_typ_lc_exp using solve [auto] : lngen.
+#[export] Hint Resolve close_exp_wrt_typ_lc_exp : lngen.
+#[export] Hint Rewrite close_exp_wrt_typ_lc_exp using solve [auto] : lngen.
 
 Lemma close_exp_wrt_exp_lc_exp :
 forall e1 x1,
@@ -3512,8 +3476,8 @@ Proof.
 unfold close_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve close_exp_wrt_exp_lc_exp : lngen.
-Hint Rewrite close_exp_wrt_exp_lc_exp using solve [auto] : lngen.
+#[export] Hint Resolve close_exp_wrt_exp_lc_exp : lngen.
+#[export] Hint Rewrite close_exp_wrt_exp_lc_exp using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -3538,8 +3502,8 @@ Proof.
 pose proof open_typ_wrt_typ_rec_degree_typ_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_typ_wrt_typ_rec_degree_typ_wrt_typ : lngen.
-Hint Rewrite open_typ_wrt_typ_rec_degree_typ_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve open_typ_wrt_typ_rec_degree_typ_wrt_typ : lngen.
+#[export] Hint Rewrite open_typ_wrt_typ_rec_degree_typ_wrt_typ using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3566,8 +3530,8 @@ Proof.
 pose proof open_binding_wrt_typ_rec_degree_binding_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_binding_wrt_typ_rec_degree_binding_wrt_typ : lngen.
-Hint Rewrite open_binding_wrt_typ_rec_degree_binding_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve open_binding_wrt_typ_rec_degree_binding_wrt_typ : lngen.
+#[export] Hint Rewrite open_binding_wrt_typ_rec_degree_binding_wrt_typ using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3594,8 +3558,8 @@ Proof.
 pose proof open_exp_wrt_typ_rec_degree_exp_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_exp_wrt_typ_rec_degree_exp_wrt_typ : lngen.
-Hint Rewrite open_exp_wrt_typ_rec_degree_exp_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve open_exp_wrt_typ_rec_degree_exp_wrt_typ : lngen.
+#[export] Hint Rewrite open_exp_wrt_typ_rec_degree_exp_wrt_typ using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3622,8 +3586,8 @@ Proof.
 pose proof open_exp_wrt_exp_rec_degree_exp_wrt_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve open_exp_wrt_exp_rec_degree_exp_wrt_exp : lngen.
-Hint Rewrite open_exp_wrt_exp_rec_degree_exp_wrt_exp using solve [auto] : lngen.
+#[export] Hint Resolve open_exp_wrt_exp_rec_degree_exp_wrt_exp : lngen.
+#[export] Hint Rewrite open_exp_wrt_exp_rec_degree_exp_wrt_exp using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3635,8 +3599,8 @@ Proof.
 unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve open_typ_wrt_typ_lc_typ : lngen.
-Hint Rewrite open_typ_wrt_typ_lc_typ using solve [auto] : lngen.
+#[export] Hint Resolve open_typ_wrt_typ_lc_typ : lngen.
+#[export] Hint Rewrite open_typ_wrt_typ_lc_typ using solve [auto] : lngen.
 
 Lemma open_binding_wrt_typ_lc_binding :
 forall b1 T1,
@@ -3646,8 +3610,8 @@ Proof.
 unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve open_binding_wrt_typ_lc_binding : lngen.
-Hint Rewrite open_binding_wrt_typ_lc_binding using solve [auto] : lngen.
+#[export] Hint Resolve open_binding_wrt_typ_lc_binding : lngen.
+#[export] Hint Rewrite open_binding_wrt_typ_lc_binding using solve [auto] : lngen.
 
 Lemma open_exp_wrt_typ_lc_exp :
 forall e1 T1,
@@ -3657,8 +3621,8 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve open_exp_wrt_typ_lc_exp : lngen.
-Hint Rewrite open_exp_wrt_typ_lc_exp using solve [auto] : lngen.
+#[export] Hint Resolve open_exp_wrt_typ_lc_exp : lngen.
+#[export] Hint Rewrite open_exp_wrt_typ_lc_exp using solve [auto] : lngen.
 
 Lemma open_exp_wrt_exp_lc_exp :
 forall e2 e1,
@@ -3668,8 +3632,8 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve open_exp_wrt_exp_lc_exp : lngen.
-Hint Rewrite open_exp_wrt_exp_lc_exp using solve [auto] : lngen.
+#[export] Hint Resolve open_exp_wrt_exp_lc_exp : lngen.
+#[export] Hint Rewrite open_exp_wrt_exp_lc_exp using solve [auto] : lngen.
 
 
 (* *********************************************************************** *)
@@ -3699,8 +3663,8 @@ Proof.
 pose proof fv_typ_in_typ_close_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_typ_close_typ_wrt_typ_rec : lngen.
-Hint Rewrite fv_typ_in_typ_close_typ_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_typ_close_typ_wrt_typ_rec : lngen.
+#[export] Hint Rewrite fv_typ_in_typ_close_typ_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3725,8 +3689,8 @@ Proof.
 pose proof fv_typ_in_binding_close_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_binding_close_binding_wrt_typ_rec : lngen.
-Hint Rewrite fv_typ_in_binding_close_binding_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_binding_close_binding_wrt_typ_rec : lngen.
+#[export] Hint Rewrite fv_typ_in_binding_close_binding_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3751,8 +3715,8 @@ Proof.
 pose proof fv_typ_in_exp_close_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_close_exp_wrt_typ_rec : lngen.
-Hint Rewrite fv_typ_in_exp_close_exp_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_exp_close_exp_wrt_typ_rec : lngen.
+#[export] Hint Rewrite fv_typ_in_exp_close_exp_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3777,8 +3741,8 @@ Proof.
 pose proof fv_typ_in_exp_close_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_close_exp_wrt_exp_rec : lngen.
-Hint Rewrite fv_typ_in_exp_close_exp_wrt_exp_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_exp_close_exp_wrt_exp_rec : lngen.
+#[export] Hint Rewrite fv_typ_in_exp_close_exp_wrt_exp_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3803,8 +3767,8 @@ Proof.
 pose proof fv_exp_in_exp_close_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_close_exp_wrt_typ_rec : lngen.
-Hint Rewrite fv_exp_in_exp_close_exp_wrt_typ_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_exp_in_exp_close_exp_wrt_typ_rec : lngen.
+#[export] Hint Rewrite fv_exp_in_exp_close_exp_wrt_typ_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3829,8 +3793,8 @@ Proof.
 pose proof fv_exp_in_exp_close_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_close_exp_wrt_exp_rec : lngen.
-Hint Rewrite fv_exp_in_exp_close_exp_wrt_exp_rec using solve [auto] : lngen.
+#[export] Hint Resolve fv_exp_in_exp_close_exp_wrt_exp_rec : lngen.
+#[export] Hint Rewrite fv_exp_in_exp_close_exp_wrt_exp_rec using solve [auto] : lngen.
 
 (* end hide *)
 
@@ -3841,8 +3805,8 @@ Proof.
 unfold close_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_typ_close_typ_wrt_typ : lngen.
-Hint Rewrite fv_typ_in_typ_close_typ_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_typ_close_typ_wrt_typ : lngen.
+#[export] Hint Rewrite fv_typ_in_typ_close_typ_wrt_typ using solve [auto] : lngen.
 
 Lemma fv_typ_in_binding_close_binding_wrt_typ :
 forall b1 X1,
@@ -3851,8 +3815,8 @@ Proof.
 unfold close_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_binding_close_binding_wrt_typ : lngen.
-Hint Rewrite fv_typ_in_binding_close_binding_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_binding_close_binding_wrt_typ : lngen.
+#[export] Hint Rewrite fv_typ_in_binding_close_binding_wrt_typ using solve [auto] : lngen.
 
 Lemma fv_typ_in_exp_close_exp_wrt_typ :
 forall e1 X1,
@@ -3861,8 +3825,8 @@ Proof.
 unfold close_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_exp_close_exp_wrt_typ : lngen.
-Hint Rewrite fv_typ_in_exp_close_exp_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_exp_close_exp_wrt_typ : lngen.
+#[export] Hint Rewrite fv_typ_in_exp_close_exp_wrt_typ using solve [auto] : lngen.
 
 Lemma fv_typ_in_exp_close_exp_wrt_exp :
 forall e1 x1,
@@ -3871,8 +3835,8 @@ Proof.
 unfold close_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_exp_close_exp_wrt_exp : lngen.
-Hint Rewrite fv_typ_in_exp_close_exp_wrt_exp using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_exp_close_exp_wrt_exp : lngen.
+#[export] Hint Rewrite fv_typ_in_exp_close_exp_wrt_exp using solve [auto] : lngen.
 
 Lemma fv_exp_in_exp_close_exp_wrt_typ :
 forall e1 X1,
@@ -3881,8 +3845,8 @@ Proof.
 unfold close_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_exp_in_exp_close_exp_wrt_typ : lngen.
-Hint Rewrite fv_exp_in_exp_close_exp_wrt_typ using solve [auto] : lngen.
+#[export] Hint Resolve fv_exp_in_exp_close_exp_wrt_typ : lngen.
+#[export] Hint Rewrite fv_exp_in_exp_close_exp_wrt_typ using solve [auto] : lngen.
 
 Lemma fv_exp_in_exp_close_exp_wrt_exp :
 forall e1 x1,
@@ -3891,8 +3855,8 @@ Proof.
 unfold close_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve fv_exp_in_exp_close_exp_wrt_exp : lngen.
-Hint Rewrite fv_exp_in_exp_close_exp_wrt_exp using solve [auto] : lngen.
+#[export] Hint Resolve fv_exp_in_exp_close_exp_wrt_exp : lngen.
+#[export] Hint Rewrite fv_exp_in_exp_close_exp_wrt_exp using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -3915,7 +3879,7 @@ Proof.
 pose proof fv_typ_in_typ_open_typ_wrt_typ_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_typ_open_typ_wrt_typ_rec_lower : lngen.
+#[export] Hint Resolve fv_typ_in_typ_open_typ_wrt_typ_rec_lower : lngen.
 
 (* end hide *)
 
@@ -3940,7 +3904,7 @@ Proof.
 pose proof fv_typ_in_binding_open_binding_wrt_typ_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_binding_open_binding_wrt_typ_rec_lower : lngen.
+#[export] Hint Resolve fv_typ_in_binding_open_binding_wrt_typ_rec_lower : lngen.
 
 (* end hide *)
 
@@ -3965,7 +3929,7 @@ Proof.
 pose proof fv_typ_in_exp_open_exp_wrt_typ_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_open_exp_wrt_typ_rec_lower : lngen.
+#[export] Hint Resolve fv_typ_in_exp_open_exp_wrt_typ_rec_lower : lngen.
 
 (* end hide *)
 
@@ -3990,7 +3954,7 @@ Proof.
 pose proof fv_typ_in_exp_open_exp_wrt_exp_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_open_exp_wrt_exp_rec_lower : lngen.
+#[export] Hint Resolve fv_typ_in_exp_open_exp_wrt_exp_rec_lower : lngen.
 
 (* end hide *)
 
@@ -4015,7 +3979,7 @@ Proof.
 pose proof fv_exp_in_exp_open_exp_wrt_typ_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_open_exp_wrt_typ_rec_lower : lngen.
+#[export] Hint Resolve fv_exp_in_exp_open_exp_wrt_typ_rec_lower : lngen.
 
 (* end hide *)
 
@@ -4040,7 +4004,7 @@ Proof.
 pose proof fv_exp_in_exp_open_exp_wrt_exp_rec_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_open_exp_wrt_exp_rec_lower : lngen.
+#[export] Hint Resolve fv_exp_in_exp_open_exp_wrt_exp_rec_lower : lngen.
 
 (* end hide *)
 
@@ -4051,7 +4015,7 @@ Proof.
 unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_typ_open_typ_wrt_typ_lower : lngen.
+#[export] Hint Resolve fv_typ_in_typ_open_typ_wrt_typ_lower : lngen.
 
 Lemma fv_typ_in_binding_open_binding_wrt_typ_lower :
 forall b1 T1,
@@ -4060,7 +4024,7 @@ Proof.
 unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_binding_open_binding_wrt_typ_lower : lngen.
+#[export] Hint Resolve fv_typ_in_binding_open_binding_wrt_typ_lower : lngen.
 
 Lemma fv_typ_in_exp_open_exp_wrt_typ_lower :
 forall e1 T1,
@@ -4069,7 +4033,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_exp_open_exp_wrt_typ_lower : lngen.
+#[export] Hint Resolve fv_typ_in_exp_open_exp_wrt_typ_lower : lngen.
 
 Lemma fv_typ_in_exp_open_exp_wrt_exp_lower :
 forall e1 e2,
@@ -4078,7 +4042,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_exp_open_exp_wrt_exp_lower : lngen.
+#[export] Hint Resolve fv_typ_in_exp_open_exp_wrt_exp_lower : lngen.
 
 Lemma fv_exp_in_exp_open_exp_wrt_typ_lower :
 forall e1 T1,
@@ -4087,7 +4051,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_exp_in_exp_open_exp_wrt_typ_lower : lngen.
+#[export] Hint Resolve fv_exp_in_exp_open_exp_wrt_typ_lower : lngen.
 
 Lemma fv_exp_in_exp_open_exp_wrt_exp_lower :
 forall e1 e2,
@@ -4096,7 +4060,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve fv_exp_in_exp_open_exp_wrt_exp_lower : lngen.
+#[export] Hint Resolve fv_exp_in_exp_open_exp_wrt_exp_lower : lngen.
 
 (* begin hide *)
 
@@ -4119,7 +4083,7 @@ Proof.
 pose proof fv_typ_in_typ_open_typ_wrt_typ_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_typ_open_typ_wrt_typ_rec_upper : lngen.
+#[export] Hint Resolve fv_typ_in_typ_open_typ_wrt_typ_rec_upper : lngen.
 
 (* end hide *)
 
@@ -4144,7 +4108,7 @@ Proof.
 pose proof fv_typ_in_binding_open_binding_wrt_typ_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_binding_open_binding_wrt_typ_rec_upper : lngen.
+#[export] Hint Resolve fv_typ_in_binding_open_binding_wrt_typ_rec_upper : lngen.
 
 (* end hide *)
 
@@ -4169,7 +4133,7 @@ Proof.
 pose proof fv_typ_in_exp_open_exp_wrt_typ_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_open_exp_wrt_typ_rec_upper : lngen.
+#[export] Hint Resolve fv_typ_in_exp_open_exp_wrt_typ_rec_upper : lngen.
 
 (* end hide *)
 
@@ -4194,7 +4158,7 @@ Proof.
 pose proof fv_typ_in_exp_open_exp_wrt_exp_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_open_exp_wrt_exp_rec_upper : lngen.
+#[export] Hint Resolve fv_typ_in_exp_open_exp_wrt_exp_rec_upper : lngen.
 
 (* end hide *)
 
@@ -4219,7 +4183,7 @@ Proof.
 pose proof fv_exp_in_exp_open_exp_wrt_typ_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_open_exp_wrt_typ_rec_upper : lngen.
+#[export] Hint Resolve fv_exp_in_exp_open_exp_wrt_typ_rec_upper : lngen.
 
 (* end hide *)
 
@@ -4244,7 +4208,7 @@ Proof.
 pose proof fv_exp_in_exp_open_exp_wrt_exp_rec_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_open_exp_wrt_exp_rec_upper : lngen.
+#[export] Hint Resolve fv_exp_in_exp_open_exp_wrt_exp_rec_upper : lngen.
 
 (* end hide *)
 
@@ -4255,7 +4219,7 @@ Proof.
 unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_typ_open_typ_wrt_typ_upper : lngen.
+#[export] Hint Resolve fv_typ_in_typ_open_typ_wrt_typ_upper : lngen.
 
 Lemma fv_typ_in_binding_open_binding_wrt_typ_upper :
 forall b1 T1,
@@ -4264,7 +4228,7 @@ Proof.
 unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_binding_open_binding_wrt_typ_upper : lngen.
+#[export] Hint Resolve fv_typ_in_binding_open_binding_wrt_typ_upper : lngen.
 
 Lemma fv_typ_in_exp_open_exp_wrt_typ_upper :
 forall e1 T1,
@@ -4273,7 +4237,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_exp_open_exp_wrt_typ_upper : lngen.
+#[export] Hint Resolve fv_typ_in_exp_open_exp_wrt_typ_upper : lngen.
 
 Lemma fv_typ_in_exp_open_exp_wrt_exp_upper :
 forall e1 e2,
@@ -4282,7 +4246,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve fv_typ_in_exp_open_exp_wrt_exp_upper : lngen.
+#[export] Hint Resolve fv_typ_in_exp_open_exp_wrt_exp_upper : lngen.
 
 Lemma fv_exp_in_exp_open_exp_wrt_typ_upper :
 forall e1 T1,
@@ -4291,7 +4255,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve fv_exp_in_exp_open_exp_wrt_typ_upper : lngen.
+#[export] Hint Resolve fv_exp_in_exp_open_exp_wrt_typ_upper : lngen.
 
 Lemma fv_exp_in_exp_open_exp_wrt_exp_upper :
 forall e1 e2,
@@ -4300,7 +4264,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve fv_exp_in_exp_open_exp_wrt_exp_upper : lngen.
+#[export] Hint Resolve fv_exp_in_exp_open_exp_wrt_exp_upper : lngen.
 
 (* begin hide *)
 
@@ -4323,8 +4287,8 @@ Proof.
 pose proof fv_typ_in_typ_subst_typ_in_typ_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_typ_subst_typ_in_typ_fresh : lngen.
-Hint Rewrite fv_typ_in_typ_subst_typ_in_typ_fresh using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_typ_subst_typ_in_typ_fresh : lngen.
+#[export] Hint Rewrite fv_typ_in_typ_subst_typ_in_typ_fresh using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -4347,8 +4311,8 @@ Proof.
 pose proof fv_typ_in_binding_subst_typ_in_binding_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_binding_subst_typ_in_binding_fresh : lngen.
-Hint Rewrite fv_typ_in_binding_subst_typ_in_binding_fresh using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_binding_subst_typ_in_binding_fresh : lngen.
+#[export] Hint Rewrite fv_typ_in_binding_subst_typ_in_binding_fresh using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -4371,8 +4335,8 @@ Proof.
 pose proof fv_typ_in_exp_subst_typ_in_exp_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_subst_typ_in_exp_fresh : lngen.
-Hint Rewrite fv_typ_in_exp_subst_typ_in_exp_fresh using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_exp_subst_typ_in_exp_fresh : lngen.
+#[export] Hint Rewrite fv_typ_in_exp_subst_typ_in_exp_fresh using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -4393,8 +4357,8 @@ Proof.
 pose proof fv_typ_in_exp_subst_exp_in_exp_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_subst_exp_in_exp_fresh : lngen.
-Hint Rewrite fv_typ_in_exp_subst_exp_in_exp_fresh using solve [auto] : lngen.
+#[export] Hint Resolve fv_typ_in_exp_subst_exp_in_exp_fresh : lngen.
+#[export] Hint Rewrite fv_typ_in_exp_subst_exp_in_exp_fresh using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -4417,8 +4381,8 @@ Proof.
 pose proof fv_exp_in_exp_subst_exp_in_exp_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_subst_exp_in_exp_fresh : lngen.
-Hint Rewrite fv_exp_in_exp_subst_exp_in_exp_fresh using solve [auto] : lngen.
+#[export] Hint Resolve fv_exp_in_exp_subst_exp_in_exp_fresh : lngen.
+#[export] Hint Rewrite fv_exp_in_exp_subst_exp_in_exp_fresh using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -4439,7 +4403,7 @@ Proof.
 pose proof fv_typ_in_typ_subst_typ_in_typ_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_typ_subst_typ_in_typ_lower : lngen.
+#[export] Hint Resolve fv_typ_in_typ_subst_typ_in_typ_lower : lngen.
 
 (* begin hide *)
 
@@ -4460,7 +4424,7 @@ Proof.
 pose proof fv_typ_in_binding_subst_typ_in_binding_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_binding_subst_typ_in_binding_lower : lngen.
+#[export] Hint Resolve fv_typ_in_binding_subst_typ_in_binding_lower : lngen.
 
 (* begin hide *)
 
@@ -4481,7 +4445,7 @@ Proof.
 pose proof fv_typ_in_exp_subst_typ_in_exp_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_subst_typ_in_exp_lower : lngen.
+#[export] Hint Resolve fv_typ_in_exp_subst_typ_in_exp_lower : lngen.
 
 (* begin hide *)
 
@@ -4502,7 +4466,7 @@ Proof.
 pose proof fv_typ_in_exp_subst_exp_in_exp_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_subst_exp_in_exp_lower : lngen.
+#[export] Hint Resolve fv_typ_in_exp_subst_exp_in_exp_lower : lngen.
 
 (* begin hide *)
 
@@ -4523,7 +4487,7 @@ Proof.
 pose proof fv_exp_in_exp_subst_typ_in_exp_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_subst_typ_in_exp_lower : lngen.
+#[export] Hint Resolve fv_exp_in_exp_subst_typ_in_exp_lower : lngen.
 
 (* begin hide *)
 
@@ -4544,7 +4508,7 @@ Proof.
 pose proof fv_exp_in_exp_subst_exp_in_exp_lower_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_subst_exp_in_exp_lower : lngen.
+#[export] Hint Resolve fv_exp_in_exp_subst_exp_in_exp_lower : lngen.
 
 (* begin hide *)
 
@@ -4569,7 +4533,7 @@ Proof.
 pose proof fv_typ_in_typ_subst_typ_in_typ_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_typ_subst_typ_in_typ_notin : lngen.
+#[export] Hint Resolve fv_typ_in_typ_subst_typ_in_typ_notin : lngen.
 
 (* begin hide *)
 
@@ -4594,7 +4558,7 @@ Proof.
 pose proof fv_typ_in_binding_subst_typ_in_binding_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_binding_subst_typ_in_binding_notin : lngen.
+#[export] Hint Resolve fv_typ_in_binding_subst_typ_in_binding_notin : lngen.
 
 (* begin hide *)
 
@@ -4619,7 +4583,7 @@ Proof.
 pose proof fv_typ_in_exp_subst_typ_in_exp_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_subst_typ_in_exp_notin : lngen.
+#[export] Hint Resolve fv_typ_in_exp_subst_typ_in_exp_notin : lngen.
 
 (* begin hide *)
 
@@ -4644,7 +4608,7 @@ Proof.
 pose proof fv_typ_in_exp_subst_exp_in_exp_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_subst_exp_in_exp_notin : lngen.
+#[export] Hint Resolve fv_typ_in_exp_subst_exp_in_exp_notin : lngen.
 
 (* begin hide *)
 
@@ -4667,7 +4631,7 @@ Proof.
 pose proof fv_exp_in_exp_subst_typ_in_exp_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_subst_typ_in_exp_notin : lngen.
+#[export] Hint Resolve fv_exp_in_exp_subst_typ_in_exp_notin : lngen.
 
 (* begin hide *)
 
@@ -4692,7 +4656,7 @@ Proof.
 pose proof fv_exp_in_exp_subst_exp_in_exp_notin_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_subst_exp_in_exp_notin : lngen.
+#[export] Hint Resolve fv_exp_in_exp_subst_exp_in_exp_notin : lngen.
 
 (* begin hide *)
 
@@ -4713,7 +4677,7 @@ Proof.
 pose proof fv_typ_in_typ_subst_typ_in_typ_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_typ_subst_typ_in_typ_upper : lngen.
+#[export] Hint Resolve fv_typ_in_typ_subst_typ_in_typ_upper : lngen.
 
 (* begin hide *)
 
@@ -4734,7 +4698,7 @@ Proof.
 pose proof fv_typ_in_binding_subst_typ_in_binding_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_binding_subst_typ_in_binding_upper : lngen.
+#[export] Hint Resolve fv_typ_in_binding_subst_typ_in_binding_upper : lngen.
 
 (* begin hide *)
 
@@ -4755,7 +4719,7 @@ Proof.
 pose proof fv_typ_in_exp_subst_typ_in_exp_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_subst_typ_in_exp_upper : lngen.
+#[export] Hint Resolve fv_typ_in_exp_subst_typ_in_exp_upper : lngen.
 
 (* begin hide *)
 
@@ -4776,7 +4740,7 @@ Proof.
 pose proof fv_typ_in_exp_subst_exp_in_exp_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_typ_in_exp_subst_exp_in_exp_upper : lngen.
+#[export] Hint Resolve fv_typ_in_exp_subst_exp_in_exp_upper : lngen.
 
 (* begin hide *)
 
@@ -4797,7 +4761,7 @@ Proof.
 pose proof fv_exp_in_exp_subst_typ_in_exp_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_subst_typ_in_exp_upper : lngen.
+#[export] Hint Resolve fv_exp_in_exp_subst_typ_in_exp_upper : lngen.
 
 (* begin hide *)
 
@@ -4818,7 +4782,7 @@ Proof.
 pose proof fv_exp_in_exp_subst_exp_in_exp_upper_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve fv_exp_in_exp_subst_exp_in_exp_upper : lngen.
+#[export] Hint Resolve fv_exp_in_exp_subst_exp_in_exp_upper : lngen.
 
 
 (* *********************************************************************** *)
@@ -4852,7 +4816,7 @@ Proof.
 pose proof subst_typ_in_typ_close_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_close_typ_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_typ_close_typ_wrt_typ_rec : lngen.
 
 (* begin hide *)
 
@@ -4879,7 +4843,7 @@ Proof.
 pose proof subst_typ_in_binding_close_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_close_binding_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_binding_close_binding_wrt_typ_rec : lngen.
 
 (* begin hide *)
 
@@ -4906,7 +4870,7 @@ Proof.
 pose proof subst_typ_in_exp_close_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_close_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_exp_close_exp_wrt_typ_rec : lngen.
 
 (* begin hide *)
 
@@ -4927,7 +4891,7 @@ Proof.
 pose proof subst_typ_in_exp_close_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_close_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve subst_typ_in_exp_close_exp_wrt_exp_rec : lngen.
 
 (* begin hide *)
 
@@ -4952,7 +4916,7 @@ Proof.
 pose proof subst_exp_in_exp_close_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_close_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_exp_in_exp_close_exp_wrt_typ_rec : lngen.
 
 (* begin hide *)
 
@@ -4979,7 +4943,7 @@ Proof.
 pose proof subst_exp_in_exp_close_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_close_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve subst_exp_in_exp_close_exp_wrt_exp_rec : lngen.
 
 Lemma subst_typ_in_typ_close_typ_wrt_typ :
 forall T2 T1 X1 X2,
@@ -4990,7 +4954,7 @@ Proof.
 unfold close_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_typ_close_typ_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_typ_close_typ_wrt_typ : lngen.
 
 Lemma subst_typ_in_binding_close_binding_wrt_typ :
 forall b1 T1 X1 X2,
@@ -5001,7 +4965,7 @@ Proof.
 unfold close_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_binding_close_binding_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_binding_close_binding_wrt_typ : lngen.
 
 Lemma subst_typ_in_exp_close_exp_wrt_typ :
 forall e1 T1 X1 X2,
@@ -5012,7 +4976,7 @@ Proof.
 unfold close_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_close_exp_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_exp_close_exp_wrt_typ : lngen.
 
 Lemma subst_typ_in_exp_close_exp_wrt_exp :
 forall e1 T1 x1 X1,
@@ -5021,7 +4985,7 @@ Proof.
 unfold close_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_close_exp_wrt_exp : lngen.
+#[export] Hint Resolve subst_typ_in_exp_close_exp_wrt_exp : lngen.
 
 Lemma subst_exp_in_exp_close_exp_wrt_typ :
 forall e2 e1 X1 x1,
@@ -5031,7 +4995,7 @@ Proof.
 unfold close_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_close_exp_wrt_typ : lngen.
+#[export] Hint Resolve subst_exp_in_exp_close_exp_wrt_typ : lngen.
 
 Lemma subst_exp_in_exp_close_exp_wrt_exp :
 forall e2 e1 x1 x2,
@@ -5042,7 +5006,7 @@ Proof.
 unfold close_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_close_exp_wrt_exp : lngen.
+#[export] Hint Resolve subst_exp_in_exp_close_exp_wrt_exp : lngen.
 
 (* begin hide *)
 
@@ -5067,7 +5031,7 @@ Proof.
 pose proof subst_typ_in_typ_degree_typ_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_degree_typ_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_typ_degree_typ_wrt_typ : lngen.
 
 (* begin hide *)
 
@@ -5092,7 +5056,7 @@ Proof.
 pose proof subst_typ_in_binding_degree_binding_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_degree_binding_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_binding_degree_binding_wrt_typ : lngen.
 
 (* begin hide *)
 
@@ -5117,7 +5081,7 @@ Proof.
 pose proof subst_typ_in_exp_degree_exp_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_degree_exp_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_exp_degree_exp_wrt_typ : lngen.
 
 (* begin hide *)
 
@@ -5140,7 +5104,7 @@ Proof.
 pose proof subst_typ_in_exp_degree_exp_wrt_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_degree_exp_wrt_exp : lngen.
+#[export] Hint Resolve subst_typ_in_exp_degree_exp_wrt_exp : lngen.
 
 (* begin hide *)
 
@@ -5165,7 +5129,7 @@ Proof.
 pose proof subst_exp_in_exp_degree_exp_wrt_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_degree_exp_wrt_typ : lngen.
+#[export] Hint Resolve subst_exp_in_exp_degree_exp_wrt_typ : lngen.
 
 (* begin hide *)
 
@@ -5190,7 +5154,7 @@ Proof.
 pose proof subst_exp_in_exp_degree_exp_wrt_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_degree_exp_wrt_exp : lngen.
+#[export] Hint Resolve subst_exp_in_exp_degree_exp_wrt_exp : lngen.
 
 (* begin hide *)
 
@@ -5213,8 +5177,8 @@ Proof.
 pose proof subst_typ_in_typ_fresh_eq_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_fresh_eq : lngen.
-Hint Rewrite subst_typ_in_typ_fresh_eq using solve [auto] : lngen.
+#[export] Hint Resolve subst_typ_in_typ_fresh_eq : lngen.
+#[export] Hint Rewrite subst_typ_in_typ_fresh_eq using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -5237,8 +5201,8 @@ Proof.
 pose proof subst_typ_in_binding_fresh_eq_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_fresh_eq : lngen.
-Hint Rewrite subst_typ_in_binding_fresh_eq using solve [auto] : lngen.
+#[export] Hint Resolve subst_typ_in_binding_fresh_eq : lngen.
+#[export] Hint Rewrite subst_typ_in_binding_fresh_eq using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -5261,8 +5225,8 @@ Proof.
 pose proof subst_typ_in_exp_fresh_eq_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_fresh_eq : lngen.
-Hint Rewrite subst_typ_in_exp_fresh_eq using solve [auto] : lngen.
+#[export] Hint Resolve subst_typ_in_exp_fresh_eq : lngen.
+#[export] Hint Rewrite subst_typ_in_exp_fresh_eq using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -5285,8 +5249,8 @@ Proof.
 pose proof subst_exp_in_exp_fresh_eq_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_fresh_eq : lngen.
-Hint Rewrite subst_exp_in_exp_fresh_eq using solve [auto] : lngen.
+#[export] Hint Resolve subst_exp_in_exp_fresh_eq : lngen.
+#[export] Hint Rewrite subst_exp_in_exp_fresh_eq using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -5309,7 +5273,7 @@ Proof.
 pose proof subst_typ_in_typ_fresh_same_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_fresh_same : lngen.
+#[export] Hint Resolve subst_typ_in_typ_fresh_same : lngen.
 
 (* begin hide *)
 
@@ -5332,7 +5296,7 @@ Proof.
 pose proof subst_typ_in_binding_fresh_same_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_fresh_same : lngen.
+#[export] Hint Resolve subst_typ_in_binding_fresh_same : lngen.
 
 (* begin hide *)
 
@@ -5355,7 +5319,7 @@ Proof.
 pose proof subst_typ_in_exp_fresh_same_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_fresh_same : lngen.
+#[export] Hint Resolve subst_typ_in_exp_fresh_same : lngen.
 
 (* begin hide *)
 
@@ -5378,7 +5342,7 @@ Proof.
 pose proof subst_exp_in_exp_fresh_same_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_fresh_same : lngen.
+#[export] Hint Resolve subst_exp_in_exp_fresh_same : lngen.
 
 (* begin hide *)
 
@@ -5403,7 +5367,7 @@ Proof.
 pose proof subst_typ_in_typ_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_fresh : lngen.
+#[export] Hint Resolve subst_typ_in_typ_fresh : lngen.
 
 (* begin hide *)
 
@@ -5428,7 +5392,7 @@ Proof.
 pose proof subst_typ_in_binding_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_fresh : lngen.
+#[export] Hint Resolve subst_typ_in_binding_fresh : lngen.
 
 (* begin hide *)
 
@@ -5453,7 +5417,7 @@ Proof.
 pose proof subst_typ_in_exp_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_fresh : lngen.
+#[export] Hint Resolve subst_typ_in_exp_fresh : lngen.
 
 (* begin hide *)
 
@@ -5478,7 +5442,7 @@ Proof.
 pose proof subst_exp_in_exp_fresh_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_fresh : lngen.
+#[export] Hint Resolve subst_exp_in_exp_fresh : lngen.
 
 Lemma subst_typ_in_typ_lc_typ :
 forall T1 T2 X1,
@@ -5489,7 +5453,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_typ_lc_typ : lngen.
+#[export] Hint Resolve subst_typ_in_typ_lc_typ : lngen.
 
 Lemma subst_typ_in_binding_lc_binding :
 forall b1 T1 X1,
@@ -5500,7 +5464,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_binding_lc_binding : lngen.
+#[export] Hint Resolve subst_typ_in_binding_lc_binding : lngen.
 
 Lemma subst_typ_in_exp_lc_exp :
 forall e1 T1 X1,
@@ -5511,7 +5475,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_lc_exp : lngen.
+#[export] Hint Resolve subst_typ_in_exp_lc_exp : lngen.
 
 Lemma subst_exp_in_exp_lc_exp :
 forall e1 e2 x1,
@@ -5522,7 +5486,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_lc_exp : lngen.
+#[export] Hint Resolve subst_exp_in_exp_lc_exp : lngen.
 
 (* begin hide *)
 
@@ -5547,7 +5511,7 @@ Proof.
 pose proof subst_typ_in_typ_open_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_open_typ_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_typ_open_typ_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -5574,7 +5538,7 @@ Proof.
 pose proof subst_typ_in_binding_open_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_open_binding_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_binding_open_binding_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -5601,7 +5565,7 @@ Proof.
 pose proof subst_typ_in_exp_open_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_open_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_exp_open_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -5626,7 +5590,7 @@ Proof.
 pose proof subst_typ_in_exp_open_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_open_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve subst_typ_in_exp_open_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -5653,7 +5617,7 @@ Proof.
 pose proof subst_exp_in_exp_open_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_open_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_exp_in_exp_open_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -5680,7 +5644,7 @@ Proof.
 pose proof subst_exp_in_exp_open_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_open_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve subst_exp_in_exp_open_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -5692,7 +5656,7 @@ Proof.
 unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_typ_open_typ_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_typ_open_typ_wrt_typ : lngen.
 
 Lemma subst_typ_in_binding_open_binding_wrt_typ :
 forall b1 T1 T2 X1,
@@ -5702,7 +5666,7 @@ Proof.
 unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_binding_open_binding_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_binding_open_binding_wrt_typ : lngen.
 
 Lemma subst_typ_in_exp_open_exp_wrt_typ :
 forall e1 T1 T2 X1,
@@ -5712,7 +5676,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_open_exp_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_exp_open_exp_wrt_typ : lngen.
 
 Lemma subst_typ_in_exp_open_exp_wrt_exp :
 forall e2 T1 e1 X1,
@@ -5721,7 +5685,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_open_exp_wrt_exp : lngen.
+#[export] Hint Resolve subst_typ_in_exp_open_exp_wrt_exp : lngen.
 
 Lemma subst_exp_in_exp_open_exp_wrt_typ :
 forall e2 e1 T1 x1,
@@ -5731,7 +5695,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_open_exp_wrt_typ : lngen.
+#[export] Hint Resolve subst_exp_in_exp_open_exp_wrt_typ : lngen.
 
 Lemma subst_exp_in_exp_open_exp_wrt_exp :
 forall e3 e1 e2 x1,
@@ -5741,7 +5705,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_open_exp_wrt_exp : lngen.
+#[export] Hint Resolve subst_exp_in_exp_open_exp_wrt_exp : lngen.
 
 Lemma subst_typ_in_typ_open_typ_wrt_typ_var :
 forall T2 T1 X1 X2,
@@ -5752,7 +5716,7 @@ Proof.
 intros; rewrite subst_typ_in_typ_open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_typ_open_typ_wrt_typ_var : lngen.
+#[export] Hint Resolve subst_typ_in_typ_open_typ_wrt_typ_var : lngen.
 
 Lemma subst_typ_in_binding_open_binding_wrt_typ_var :
 forall b1 T1 X1 X2,
@@ -5763,7 +5727,7 @@ Proof.
 intros; rewrite subst_typ_in_binding_open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_binding_open_binding_wrt_typ_var : lngen.
+#[export] Hint Resolve subst_typ_in_binding_open_binding_wrt_typ_var : lngen.
 
 Lemma subst_typ_in_exp_open_exp_wrt_typ_var :
 forall e1 T1 X1 X2,
@@ -5774,7 +5738,7 @@ Proof.
 intros; rewrite subst_typ_in_exp_open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_open_exp_wrt_typ_var : lngen.
+#[export] Hint Resolve subst_typ_in_exp_open_exp_wrt_typ_var : lngen.
 
 Lemma subst_typ_in_exp_open_exp_wrt_exp_var :
 forall e1 T1 X1 x1,
@@ -5783,7 +5747,7 @@ Proof.
 intros; rewrite subst_typ_in_exp_open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_open_exp_wrt_exp_var : lngen.
+#[export] Hint Resolve subst_typ_in_exp_open_exp_wrt_exp_var : lngen.
 
 Lemma subst_exp_in_exp_open_exp_wrt_typ_var :
 forall e2 e1 x1 X1,
@@ -5793,7 +5757,7 @@ Proof.
 intros; rewrite subst_exp_in_exp_open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_open_exp_wrt_typ_var : lngen.
+#[export] Hint Resolve subst_exp_in_exp_open_exp_wrt_typ_var : lngen.
 
 Lemma subst_exp_in_exp_open_exp_wrt_exp_var :
 forall e2 e1 x1 x2,
@@ -5804,7 +5768,7 @@ Proof.
 intros; rewrite subst_exp_in_exp_open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_open_exp_wrt_exp_var : lngen.
+#[export] Hint Resolve subst_exp_in_exp_open_exp_wrt_exp_var : lngen.
 
 (* begin hide *)
 
@@ -5827,7 +5791,7 @@ Proof.
 pose proof subst_typ_in_typ_spec_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_spec_rec : lngen.
+#[export] Hint Resolve subst_typ_in_typ_spec_rec : lngen.
 
 (* end hide *)
 
@@ -5852,7 +5816,7 @@ Proof.
 pose proof subst_typ_in_binding_spec_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_spec_rec : lngen.
+#[export] Hint Resolve subst_typ_in_binding_spec_rec : lngen.
 
 (* end hide *)
 
@@ -5877,7 +5841,7 @@ Proof.
 pose proof subst_typ_in_exp_spec_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_spec_rec : lngen.
+#[export] Hint Resolve subst_typ_in_exp_spec_rec : lngen.
 
 (* end hide *)
 
@@ -5902,7 +5866,7 @@ Proof.
 pose proof subst_exp_in_exp_spec_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_spec_rec : lngen.
+#[export] Hint Resolve subst_exp_in_exp_spec_rec : lngen.
 
 (* end hide *)
 
@@ -5913,7 +5877,7 @@ Proof.
 unfold close_typ_wrt_typ; unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_typ_spec : lngen.
+#[export] Hint Resolve subst_typ_in_typ_spec : lngen.
 
 Lemma subst_typ_in_binding_spec :
 forall b1 T1 X1,
@@ -5922,7 +5886,7 @@ Proof.
 unfold close_binding_wrt_typ; unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_binding_spec : lngen.
+#[export] Hint Resolve subst_typ_in_binding_spec : lngen.
 
 Lemma subst_typ_in_exp_spec :
 forall e1 T1 X1,
@@ -5931,7 +5895,7 @@ Proof.
 unfold close_exp_wrt_typ; unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_spec : lngen.
+#[export] Hint Resolve subst_typ_in_exp_spec : lngen.
 
 Lemma subst_exp_in_exp_spec :
 forall e1 e2 x1,
@@ -5940,7 +5904,7 @@ Proof.
 unfold close_exp_wrt_exp; unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_spec : lngen.
+#[export] Hint Resolve subst_exp_in_exp_spec : lngen.
 
 (* begin hide *)
 
@@ -5965,7 +5929,7 @@ Proof.
 pose proof subst_typ_in_typ_subst_typ_in_typ_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_subst_typ_in_typ : lngen.
+#[export] Hint Resolve subst_typ_in_typ_subst_typ_in_typ : lngen.
 
 (* begin hide *)
 
@@ -5990,7 +5954,7 @@ Proof.
 pose proof subst_typ_in_binding_subst_typ_in_binding_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_subst_typ_in_binding : lngen.
+#[export] Hint Resolve subst_typ_in_binding_subst_typ_in_binding : lngen.
 
 (* begin hide *)
 
@@ -6015,7 +5979,7 @@ Proof.
 pose proof subst_typ_in_exp_subst_typ_in_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_subst_typ_in_exp : lngen.
+#[export] Hint Resolve subst_typ_in_exp_subst_typ_in_exp : lngen.
 
 (* begin hide *)
 
@@ -6036,7 +6000,7 @@ Proof.
 pose proof subst_typ_in_exp_subst_exp_in_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_subst_exp_in_exp : lngen.
+#[export] Hint Resolve subst_typ_in_exp_subst_exp_in_exp : lngen.
 
 (* begin hide *)
 
@@ -6059,7 +6023,7 @@ Proof.
 pose proof subst_exp_in_exp_subst_typ_in_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_subst_typ_in_exp : lngen.
+#[export] Hint Resolve subst_exp_in_exp_subst_typ_in_exp : lngen.
 
 (* begin hide *)
 
@@ -6084,7 +6048,7 @@ Proof.
 pose proof subst_exp_in_exp_subst_exp_in_exp_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_subst_exp_in_exp : lngen.
+#[export] Hint Resolve subst_exp_in_exp_subst_exp_in_exp : lngen.
 
 (* begin hide *)
 
@@ -6115,7 +6079,7 @@ Proof.
 pose proof subst_typ_in_typ_close_typ_wrt_typ_rec_open_typ_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_close_typ_wrt_typ_rec_open_typ_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_typ_close_typ_wrt_typ_rec_open_typ_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -6148,7 +6112,7 @@ Proof.
 pose proof subst_typ_in_binding_close_binding_wrt_typ_rec_open_binding_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_close_binding_wrt_typ_rec_open_binding_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_binding_close_binding_wrt_typ_rec_open_binding_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -6181,7 +6145,7 @@ Proof.
 pose proof subst_typ_in_exp_close_exp_wrt_typ_rec_open_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_close_exp_wrt_typ_rec_open_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_typ_in_exp_close_exp_wrt_typ_rec_open_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -6208,7 +6172,7 @@ Proof.
 pose proof subst_typ_in_exp_close_exp_wrt_exp_rec_open_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_close_exp_wrt_exp_rec_open_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve subst_typ_in_exp_close_exp_wrt_exp_rec_open_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -6239,7 +6203,7 @@ Proof.
 pose proof subst_exp_in_exp_close_exp_wrt_typ_rec_open_exp_wrt_typ_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_close_exp_wrt_typ_rec_open_exp_wrt_typ_rec : lngen.
+#[export] Hint Resolve subst_exp_in_exp_close_exp_wrt_typ_rec_open_exp_wrt_typ_rec : lngen.
 
 (* end hide *)
 
@@ -6272,7 +6236,7 @@ Proof.
 pose proof subst_exp_in_exp_close_exp_wrt_exp_rec_open_exp_wrt_exp_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_close_exp_wrt_exp_rec_open_exp_wrt_exp_rec : lngen.
+#[export] Hint Resolve subst_exp_in_exp_close_exp_wrt_exp_rec_open_exp_wrt_exp_rec : lngen.
 
 (* end hide *)
 
@@ -6287,7 +6251,7 @@ Proof.
 unfold close_typ_wrt_typ; unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_typ_close_typ_wrt_typ_open_typ_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_typ_close_typ_wrt_typ_open_typ_wrt_typ : lngen.
 
 Lemma subst_typ_in_binding_close_binding_wrt_typ_open_binding_wrt_typ :
 forall b1 T1 X1 X2,
@@ -6300,7 +6264,7 @@ Proof.
 unfold close_binding_wrt_typ; unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_binding_close_binding_wrt_typ_open_binding_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_binding_close_binding_wrt_typ_open_binding_wrt_typ : lngen.
 
 Lemma subst_typ_in_exp_close_exp_wrt_typ_open_exp_wrt_typ :
 forall e1 T1 X1 X2,
@@ -6313,7 +6277,7 @@ Proof.
 unfold close_exp_wrt_typ; unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_close_exp_wrt_typ_open_exp_wrt_typ : lngen.
+#[export] Hint Resolve subst_typ_in_exp_close_exp_wrt_typ_open_exp_wrt_typ : lngen.
 
 Lemma subst_typ_in_exp_close_exp_wrt_exp_open_exp_wrt_exp :
 forall e1 T1 X1 x1,
@@ -6324,7 +6288,7 @@ Proof.
 unfold close_exp_wrt_exp; unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_close_exp_wrt_exp_open_exp_wrt_exp : lngen.
+#[export] Hint Resolve subst_typ_in_exp_close_exp_wrt_exp_open_exp_wrt_exp : lngen.
 
 Lemma subst_exp_in_exp_close_exp_wrt_typ_open_exp_wrt_typ :
 forall e2 e1 x1 X1,
@@ -6336,7 +6300,7 @@ Proof.
 unfold close_exp_wrt_typ; unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_close_exp_wrt_typ_open_exp_wrt_typ : lngen.
+#[export] Hint Resolve subst_exp_in_exp_close_exp_wrt_typ_open_exp_wrt_typ : lngen.
 
 Lemma subst_exp_in_exp_close_exp_wrt_exp_open_exp_wrt_exp :
 forall e2 e1 x1 x2,
@@ -6349,7 +6313,7 @@ Proof.
 unfold close_exp_wrt_exp; unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_close_exp_wrt_exp_open_exp_wrt_exp : lngen.
+#[export] Hint Resolve subst_exp_in_exp_close_exp_wrt_exp_open_exp_wrt_exp : lngen.
 
 Lemma subst_typ_in_typ_typ_all :
 forall X2 T2 T3 T1 X1,
@@ -6360,7 +6324,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_typ_typ_all : lngen.
+#[export] Hint Resolve subst_typ_in_typ_typ_all : lngen.
 
 Lemma subst_typ_in_exp_exp_abs :
 forall x1 T2 e1 T1 X1,
@@ -6371,7 +6335,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_exp_abs : lngen.
+#[export] Hint Resolve subst_typ_in_exp_exp_abs : lngen.
 
 Lemma subst_typ_in_exp_exp_tabs :
 forall X2 T2 e1 T1 X1,
@@ -6382,7 +6346,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_exp_tabs : lngen.
+#[export] Hint Resolve subst_typ_in_exp_exp_tabs : lngen.
 
 Lemma subst_typ_in_exp_exp_let :
 forall x1 e1 e2 T1 X1,
@@ -6393,7 +6357,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_exp_let : lngen.
+#[export] Hint Resolve subst_typ_in_exp_exp_let : lngen.
 
 Lemma subst_typ_in_exp_exp_case :
 forall x1 y1 e1 e2 e3 T1 X1,
@@ -6405,7 +6369,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_exp_case : lngen.
+#[export] Hint Resolve subst_typ_in_exp_exp_case : lngen.
 
 Lemma subst_exp_in_exp_exp_abs :
 forall x2 T1 e2 e1 x1,
@@ -6416,7 +6380,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_exp_abs : lngen.
+#[export] Hint Resolve subst_exp_in_exp_exp_abs : lngen.
 
 Lemma subst_exp_in_exp_exp_tabs :
 forall X1 T1 e2 e1 x1,
@@ -6427,7 +6391,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_exp_tabs : lngen.
+#[export] Hint Resolve subst_exp_in_exp_exp_tabs : lngen.
 
 Lemma subst_exp_in_exp_exp_let :
 forall x2 e2 e3 e1 x1,
@@ -6438,7 +6402,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_exp_let : lngen.
+#[export] Hint Resolve subst_exp_in_exp_exp_let : lngen.
 
 Lemma subst_exp_in_exp_exp_case :
 forall x2 y1 e2 e3 e4 e1 x1,
@@ -6450,7 +6414,7 @@ Proof.
 default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_exp_case : lngen.
+#[export] Hint Resolve subst_exp_in_exp_exp_case : lngen.
 
 (* begin hide *)
 
@@ -6473,8 +6437,8 @@ Proof.
 pose proof subst_typ_in_typ_intro_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_typ_intro_rec : lngen.
-Hint Rewrite subst_typ_in_typ_intro_rec using solve [auto] : lngen.
+#[export] Hint Resolve subst_typ_in_typ_intro_rec : lngen.
+#[export] Hint Rewrite subst_typ_in_typ_intro_rec using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -6497,8 +6461,8 @@ Proof.
 pose proof subst_typ_in_binding_intro_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_binding_intro_rec : lngen.
-Hint Rewrite subst_typ_in_binding_intro_rec using solve [auto] : lngen.
+#[export] Hint Resolve subst_typ_in_binding_intro_rec : lngen.
+#[export] Hint Rewrite subst_typ_in_binding_intro_rec using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -6521,8 +6485,8 @@ Proof.
 pose proof subst_typ_in_exp_intro_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_typ_in_exp_intro_rec : lngen.
-Hint Rewrite subst_typ_in_exp_intro_rec using solve [auto] : lngen.
+#[export] Hint Resolve subst_typ_in_exp_intro_rec : lngen.
+#[export] Hint Rewrite subst_typ_in_exp_intro_rec using solve [auto] : lngen.
 
 (* begin hide *)
 
@@ -6545,8 +6509,8 @@ Proof.
 pose proof subst_exp_in_exp_intro_rec_mutual as H; intuition eauto.
 Qed.
 
-Hint Resolve subst_exp_in_exp_intro_rec : lngen.
-Hint Rewrite subst_exp_in_exp_intro_rec using solve [auto] : lngen.
+#[export] Hint Resolve subst_exp_in_exp_intro_rec : lngen.
+#[export] Hint Rewrite subst_exp_in_exp_intro_rec using solve [auto] : lngen.
 
 Lemma subst_typ_in_typ_intro :
 forall X1 T1 T2,
@@ -6556,7 +6520,7 @@ Proof.
 unfold open_typ_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_typ_intro : lngen.
+#[export] Hint Resolve subst_typ_in_typ_intro : lngen.
 
 Lemma subst_typ_in_binding_intro :
 forall X1 b1 T1,
@@ -6566,7 +6530,7 @@ Proof.
 unfold open_binding_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_binding_intro : lngen.
+#[export] Hint Resolve subst_typ_in_binding_intro : lngen.
 
 Lemma subst_typ_in_exp_intro :
 forall X1 e1 T1,
@@ -6576,7 +6540,7 @@ Proof.
 unfold open_exp_wrt_typ; default_simp.
 Qed.
 
-Hint Resolve subst_typ_in_exp_intro : lngen.
+#[export] Hint Resolve subst_typ_in_exp_intro : lngen.
 
 Lemma subst_exp_in_exp_intro :
 forall x1 e1 e2,
@@ -6586,7 +6550,7 @@ Proof.
 unfold open_exp_wrt_exp; default_simp.
 Qed.
 
-Hint Resolve subst_exp_in_exp_intro : lngen.
+#[export] Hint Resolve subst_exp_in_exp_intro : lngen.
 
 
 (* *********************************************************************** *)

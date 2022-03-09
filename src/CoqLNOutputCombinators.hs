@@ -68,11 +68,11 @@ lemmaText resolve rewrite hide dbs name stmt proof =
                       proof)
          (case resolve of
             NoResolve -> ""
-            Resolve   -> printf "Hint Resolve %s : %s.\n" name (sepStrings " " dbs)
-            Immediate -> printf "Hint Immediate %s : %s.\n" name (sepStrings " " dbs))
+            Resolve   -> printf "#[export] Hint Resolve %s : %s.\n" name (sepStrings " " dbs)
+            Immediate -> printf "#[export] Hint Immediate %s : %s.\n" name (sepStrings " " dbs))
          (case rewrite of
             NoRewrite -> ""
-            Rewrite   -> printf "Hint Rewrite %s using solve [auto] : %s.\n" name (sepStrings " " dbs))
+            Rewrite   -> printf "#[export] Hint Rewrite %s using solve [auto] : %s.\n" name (sepStrings " " dbs))
          (case (resolve, rewrite) of
             (NoResolve, NoRewrite) -> ""
             _ -> "\n")

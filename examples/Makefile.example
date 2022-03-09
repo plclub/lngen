@@ -20,7 +20,7 @@
 ## Paths to executables. Do not include options here.
 ## Modify these to suit your Coq installation, if necessary.
 
-LNGEN = lngen
+LNGEN = stack exec lngen --
 COQC = coqc
 COQDEP = coqdep
 COQDOC = coqdoc
