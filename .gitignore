@@ -25,3 +25,13 @@ src/style.css
 CoqSrc.mk
 *~
 stack.yaml.lock
+*.aux
+*.depend
+*.vok 
+*.vos
+#*#
+.CoqSrc.mk.d
+.depend
+examples/issue4/issue4.v
+examples/issue4/issue4_inf.v
+.lia.cache
