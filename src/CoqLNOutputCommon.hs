@@ -158,6 +158,7 @@ ntType aa nt = getSyntax aa nt >>= \decl -> return (toName decl)
 {- ----------------------------------------------------------------------- -}
 {- * Constructing names: Functions -}
 
+ 
 {- | Returns the name of the @close@ function, where the function is
    defined by induction on the first given nonterminal. -}
 
@@ -177,6 +178,7 @@ closeName aa nt1 mv2 =
 closeRecName :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m Name
 closeRecName aa nt1 mv2 =
     closeName aa nt1 mv2 >>= \n -> return $ n ++ "_rec"
+
 
 {- | Returns the name of the @fv@ function, where the function is
    defined by induction on the first given nonterminal. -}

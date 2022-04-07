@@ -43,62 +43,6 @@ Combined Scheme exp_mutrec from exp_rec'.
 
 
 (* *********************************************************************** *)
-(** * Close *)
-
-Fixpoint close_typ_wrt_typ_rec (n1 : nat) (X1 : typvar) (T1 : typ) {struct T1} : typ :=
-  match T1 with
-    | typ_top => typ_top
-    | typ_var_f X2 => if (X1 == X2) then (typ_var_b n1) else (typ_var_f X2)
-    | typ_var_b n2 => if (lt_ge_dec n2 n1) then (typ_var_b n2) else (typ_var_b (S n2))
-    | typ_arrow T2 T3 => typ_arrow (close_typ_wrt_typ_rec n1 X1 T2) (close_typ_wrt_typ_rec n1 X1 T3)
-    | typ_all T2 T3 => typ_all (close_typ_wrt_typ_rec n1 X1 T2) (close_typ_wrt_typ_rec (S n1) X1 T3)
-    | typ_sum T2 T3 => typ_sum (close_typ_wrt_typ_rec n1 X1 T2) (close_typ_wrt_typ_rec n1 X1 T3)
-  end.
-
-Definition close_typ_wrt_typ X1 T1 := close_typ_wrt_typ_rec 0 X1 T1.
-
-Fixpoint close_binding_wrt_typ_rec (n1 : nat) (X1 : typvar) (b1 : binding) {struct b1} : binding :=
-  match b1 with
-    | bind_sub T1 => bind_sub (close_typ_wrt_typ_rec n1 X1 T1)
-    | bind_typ T1 => bind_typ (close_typ_wrt_typ_rec n1 X1 T1)
-  end.
-
-Definition close_binding_wrt_typ X1 b1 := close_binding_wrt_typ_rec 0 X1 b1.
-
-Fixpoint close_exp_wrt_typ_rec (n1 : nat) (X1 : typvar) (e1 : exp) {struct e1} : exp :=
-  match e1 with
-    | exp_var_f x1 => exp_var_f x1
-    | exp_var_b n2 => exp_var_b n2
-    | exp_abs T1 e2 => exp_abs (close_typ_wrt_typ_rec n1 X1 T1) (close_exp_wrt_typ_rec n1 X1 e2)
-    | exp_app e2 e3 => exp_app (close_exp_wrt_typ_rec n1 X1 e2) (close_exp_wrt_typ_rec n1 X1 e3)
-    | exp_tabs T1 e2 => exp_tabs (close_typ_wrt_typ_rec n1 X1 T1) (close_exp_wrt_typ_rec (S n1) X1 e2)
-    | exp_tapp e2 T1 => exp_tapp (close_exp_wrt_typ_rec n1 X1 e2) (close_typ_wrt_typ_rec n1 X1 T1)
-    | exp_let e2 e3 => exp_let (close_exp_wrt_typ_rec n1 X1 e2) (close_exp_wrt_typ_rec n1 X1 e3)
-    | exp_inl e2 => exp_inl (close_exp_wrt_typ_rec n1 X1 e2)
-    | exp_inr e2 => exp_inr (close_exp_wrt_typ_rec n1 X1 e2)
-    | exp_case e2 e3 e4 => exp_case (close_exp_wrt_typ_rec n1 X1 e2) (close_exp_wrt_typ_rec n1 X1 e3) (close_exp_wrt_typ_rec n1 X1 e4)
-  end.
-
-Fixpoint close_exp_wrt_exp_rec (n1 : nat) (x1 : expvar) (e1 : exp) {struct e1} : exp :=
-  match e1 with
-    | exp_var_f x2 => if (x1 == x2) then (exp_var_b n1) else (exp_var_f x2)
-    | exp_var_b n2 => if (lt_ge_dec n2 n1) then (exp_var_b n2) else (exp_var_b (S n2))
-    | exp_abs T1 e2 => exp_abs T1 (close_exp_wrt_exp_rec (S n1) x1 e2)
-    | exp_app e2 e3 => exp_app (close_exp_wrt_exp_rec n1 x1 e2) (close_exp_wrt_exp_rec n1 x1 e3)
-    | exp_tabs T1 e2 => exp_tabs T1 (close_exp_wrt_exp_rec n1 x1 e2)
-    | exp_tapp e2 T1 => exp_tapp (close_exp_wrt_exp_rec n1 x1 e2) T1
-    | exp_let e2 e3 => exp_let (close_exp_wrt_exp_rec n1 x1 e2) (close_exp_wrt_exp_rec (S n1) x1 e3)
-    | exp_inl e2 => exp_inl (close_exp_wrt_exp_rec n1 x1 e2)
-    | exp_inr e2 => exp_inr (close_exp_wrt_exp_rec n1 x1 e2)
-    | exp_case e2 e3 e4 => exp_case (close_exp_wrt_exp_rec n1 x1 e2) (close_exp_wrt_exp_rec (S n1) x1 e3) (close_exp_wrt_exp_rec (S n1) x1 e4)
-  end.
-
-Definition close_exp_wrt_typ X1 e1 := close_exp_wrt_typ_rec 0 X1 e1.
-
-Definition close_exp_wrt_exp x1 e1 := close_exp_wrt_exp_rec 0 x1 e1.
-
-
-(* *********************************************************************** *)
 (** * Size *)
 
 Fixpoint size_typ (T1 : typ) {struct T1} : nat :=

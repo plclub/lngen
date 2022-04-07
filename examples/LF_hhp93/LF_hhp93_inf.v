@@ -37,39 +37,6 @@ Combined Scheme kind_mutrec from kind_rec'.
 
 
 (* *********************************************************************** *)
-(** * Close *)
-
-Fixpoint close_family_wrt_object_rec (n1 : nat) (x1 : var) (A1 : family) {struct A1} : family :=
-  match A1 with
-    | family_const a1 => family_const a1
-    | family_pi A2 B1 => family_pi (close_family_wrt_object_rec n1 x1 A2) (close_family_wrt_object_rec (S n1) x1 B1)
-    | family_abs A2 B1 => family_abs (close_family_wrt_object_rec n1 x1 A2) (close_family_wrt_object_rec (S n1) x1 B1)
-    | family_app A2 M1 => family_app (close_family_wrt_object_rec n1 x1 A2) (close_object_wrt_object_rec n1 x1 M1)
-  end
-
-with close_object_wrt_object_rec (n1 : nat) (x1 : var) (M1 : object) {struct M1} : object :=
-  match M1 with
-    | object_const c1 => object_const c1
-    | object_var_f x2 => if (x1 == x2) then (object_var_b n1) else (object_var_f x2)
-    | object_var_b n2 => if (lt_ge_dec n2 n1) then (object_var_b n2) else (object_var_b (S n2))
-    | object_abs A1 M2 => object_abs (close_family_wrt_object_rec n1 x1 A1) (close_object_wrt_object_rec (S n1) x1 M2)
-    | object_app M2 N1 => object_app (close_object_wrt_object_rec n1 x1 M2) (close_object_wrt_object_rec n1 x1 N1)
-  end.
-
-Definition close_family_wrt_object x1 A1 := close_family_wrt_object_rec 0 x1 A1.
-
-Definition close_object_wrt_object x1 M1 := close_object_wrt_object_rec 0 x1 M1.
-
-Fixpoint close_kind_wrt_object_rec (n1 : nat) (x1 : var) (K1 : kind) {struct K1} : kind :=
-  match K1 with
-    | kind_type => kind_type
-    | kind_pi A1 K2 => kind_pi (close_family_wrt_object_rec n1 x1 A1) (close_kind_wrt_object_rec (S n1) x1 K2)
-  end.
-
-Definition close_kind_wrt_object x1 K1 := close_kind_wrt_object_rec 0 x1 K1.
-
-
-(* *********************************************************************** *)
 (** * Size *)
 
 Fixpoint size_family (A1 : family) {struct A1} : nat :=
@@ -1756,7 +1723,7 @@ forall x1 A1 B1,
   lc_family (open_family_wrt_object B1 (object_var_f x1)) ->
   lc_family (family_pi A1 B1).
 Proof.
-intros; family_object_lc_exists_tac; eauto with lngen.
+intros; family_object_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 Lemma lc_family_abs_exists :
@@ -1765,7 +1732,7 @@ forall x1 A1 B1,
   lc_family (open_family_wrt_object B1 (object_var_f x1)) ->
   lc_family (family_abs A1 B1).
 Proof.
-intros; family_object_lc_exists_tac; eauto with lngen.
+intros; family_object_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 Lemma lc_object_abs_exists :
@@ -1774,7 +1741,7 @@ forall x1 A1 M1,
   lc_object (open_object_wrt_object M1 (object_var_f x1)) ->
   lc_object (object_abs A1 M1).
 Proof.
-intros; family_object_lc_exists_tac; eauto with lngen.
+intros; family_object_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 Lemma lc_kind_pi_exists :
@@ -1783,7 +1750,7 @@ forall x1 A1 K1,
   lc_kind (open_kind_wrt_object K1 (object_var_f x1)) ->
   lc_kind (kind_pi A1 K1).
 Proof.
-intros; kind_lc_exists_tac; eauto with lngen.
+intros; kind_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 #[export] Hint Extern 1 (lc_family (family_pi _ _)) =>
@@ -1818,7 +1785,7 @@ let x1 := fresh "x" in
 pick_fresh x1;
 specialize_all x1;
 family_object_lc_exists_tac;
-eauto with lngen.
+eauto 7 with lngen.
 Qed.
 
 #[export] Hint Resolve lc_body_family_wrt_object : lngen.
@@ -1835,7 +1802,7 @@ let x1 := fresh "x" in
 pick_fresh x1;
 specialize_all x1;
 family_object_lc_exists_tac;
-eauto with lngen.
+eauto 7 with lngen.
 Qed.
 
 #[export] Hint Resolve lc_body_object_wrt_object : lngen.
@@ -1852,7 +1819,7 @@ let x1 := fresh "x" in
 pick_fresh x1;
 specialize_all x1;
 kind_lc_exists_tac;
-eauto with lngen.
+eauto 7 with lngen.
 Qed.
 
 #[export] Hint Resolve lc_body_kind_wrt_object : lngen.

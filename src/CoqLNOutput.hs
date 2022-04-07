@@ -35,7 +35,6 @@ import MyLibrary ( nmap )
 coqOfAST :: Maybe String -> Maybe String -> AST -> M String
 coqOfAST ott loadpath ast =
     do { bodyStrs   <- mapM (local . processBody aa) nts
-       ; closeStrs  <- mapM (local . processClose aa) nts
        ; degreeStrs <- mapM (local . processDegree aa) nts
        ; lcStrs     <- mapM (local . processLc aa) nts
        ; ntStrs     <- mapM (local . processNt aa) nts
@@ -74,8 +73,6 @@ coqOfAST ott loadpath ast =
                   \\n" ++
                   coqSep ++ "(** * Induction principles for nonterminals *)\n\n" ++
                   concat ntStrs ++ "\n" ++
-                  coqSep ++ "(** * Close *)\n\n" ++
-                  concat closeStrs ++ "\n" ++
                   coqSep ++ "(** * Size *)\n\n" ++
                   concat sizeStrs ++ "\n" ++
                   coqSep ++ "(** * Degree *)\n\

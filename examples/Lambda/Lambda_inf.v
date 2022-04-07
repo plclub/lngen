@@ -7,6 +7,8 @@ Require Export Metalib.LibLNgen.
 
 Require Export Lambda_ott.
 
+Local Set Warnings "-non-recursive". 
+
 (** NOTE: Auxiliary theorems are hidden in generated documentation.
     In general, there is a [_rec] version of every lemma involving
     [open] and [close]. *)
@@ -22,20 +24,6 @@ Combined Scheme exp_mutind from exp_ind'.
 Scheme exp_rec' := Induction for exp Sort Set.
 
 Combined Scheme exp_mutrec from exp_rec'.
-
-
-(* *********************************************************************** *)
-(** * Close *)
-
-Fixpoint close_exp_wrt_exp_rec (n1 : nat) (x1 : expvar) (e1 : exp) {struct e1} : exp :=
-  match e1 with
-    | var_f x2 => if (x1 == x2) then (var_b n1) else (var_f x2)
-    | var_b n2 => if (lt_ge_dec n2 n1) then (var_b n2) else (var_b (S n2))
-    | app e2 e3 => app (close_exp_wrt_exp_rec n1 x1 e2) (close_exp_wrt_exp_rec n1 x1 e3)
-    | abs e2 => abs (close_exp_wrt_exp_rec (S n1) x1 e2)
-  end.
-
-Definition close_exp_wrt_exp x1 e1 := close_exp_wrt_exp_rec 0 x1 e1.
 
 
 (* *********************************************************************** *)
@@ -707,7 +695,7 @@ forall x1 e1,
   lc_exp (open_exp_wrt_exp e1 (var_f x1)) ->
   lc_exp (abs e1).
 Proof.
-intros; exp_lc_exists_tac; eauto with lngen.
+intros; exp_lc_exists_tac; eauto 6 with lngen.
 Qed.
 
 #[export] Hint Extern 1 (lc_exp (abs _)) =>
@@ -727,7 +715,7 @@ let x1 := fresh "x" in
 pick_fresh x1;
 specialize_all x1;
 exp_lc_exists_tac;
-eauto with lngen.
+eauto 7 with lngen.
 Qed.
 
 #[export] Hint Resolve lc_body_exp_wrt_exp : lngen.

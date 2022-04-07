@@ -9,7 +9,7 @@
 module ComputationMonad where
 
 import Control.Monad.Except
-import Control.Monad.Fail as Fail
+import Control.Monad.Fail()
 import Control.Monad.State
 import Data.Map ( Map )
 import qualified Data.Map as Map

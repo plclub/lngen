@@ -25,9 +25,11 @@ Dependencies
   Recently tested with GHC 8.10.7
 
 * LNgen's output must be combined with the output of
-  [Ott](http://www.cl.cam.ac.uk/~pes20/ott/).  Obtain Ott from opam.
+  [Ott](http://www.cl.cam.ac.uk/~pes20/ott/).  
+  
+  Obtain Ott from https://github.com/sweirich/ott 
 
-  Last tested with ott.0.31
+  (Fork of ott.0.31)
 
 * The Coq Proof assistant.
 
