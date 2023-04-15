@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts, LambdaCase #-}
 
 {- | Implementation notes (BEA): The exported function expect that the
    given list of 'NtRoot's all be canonical and correspond to a
@@ -128,7 +128,7 @@ processDegreeSchemes aaa nt1s =
       -- g aa nt1 _ mv2 = degreeSetName aa nt1 mv2
 
       count aa nt1 _ _ =
-          do { (Syntax _ _ cs) <- getSyntax aa nt1
+          do { (Syntax _ _ _ cs) <- getSyntax aa nt1
              ; return $ length cs
              }
 
@@ -166,7 +166,7 @@ processDegreeDefs aaa nt1s =
       degreeConstr Set  = degreeSetConstrName
 
       f sort aa nt1 nt2 mv2 =
-          do { (Syntax _ _ cs) <- getSyntax aa nt1
+          do { (Syntax _ _ _ cs) <- getSyntax aa nt1
              ; degname         <- degree sort aa nt1 mv2
              ; nttype          <- ntType aa nt1
              ; cs'             <- mapM (local . constr sort nt1 nt2 mv2) cs
@@ -262,7 +262,7 @@ processLc aa nts' =
        }
     where
       count nt1 =
-          do { (Syntax _ _ cs) <- getSyntax aa nt1
+          do { (Syntax _ _ _ cs) <- getSyntax aa nt1
              ; return $ length $ filter isCountable cs
              }
 
@@ -273,7 +273,7 @@ processLc aa nts' =
 
       def :: NtRoot -> M String
       def nt =
-          do { (Syntax _ _ cs) <- getSyntax aa nt
+          do { (Syntax _ _ _ cs) <- getSyntax aa nt
              ; lcname          <- lcSetName aa nt
              ; nttype          <- ntType aa nt
              ; cs'             <- mapMM (local . constr nt) cs
@@ -348,7 +348,7 @@ processNt aa nts =
        }
     where
       count nt1 =
-          do { (Syntax _ _ cs) <- getSyntax aa nt1
+          do { (Syntax _ _ _ cs) <- getSyntax aa nt1
              ; return $ length cs
              }
 
@@ -386,16 +386,16 @@ processSize :: ASTAnalysis -> [NtRoot] -> M String
 processSize aa nts =
     do { defsAndBools <- mapM (local . def) nts
        ; let (defs,bools) = unzip defsAndBools
-       ; if (head bools) 
-           then return $ printf "Fixpoint %s.\n\n" (sepStrings "\n\nwith " defs)
-           else return $ printf "Definition %s.\n\n" (sepStrings "\n\nwith " defs)
-       }
+       ; if head bools
+         then return $ printf "Fixpoint %s.\n\n" (sepStrings "\n\nwith " defs)
+         else return $ printf "Definition %s.\n\n" (sepStrings "\n\nwith " defs)}
     where
+      def :: NtRoot -> M (String, Bool)
       def nt =
           do { size_fn         <- sizeName aa nt
              ; e               <- newName nt
              ; etype           <- ntType aa nt
-             ; (Syntax _ _ cs) <- getSyntax aa nt
+             ; (Syntax _ _ _ cs) <- getSyntax aa nt
              ; branches        <- mapM (local . branch) cs
              ; if length branches > 0
                then return (printf
@@ -425,9 +425,11 @@ processSize aa nts =
       call (BindingArg _ _ nt, z) = call (NtArg nt, z)
 
       call (NtArg nt, z) =
-          do { fn <- sizeName aa nt
-             ; return $ Just $ printf "(%s %s)" fn z
-             }
+        isPhantomNtRoot aa nt >>= \case
+          False -> do
+            fn <- sizeName aa nt
+            return $ Just $ printf "(%s %s)" fn z
+          True -> return Nothing
 
 
 {- ----------------------------------------------------------------------- -}
@@ -446,7 +448,7 @@ processSwap aaa nt1s =
              ; ab              <- newName "ab"
              ; e               <- newName nt
              ; etype           <- ntType aa nt
-             ; (Syntax _ _ cs) <- getSyntax aa nt
+             ; (Syntax _ _ _ cs) <- getSyntax aa nt
              ; branches        <- mapM (local . branch ab) cs
              ; return $ printf
                "%s (%s : %s * %s) (%s : %s) {struct %s} : %s :=\n\

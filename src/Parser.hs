@@ -102,6 +102,17 @@ nameHom = do { n <- name ; ignoreHoms ; return n }
 
 {- | Consumes a homomorphism from the input stream. -}
 
+ruleHom :: Parser RuleHom
+ruleHom =
+    do { _ <- text "{{" <?> "homomorphism \"{{ ... }}\""
+             ; do { reserved "phantom"
+                  ; _ <- text "}}"
+                  ; return RuleHom {ruleHomPhantom = True}
+                  }
+               <|>
+               mempty <$ anyChar `manyTill` text "}}"
+             }
+
 ignoreHom :: Parser ()
 ignoreHom =
     do { _ <- text "{{" <?> "homomorphism \"{{ ... }}\""
@@ -145,7 +156,6 @@ metavarDecl =
                   }
              }
 
-
 {- ----------------------------------------------------------------------- -}
 {- * Parsing definitions of nonterminals -}
 
@@ -160,9 +170,9 @@ rule =
        ; _ <- text "::"
        ; n <- ruleName
        ; _ <- text "::="
-       ; _ <- many ignoreHom
+       ; hom <- mconcat <$> many ruleHom
        ; prods <- many production
-       ; return $ Rule pos es n prods
+       ; return $ Rule pos hom es n prods
        }
     where
       ruleName =

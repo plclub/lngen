@@ -23,6 +23,7 @@ import CoqLNOutputThmSize
 import CoqLNOutputThmSwap
 import CoqLNOutputThmSubst
 import MyLibrary ( nmap )
+import Control.Monad (filterM)
 
 
 {- ----------------------------------------------------------------------- -}
@@ -34,22 +35,24 @@ import MyLibrary ( nmap )
 
 coqOfAST :: Maybe String -> Maybe String -> AST -> M String
 coqOfAST ott loadpath ast =
-    do { bodyStrs   <- mapM (local . processBody aa) nts
-       ; degreeStrs <- mapM (local . processDegree aa) nts
-       ; lcStrs     <- mapM (local . processLc aa) nts
-       ; ntStrs     <- mapM (local . processNt aa) nts
-       ; sizeStrs   <- mapM (local . processSize aa) nts
-       ; _swapStrs   <- mapM (local . processSwap aa) nts
+    do { nts'       <- filter (not . null) <$>
+                       mapM (local . filterM (notPhantomNtRoot aa)) nts
+       ; bodyStrs   <- mapM (local . processBody aa) nts'
+       ; degreeStrs <- mapM (local . processDegree aa) nts'
+       ; lcStrs     <- mapM (local . processLc aa) nts'
+       ; ntStrs     <- mapM (local . processNt aa) nts'
+       ; sizeStrs   <- mapM (local . processSize aa) nts'
+       ; _swapStrs   <- mapM (local . processSwap aa) nts'
        ; tacticStrs <- local $ processTactics aa
 
-       ; degree_thms      <- degreeThms aa nts
-       ; fv_thms          <- fvThms aa nts
-       ; lc_thms          <- lcThms aa nts
-       ; open_close_thms  <- openCloseThms aa nts
-       ; open_close_thms2 <- openCloseThms2 aa nts
-       ; size_thms        <- sizeThms aa nts
-       ; _swap_thms        <- swapThms aa nts
-       ; subst_thms       <- substThms aa nts
+       ; degree_thms      <- degreeThms aa nts'
+       ; fv_thms          <- fvThms aa nts'
+       ; lc_thms          <- lcThms aa nts'
+       ; open_close_thms  <- openCloseThms aa nts'
+       ; open_close_thms2 <- openCloseThms2 aa nts'
+       ; size_thms        <- sizeThms aa nts'
+       ; _swap_thms        <- swapThms aa nts'
+       ; subst_thms       <- substThms aa nts'
 
        ; return $ (case loadpath of
                      Nothing -> ""

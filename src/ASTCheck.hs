@@ -39,7 +39,7 @@ getMvRoots mvds = foldM f [] mvds
 getNtRoots :: (MonadError ProgramError m) => [MvRoot] -> [PreRule] -> m [MvRoot]
 getNtRoots mvs rls = foldM f [] rls
     where
-      f acc (Rule pos rs _ _) =
+      f acc (Rule pos _ rs _ _) =
           if not $ null $ intersect rs (acc ++ mvs)
           then abort $ ASTDupRoots pos (intersect rs (acc ++ mvs))
           else return $ nub rs ++ acc
@@ -53,9 +53,9 @@ getNtRoots mvs rls = foldM f [] rls
    whether a symbol is a metavariable or a nonterminal. -}
 
 toRule :: (MonadError ProgramError m) => [MvRoot] -> [NtRoot] -> PreRule -> m Rule
-toRule mvs nts (Rule pos ns n ps) =
+toRule mvs nts (Rule pos hom ns n ps) =
     do { ps' <- mapM toProduction ps
-       ; return $ Rule pos ns n ps'
+       ; return $ Rule pos hom ns n ps'
        }
     where
       toProduction (Production p es flag constr bs) =
@@ -112,9 +112,9 @@ astOfPreAST (PreAST mvds rls substs fvs) =
     where
       formalRules = map deleteMetaprods $ filter isNonformal rls
 
-      isNonformal (Rule _ es _ _) = "terminals" `notElem` es &&
+      isNonformal (Rule _ _ es _ _) = "terminals" `notElem` es &&
                                     "formula"   `notElem` es
 
-      deleteMetaprods (Rule pos es n ps) = Rule pos es n (filter f ps)
+      deleteMetaprods (Rule pos hom es n ps) = Rule pos hom es n (filter f ps)
           where
             f (Production _ _ fs _ _) = null fs

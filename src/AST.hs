@@ -111,6 +111,18 @@ data MetavarHom
     -- ^ Specifies that no implementation should be provided.
     deriving ( Eq, Show )
 
+{- | A homomorphism used to annotate a rule declaration. -}
+newtype RuleHom = RuleHom {
+      ruleHomPhantom :: Bool
+    }
+    deriving ( Eq, Show, Data )
+
+instance Semigroup RuleHom where
+  RuleHom {ruleHomPhantom = p1} <> RuleHom {ruleHomPhantom = p2} =
+    RuleHom {ruleHomPhantom = p1 || p2}
+
+instance Monoid RuleHom where
+  mempty = RuleHom {ruleHomPhantom = False}
 
 {- ----------------------------------------------------------------------- -}
 {- * Metavariable declarations -}
@@ -141,7 +153,7 @@ data MetavarDecl
    type for nonterminals. -}
 
 data GenRule a b c
-    = Rule SourcePos [NtRoot] Name [GenProduction a b c]
+    = Rule SourcePos RuleHom [NtRoot] Name [GenProduction a b c]
     deriving ( Data, Show, Typeable )
 
 {- | A production consists of a list of elements, a list of flags, a
@@ -257,7 +269,7 @@ instance Nameable MetavarDecl where
     toName (MetavarDecl _ mvrs _) = head mvrs
 
 instance Nameable (GenRule a b c) where
-    toName (Rule _ ntrs _ _) = head ntrs
+    toName (Rule _ _ ntrs _ _) = head ntrs
 
 {- | A source entity is any type for which we can extract position
    information. -}
@@ -283,7 +295,7 @@ instance SourceEntity MetavarDecl where
     toPos (MetavarDecl pos _ _) = pos
 
 instance SourceEntity (GenRule a b c) where
-    toPos (Rule pos _ _ _) = pos
+    toPos (Rule pos _ _ _ _) = pos
 
 instance SourceEntity (GenProduction a b c) where
     toPos (Production pos _ _ _ _) = pos
@@ -323,3 +335,8 @@ coqMvImplType (MetavarDecl _ _ homs) = head $ mapMaybe f homs
 
 isPhantomMvDecl :: MetavarDecl -> Bool
 isPhantomMvDecl (MetavarDecl _ _ homs) = MvPhantom `elem` homs
+
+{- | 'True' if and only if the rule is for a \"phantom\"
+   AST. -}
+isPhantomRule :: Rule -> Bool
+isPhantomRule (Rule _ hom _ _ _) = ruleHomPhantom hom
