@@ -22,6 +22,7 @@ import ComputationMonad
 import CoqLNOutputCombinators
 import CoqLNOutputCommon
 import MyLibrary ( mapMM, sepStrings )
+import Control.Monad.State (get)
 
 
 {- ----------------------------------------------------------------------- -}
@@ -32,7 +33,7 @@ import MyLibrary ( mapMM, sepStrings )
 
 schemeIndDecl :: [Name] -> Int -> M Name
 schemeIndDecl ns _i =
-    do { 
+    do {
        ; let sns = map schemeIndName ns
        ; return $ printf
          "Scheme %s.\n\
@@ -51,8 +52,8 @@ schemeIndDecl ns _i =
 
 schemeRecDecl :: [Name] -> Int -> M Name
 schemeRecDecl ns _i =
-    do { 
-       ; 
+    do {
+       ;
        ; let sns = map schemeRecName ns
        ; return $ printf
          "Scheme %s.\n\
@@ -236,6 +237,8 @@ processDegreeDefs aaa nt1s =
 processLc :: ASTAnalysis -> [NtRoot] -> M String
 processLc aa nts' =
     do { let nts = filter (isOpenable aa) nts'
+       ; (flags, _)   <- get
+       ; let suppress x = if nolcset flags then "" else x
        ; defs         <- mapM def nts
        ; names        <- mapM (lcName aa) nts
        ; namesSet     <- mapM (lcSetName aa) nts
@@ -245,20 +248,13 @@ processLc aa nts' =
        ; recSchemeSet <- local $ schemeRecDecl namesSet (sum counts)
        ; if null defs
          then return ""
-         else return $ printf
-              "Inductive %s.\n\
-              \\n\
-              \%s\
-              \%s\
-              \%s\
-              \%s\
-              \%s"
-              (sepStrings "\n\nwith " defs)
-              indScheme
-              indSchemeSet
-              recSchemeSet
-              (concat (map hint names) :: String)
-              (concat (map hint namesSet) :: String)
+         else return $
+              suppress (printf "Inductive %s.\n" (sepStrings "\n\nwith " defs)) ++
+              indScheme ++
+              suppress indSchemeSet ++
+              suppress recSchemeSet ++
+              concatMap hint names ++
+              suppress (concatMap hint namesSet)
        }
     where
       count nt1 =

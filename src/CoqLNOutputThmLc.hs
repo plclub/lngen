@@ -12,6 +12,7 @@ import ComputationMonad
 import CoqLNOutputCommon
 import CoqLNOutputCombinators
 import MyLibrary ( sepStrings )
+import Control.Monad.State (get)
 
 lcThms :: ASTAnalysis -> [[NtRoot]] -> M String
 lcThms aa nts =
@@ -25,6 +26,8 @@ lcThms aa nts =
        ; lc_of_lc_sets     <- mapM (local . lc_of_lc_set aa) nts
        ; lc_set_of_lcs     <- mapM (local . lc_set_of_lc aa) nts
        ; lc_uniques        <- mapM (local . lc_unique aa) nts
+       ; (flags, _)   <- get
+       ; let suppress x = if nolcset flags then "" else x
        ; return $ printf "Ltac %s ::= auto with %s %s; tauto.\n\
                          \Ltac %s ::= autorewrite with %s.\n\
                          \\n"
@@ -38,8 +41,8 @@ lcThms aa nts =
                   concat lc_bodys ++
                   (concat $ concat lc_body_constrs) ++
                   concat lc_uniques ++
-                  concat lc_of_lc_sets ++
-                  concat lc_set_of_lcs ++ "\n"
+                  suppress (concat lc_of_lc_sets) ++
+                  suppress (concat lc_set_of_lcs) ++ "\n"
        }
 
 {- | @degree 0 e@ when @lc e@. -}
@@ -327,7 +330,6 @@ lc_of_degree aaa nt1s =
                             \  | |- _ = _ => reflexivity\n\
                             \  | _ => idtac\n\
                             \end;\n\
-                            \instantiate;\n\
                             \(* everything should be easy now *)\n\
                             \%s."
                             i i ltWfRec
@@ -423,7 +425,6 @@ lc_set_of_lc aaa nt1s =
                             \  | |- _ = _ => reflexivity\n\
                             \  | _ => idtac\n\
                             \end;\n\
-                            \instantiate;\n\
                             \(* everything should be easy now *)\n\
                             \%s."
                             i i ltWfRec

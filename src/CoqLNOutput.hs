@@ -117,7 +117,6 @@ coqOfAST ott loadpath ast =
     where
       fixSCC (AcyclicSCC n) = [canon n]
       fixSCC (CyclicSCC ns) = nmap canon ns
-
       aa    = analyzeAST ast
       canon = canonRoot aa
       nts   = reverse $ nmap fixSCC $ stronglyConnComp $ ntGraph aa
