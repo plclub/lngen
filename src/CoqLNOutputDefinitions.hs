@@ -488,7 +488,7 @@ processTactics _ =
     do { return $ printf
          "(** Additional hint declarations. *)\n\
          \\n\
-         \#[export] Hint Resolve plus_le_compat : %s.\n\
+         \#[export] Hint Resolve Nat.add_le_mono : %s.\n\
          \\n\
          \(** Redefine some tactics. *)\n\
          \\n\
