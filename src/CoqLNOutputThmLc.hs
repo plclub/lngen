@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts, LambdaCase #-}
 
 module CoqLNOutputThmLc where
 
@@ -12,6 +12,7 @@ import ComputationMonad
 import CoqLNOutputCommon
 import CoqLNOutputCombinators
 import MyLibrary ( sepStrings )
+import Control.Monad.State (get)
 
 lcThms :: ASTAnalysis -> [[NtRoot]] -> M String
 lcThms aa nts =
@@ -25,6 +26,8 @@ lcThms aa nts =
        ; lc_of_lc_sets     <- mapM (local . lc_of_lc_set aa) nts
        ; lc_set_of_lcs     <- mapM (local . lc_set_of_lc aa) nts
        ; lc_uniques        <- mapM (local . lc_unique aa) nts
+       ; (flags, _)   <- get
+       ; let suppress x = if nolcset flags then "" else x
        ; return $ printf "Ltac %s ::= auto with %s %s; tauto.\n\
                          \Ltac %s ::= autorewrite with %s.\n\
                          \\n"
@@ -38,8 +41,8 @@ lcThms aa nts =
                   concat lc_bodys ++
                   (concat $ concat lc_body_constrs) ++
                   concat lc_uniques ++
-                  concat lc_of_lc_sets ++
-                  concat lc_set_of_lcs ++ "\n"
+                  suppress (concat lc_of_lc_sets) ++
+                  suppress (concat lc_set_of_lcs) ++ "\n"
        }
 
 {- | @degree 0 e@ when @lc e@. -}
@@ -149,7 +152,7 @@ lc_body aaa nt1s =
 lc_body_constr :: ASTAnalysis -> [NtRoot] -> M [String]
 lc_body_constr aaa nt1s =
     sequence $ do { nt1                      <- nt1s
-                  ; (Syntax _ _ cs)          <- [runM [] $ getSyntax aaa nt1]
+                  ; (Syntax _ _ _ cs)          <- [runM [] $ getSyntax aaa nt1]
                   ; c@(SConstr _ _ _ args _) <- [c | c <- cs, hasBindingArg c]
                   ; let nargs = zip args [1..]
                   ; (a, n)                   <- [(a, n) | (a, n) <- nargs, hasBindingArg a]
@@ -179,7 +182,7 @@ lc_body_constr aaa nt1s =
 lc_exists :: ASTAnalysis -> [NtRoot] -> M [String]
 lc_exists aaa nt1s =
     sequence $ do { nt1             <- nt1s
-                  ; (Syntax _ _ cs) <- [runM [] $ getSyntax aaa nt1]
+                  ; (Syntax _ _ _ cs) <- [runM [] $ getSyntax aaa nt1]
                   ; c               <- [c | c <- cs, hasBindingArg c]
                   ; return $ local $ thm aaa nt1 c
                   }
@@ -235,7 +238,7 @@ lc_exists aaa nt1s =
 lc_exists_hint :: ASTAnalysis -> [NtRoot] -> M [String]
 lc_exists_hint aaa nt1s =
     sequence $ do { nt1             <- nt1s
-                  ; (Syntax _ _ cs) <- [runM [] $ getSyntax aaa nt1]
+                  ; (Syntax _ _ _ cs) <- [runM [] $ getSyntax aaa nt1]
                   ; c               <- [c | c <- cs, hasBindingArg c]
                   ; return $ local $ thm aaa nt1 c
                   }
@@ -307,11 +310,13 @@ lc_of_degree aaa nt1s =
     if not (isOpenable aaa (head nt1s))
     then return ""
     else
-    do { i     <- newName "i"
+    do { nt1s' <- -- filterM (fmap not . isPhantomNtRoot aaa)
+                  pure nt1s
+       ; i     <- newName "i"
        ; h     <- newName "H"
-       ; thms  <- processNt1 aaa nt1s (thm i)
-       ; names <- processNt1 aaa nt1s name
-       ; types <- processNt1 aaa nt1s ntType
+       ; thms  <- processNt1 aaa nt1s' (thm i)
+       ; names <- processNt1 aaa nt1s' name
+       ; types <- processNt1 aaa nt1s' ntType
        ; let mut_name = sepStrings "_" names ++ "_size_mutual"
        ; let mut_stms = printf "forall %s,\n%s" i (sepStrings " /\\\n" $ map wrap thms)
        ; let proof = printf "intros %s; pattern %s; apply %s;\n\
@@ -325,7 +330,6 @@ lc_of_degree aaa nt1s =
                             \  | |- _ = _ => reflexivity\n\
                             \  | _ => idtac\n\
                             \end;\n\
-                            \instantiate;\n\
                             \(* everything should be easy now *)\n\
                             \%s."
                             i i ltWfRec
@@ -333,7 +337,7 @@ lc_of_degree aaa nt1s =
                             (mutPfStart Prop types) defaultSimp
                             defaultSimp eapplyFirst
                             defaultSimp
-       ; gens <- processNt1 aaa nt1s (gen mut_name)
+       ; gens <- processNt1 aaa nt1s' (gen mut_name)
        ; s1 <- lemmaText  NoResolve NoRewrite Hide [] mut_name mut_stms proof
        ; s2 <- lemmaText2 Resolve NoRewrite NoHide [hintDb] [names] [gens]
        ; return $ s1 ++ s2
@@ -421,7 +425,6 @@ lc_set_of_lc aaa nt1s =
                             \  | |- _ = _ => reflexivity\n\
                             \  | _ => idtac\n\
                             \end;\n\
-                            \instantiate;\n\
                             \(* everything should be easy now *)\n\
                             \%s."
                             i i ltWfRec

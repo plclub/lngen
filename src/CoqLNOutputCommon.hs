@@ -154,6 +154,23 @@ mvType aa mv = getMvDecl aa mv >>= \decl -> return (toName decl)
 ntType :: MonadFail m => ASTAnalysis -> NtRoot -> m Name
 ntType aa nt = getSyntax aa nt >>= \decl -> return (toName decl)
 
+{- | Checks whether the the given nonterminal root is phantom. -}
+isPhantomNtRoot :: MonadFail m => ASTAnalysis -> NtRoot -> m Bool
+isPhantomNtRoot aa nt = isPhantomSyntax <$> getSyntax aa nt
+
+{- | Checks whether the the given nonterminal root is not phantom. -}
+notPhantomNtRoot :: MonadFail m => ASTAnalysis -> NtRoot -> m Bool
+notPhantomNtRoot aa nt = not . isPhantomSyntax <$> getSyntax aa nt
+
+{- | Returns the canonical type for the given nonterminal root that is
+   not marked as phantom. -}
+ntTypeNonPhantom :: MonadFail m => ASTAnalysis -> NtRoot -> m (Maybe Name)
+ntTypeNonPhantom aa nt = getSyntax aa nt >>= getDeclMb
+  where getDeclMb decl
+          | isPhantomSyntax decl = return Nothing
+          | otherwise = return (Just $ toName decl)
+
+
 
 {- ----------------------------------------------------------------------- -}
 {- * Constructing names: Functions -}

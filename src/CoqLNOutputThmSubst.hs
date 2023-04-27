@@ -279,7 +279,7 @@ subst_constr aaa nt1s =
     sequence $ do { nt1             <- nt1s
                   ; nt2             <- filter (canBindOver aaa nt1) (ntRoots aaa)
                   ; mv2             <- mvsOfNt aaa nt2
-                  ; (Syntax _ _ cs) <- [runM [] $ getSyntax aaa nt1]
+                  ; (Syntax _ _ _ cs) <- [runM [] $ getSyntax aaa nt1]
                   ; c               <- [c | c <- cs, hasBindingArg c]
                   ; return $ local $ thm aaa nt1 nt2 mv2 c
                   }

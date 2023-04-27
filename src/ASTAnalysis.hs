@@ -33,6 +33,7 @@ module ASTAnalysis (
     isSubordTo,
     mvsOfNt,
     ntOfMv,
+    isPhantomSyntax,
     ) where
 
 import Data.Generics       ( Data, Typeable, everything, mkQ )
@@ -62,14 +63,14 @@ import MyLibrary ( getResult, mapLookup, nmap, shortestStr )
    'Name' fields should come from the corresponding 'Rule'. -}
 
 data Syntax
-    = Syntax SourcePos Name [SConstr]
+    = Syntax SourcePos RuleHom Name [SConstr]
     deriving ( Data, Show, Typeable )
 
 instance Nameable Syntax where
-    toName (Syntax _ n _) = n
+    toName (Syntax _ _ n _) = n
 
 instance SourceEntity Syntax where
-    toPos (Syntax pos _ _) = pos
+    toPos (Syntax pos _ _ _) = pos
 
 {- | A constructor consists of a short name (for use as a suffix), a
    long name (for use as the constructor's name), a list of types (one
@@ -121,8 +122,8 @@ instance Symbol SConstrArg where
    and have bogus metavariable sorts in 'BindingArg's. -}
 
 toSyntax :: Rule -> Syntax
-toSyntax r@(Rule pos _ prefix ps) =
-    Syntax pos (toName r) (map toSConstr ps)
+toSyntax r@(Rule pos hom _ prefix ps) =
+    Syntax pos hom (toName r) (map toSConstr ps)
     where
       toSConstr (Production p es _ name bs) =
           SConstr p name (prefix ++ name) (mapMaybe toSConstrArg es) Normal
@@ -149,9 +150,9 @@ toSyntax r@(Rule pos _ prefix ps) =
    correct metavariable sorts on 'BindingArg's. -}
 
 fixSyntax :: MvMap -> NtMap -> MvSortList -> Syntax -> Either ProgramError Syntax
-fixSyntax mvm ntm mvsl (Syntax pos name cs) =
+fixSyntax mvm ntm mvsl (Syntax pos hom name cs) =
     do { cs' <- mapM toConstrs cs
-       ; return $ Syntax pos name (concat cs')
+       ; return $ Syntax pos hom name (concat cs')
        }
     where
       canon    = genCanonRoot mvm ntm
@@ -306,7 +307,7 @@ analyzeAST ast@(AST _ rs substitutions freevars) =
         phrs    = nmap crt $ map fst $ filter (isPhantomMvDecl . snd) decls
 
         smap    = Map.fromList (concatMap zipR rs)
-        zipR    = \(r@(Rule _ ns _ _)) -> zip ns (repeat (mungeR r))
+        zipR    = \(r@(Rule _ _ ns _ _)) -> zip ns (repeat (mungeR r))
         mungeR  = getResult . fixSyntax mvm ntm mvs . toSyntax
 
         aa = ASTAnalysis
@@ -344,7 +345,7 @@ genMvMap (AST mvds _ _ _) = foldr add Map.empty mvds
 genNtMap :: AST -> NtMap
 genNtMap (AST _ rs _ _) = foldr add Map.empty rs
     where
-      add o@(Rule _ ns _ _) m = foldr (\n a -> Map.insert n o a) m ns
+      add o@(Rule _ _ ns _ _) m = foldr (\n a -> Map.insert n o a) m ns
 
 {- | Generates a 'FvMap' that can be queried without putting roots
    into canonical form first. -}
@@ -357,7 +358,7 @@ genFvMap mvm ntm = foldr add Map.empty
 
       pairs nt mv =
           let (MetavarDecl _ mvs _) = fromJust $ Map.lookup mv mvm
-              (Rule _ nts _ _)      = fromJust $ Map.lookup nt ntm
+              (Rule _ _ nts _ _)      = fromJust $ Map.lookup nt ntm
           in
             [ (nt', mv') | mv' <- mvs, nt' <- nts ]
 
@@ -372,7 +373,7 @@ genSubstMap mvm ntm = foldr add Map.empty
 
       pairs nt mv =
           let (MetavarDecl _ mvs _) = fromJust $ Map.lookup mv mvm
-              (Rule _ nts _ _)      = fromJust $ Map.lookup nt ntm
+              (Rule _ _ nts _ _)      = fromJust $ Map.lookup nt ntm
           in
             [ (nt', mv') | mv' <- mvs, nt' <- nts ]
 
@@ -383,7 +384,7 @@ genCanonRoot mvm ntm rt = Map.findWithDefault rt rt canonMap
     where
       canonMap               = Map.map f mvm `Map.union` Map.map g ntm
       f (MetavarDecl _ ns _) = shortestStr ns
-      g (Rule _ ns _ _)      = shortestStr ns
+      g (Rule _ _ ns _ _)      = shortestStr ns
 
 {- | The result takes into account all nonterminals and productions
    present in the input maps. -}
@@ -400,7 +401,7 @@ genNtGraph ntm = nmap buildEdge (Map.keys ntm)
       -- Stage 1: Go through every rule and production and generate
       -- "singleton" edges.
 
-      addR k (Rule _ _ _ ps)                 = concatMap (addP k) ps
+      addR k (Rule _ _ _ _ ps)                 = concatMap (addP k) ps
       addP k (Production _ es _ _ _)         = concat $ mapMaybe (addE k) es
       addE k (NtElement (Nonterminal _ n _)) = Just $ zip (find n) (repeat k)
       addE _ _                               = Nothing
@@ -410,7 +411,7 @@ genNtGraph ntm = nmap buildEdge (Map.keys ntm)
 
       find  = fromJust . flip lookup assoc
       assoc = do { nt              <- Map.keys ntm
-                 ; (Rule _ ns _ _) <- mapLookup nt ntm
+                 ; (Rule _ _ ns _ _) <- mapLookup nt ntm
                  ; return (nt, ns)
                  }
 
@@ -431,8 +432,8 @@ genMvSorts mvm ntm srel = concatMap sorts mvrs
       sorts mv =
           nub $ do { nt  <- ntrs
                    ; nt' <- ntrs
-                   ; let (Rule _ _ _ ps)  = fromJust $ Map.lookup nt  ntm
-                   ; let (Rule _ _ _ ps') = fromJust $ Map.lookup nt' ntm
+                   ; let (Rule _ _ _ _ ps)  = fromJust $ Map.lookup nt  ntm
+                   ; let (Rule _ _ _ _ ps') = fromJust $ Map.lookup nt' ntm
 
                    -- nt has a "free variable constructor" for mv
                    ; _ <- filter (`isFreeConstr` mv) ps
@@ -501,7 +502,7 @@ getSyntax aa = flip mapLookup (syntaxMap aa)
 
 getBoundVarConstr :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m SConstr
 getBoundVarConstr aa nt mv =
-    do { (Syntax pos _ cs) <- getSyntax aa nt
+    do { (Syntax pos _ _ cs) <- getSyntax aa nt
        ; case filter isBvar cs of
               [c] -> return c
               _   -> Fail.fail $ show pos ++ ": Internal error (getBoundVarConstr)."
@@ -516,7 +517,7 @@ getBoundVarConstr aa nt mv =
 
 getFreeVarConstr :: MonadFail m => ASTAnalysis -> NtRoot -> MvRoot -> m SConstr
 getFreeVarConstr aa nt mv =
-    do { (Syntax pos _ cs) <- getSyntax aa nt
+    do { (Syntax pos _ _ cs) <- getSyntax aa nt
        ; case filter isFvar cs of
               [c] -> return c
               _   -> Fail.fail $ show pos ++ ": Internal error (getFreeVarConstr)."
@@ -570,3 +571,8 @@ mvsOfNt aa nt = nmap fst $ filter ((==cnt) . snd) sorts
 ntOfMv :: ASTAnalysis -> MvRoot -> NtRoot
 ntOfMv aa mv =
     head $ nmap (canonRoot aa) $ map snd $ filter ((mv==) . fst) (mvSorts aa)
+
+{- | 'True' if and only if the rule is for a \"phantom\"
+   AST. -}
+isPhantomSyntax :: Syntax -> Bool
+isPhantomSyntax (Syntax _ hom _ _) = ruleHomPhantom hom

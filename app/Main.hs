@@ -47,6 +47,7 @@ options =
     , Option []    ["coq-loadpath"]  (ReqArg CoqLoadPath "DIR") "Coq: directory for LoadPath"
     , Option []    ["coq-ott"]       (ReqArg CoqOtt "LIB")      "Coq: name of library to Require"
     , Option []    ["coq-stdout"]    (NoArg CoqStdout)          "Coq: send output to standard out"
+    , Option []    ["coq-nolcset"]   (NoArg CoqNoLCSet)         "Coq: suppress the Set version of local closure"
     , Option ['?'] ["help"]          (NoArg Help)               "displays usage information"
     ]
 
