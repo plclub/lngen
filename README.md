@@ -1,4 +1,4 @@
-# lngen
+# lngen [![build](https://github.com/plclub/lngen/actions/workflows/build.yml/badge.svg)](https://github.com/plclub/lngen/actions/workflows/build.yml)
 Tool for generating Locally Nameless definitions and proofs in Coq, working together with Ott
 
 Overview
