@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+name: build
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        resolver:
+          - nightly
+          - lts-21
+          - lts-20
+          - lts-19
+          - lts-18
+          - lts-17
+          - lts-16
+          - lts-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@latest
+        with:
+          enable-stack: true
+          stack-no-global: true
+      - run: stack build --resolver ${{ matrix.resolver }}
