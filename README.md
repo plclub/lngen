@@ -27,9 +27,9 @@ Dependencies
 * LNgen's output must be combined with the output of
   [Ott](https://github.com/ott-lang/ott).  
   
-  Obtain Ott from https://github.com/sweirich/ott 
+  Obtain Ott from https://github.com/sweirich/ott/tree/ln-close 
 
-  (Fork of ott.0.31)
+  (Fork of ott.0.32)
 
 * The Coq Proof assistant.
 
