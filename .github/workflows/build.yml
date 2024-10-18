@@ -16,6 +16,7 @@ jobs:
       matrix:
         resolver:
           - nightly
+          - lts-22
           - lts-21
           - lts-20
           - lts-19

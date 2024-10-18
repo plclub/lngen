@@ -24,6 +24,7 @@ import CoqLNOutputThmSwap
 import CoqLNOutputThmSubst
 import MyLibrary ( nmap )
 import Control.Monad (filterM)
+import Control.Monad.State (get)
 
 
 {- ----------------------------------------------------------------------- -}
@@ -37,7 +38,10 @@ coqOfAST :: Maybe String -> Maybe String -> AST -> M String
 coqOfAST ott loadpath ast =
     do { nts'       <- filter (not . null) <$>
                        mapM (local . filterM (notPhantomNtRoot aa)) nts
+       ; (flags, _)   <- get
+       ; let suppress x = if noclose flags then "" else x
        ; bodyStrs   <- mapM (local . processBody aa) nts'
+       ; closeStrs  <- mapM (local . processClose aa) nts
        ; degreeStrs <- mapM (local . processDegree aa) nts'
        ; lcStrs     <- mapM (local . processLc aa) nts'
        ; ntStrs     <- mapM (local . processNt aa) nts'
@@ -76,6 +80,8 @@ coqOfAST ott loadpath ast =
                   \\n" ++
                   coqSep ++ "(** * Induction principles for nonterminals *)\n\n" ++
                   concat ntStrs ++ "\n" ++
+                  suppress (coqSep ++ "(** * Close *)\n\n" ++
+                            concat closeStrs ++ "\n") ++
                   coqSep ++ "(** * Size *)\n\n" ++
                   concat sizeStrs ++ "\n" ++
                   coqSep ++ "(** * Degree *)\n\

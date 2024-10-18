@@ -30,7 +30,8 @@ data ProgFlag
     | CoqOtt String      -- ^ Name of the library to @Require@ in generated output.
     | CoqOutput String   -- ^ Destination for output.
     | CoqStdout          -- ^ Send output to standard out.
-    | CoqNoLCSet         -- ^ Suppress the Set version of Local Closure
+    | CoqNoLCSet         -- ^ Suppress the Set version of Local Closure.
+    | CoqNoClose         -- ^ Suppress generation of close and close_rec.
     | Help               -- ^ Display usage information.
     deriving ( Eq )
 
@@ -145,3 +146,7 @@ reset =
 {- | Check whether to not generate lc set  -}
 nolcset :: [ProgFlag] -> Bool
 nolcset = elem CoqNoLCSet
+
+{- | Check whether to not generate close  -}
+noclose :: [ProgFlag] -> Bool
+noclose = elem CoqNoClose
