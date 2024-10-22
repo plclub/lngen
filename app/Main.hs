@@ -48,6 +48,7 @@ options =
     , Option []    ["coq-ott"]       (ReqArg CoqOtt "LIB")      "Coq: name of library to Require"
     , Option []    ["coq-stdout"]    (NoArg CoqStdout)          "Coq: send output to standard out"
     , Option []    ["coq-nolcset"]   (NoArg CoqNoLCSet)         "Coq: suppress the Set version of local closure"
+    , Option []    ["coq-noclose"]   (NoArg CoqNoClose)         "Coq: suppress generation of close and close_rec"
     , Option ['?'] ["help"]          (NoArg Help)               "displays usage information"
     ]
 

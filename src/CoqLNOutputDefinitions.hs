@@ -6,6 +6,7 @@
 
 module CoqLNOutputDefinitions
     ( processBody
+    , processClose
     , processDegree
     , processLc
     , processNt
@@ -97,6 +98,124 @@ processBody aaa nt1s =
           do { body <- bodyName aa nt1 mv2
              ; return $ "#[export] Hint Unfold " ++ body ++ " : core.\n\n"
              }
+
+
+{- ----------------------------------------------------------------------- -}
+{- * Output for @close@ -}
+
+{- | Generates the text for the @close@ and @close_rec@ functions. -}
+
+processClose :: ASTAnalysis -> [NtRoot] -> M String
+processClose aa nts =
+    do { s1 <- processCloseRecs aa nts
+       ; s2 <- processCloseDefs aa nts
+       ; return $ s1 ++ s2
+       }
+
+{- | Generates the text for the definitions of @close@. -}
+
+processCloseDefs :: ASTAnalysis -> [NtRoot] -> M String
+processCloseDefs aaa nt1s =
+    do { ss <- processNt1Nt2Mv2 aaa nt1s f
+       ; return $ concat $ concat ss
+       }
+    where
+      f aa nt1 _ mv2 =
+          do { fn    <- closeName aa nt1 mv2
+             ; fnrec <- closeRecName aa nt1 mv2
+             ; e     <- newName nt1
+             ; x     <- newName mv2
+             ; return $ printf
+               "Definition %s %s %s := %s 0 %s %s.\n\n"
+               fn x e fnrec x e
+             }
+
+{- | Generates the text for the definitions of @close_rec@. -}
+
+processCloseRecs :: ASTAnalysis -> [NtRoot] -> M String
+processCloseRecs aaa nt1s =
+    do { ss <- processNt1Nt2Mv2 aaa nt1s f
+       ; return $ concat $ map join $ ss
+       }
+    where
+      join strs = printf "Fixpoint %s.\n\n" (sepStrings "\n\nwith " strs)
+
+      f aa nt1 nt2 mv2 =
+        do { close           <- closeRecName aa nt1 mv2
+           ; k               <- newName bvarRoot
+           ; x               <- newName mv2
+           ; xtype           <- mvType aa mv2
+           ; e               <- newName nt1
+           ; etype           <- ntType aa nt1
+           ; (Syntax _ _ _ cs) <- getSyntax aa nt1
+           ; branches        <- mapM (local . branch k x nt1 nt2 mv2) cs
+           ; return $ printf
+             "%s (%s : %s) (%s : %s) (%s : %s) {struct %s} : %s :=\n\
+             \  match %s with\n\
+             \%s\n\
+             \  end"
+             close k bvarType x xtype e etype e etype
+             e
+             (sepStrings "\n" branches)
+            }
+
+      branch k _ nt1 nt2 mv2 c@(SConstr _ _ _ _ (Bound mv'))
+          | canonRoot aaa nt1 == canonRoot aaa nt2 &&
+            canonRoot aaa mv2 == canonRoot aaa mv' =
+                do { n <- newName bvarRoot
+                   ; return $ printf
+                     "    | %s %s => if (%s %s %s) then (%s %s) else (%s %s)"
+                     (toName c) n
+                     bvarLtGeDec n k
+                     (toName c) n
+                     (toName c) ("(S " ++ n ++ ")")
+                   }
+
+      branch k x nt1 nt2 mv2 c@(SConstr _ _ _ _ (Free mv'))
+                | canonRoot aaa nt1 == canonRoot aaa nt2 &&
+                  canonRoot aaa mv2 == canonRoot aaa mv' =
+              do { y   <- newName mv2
+                 ; bsc <- getBoundVarConstr aaa nt1 mv2
+                 ; return $ printf
+                   "    | %s %s => if (%s == %s) then (%s %s) else (%s %s)"
+                   (toName c) y
+                   x y
+                   (toName bsc) k
+                   (toName c) y
+                 }
+      branch k x nt1 nt2 mv2 c@(SConstr _ _ _ ts _) =
+          do { args  <- mapM (newName . toRoot) ts
+             ; calls <- mapM (call k x nt1 nt2 mv2) (zip ts args)
+             ; return $ printf
+               "    | %s%s => %s%s"
+               (toName c)
+               (sepStrings " " ("" : args))
+               (toName c)
+               (sepStrings " " ("" : calls))
+             }
+
+      call _ _ _ _ _ (IndexArg, z) = return z
+      call _ _ _ _ _ (MvArg _,  z) = return z
+
+      call k x _ nt2 mv2 (NtArg nt, z)
+          | canBindIn aaa nt2 nt =
+              do { fn <- closeRecName aaa nt mv2
+                 ; return $ printf "(%s %s %s %s)" fn k x z
+                 }
+          | otherwise =
+              return z
+
+      call k x nt1 nt2 mv2 (BindingArg mv' ntm nt, z)
+          | canonRoot aaa ntm == canonRoot aaa nt2 &&
+            canonRoot aaa mv2 == canonRoot aaa mv' =
+                do { fn <- closeRecName aaa nt mv2
+                   ; return $ printf
+                     "(%s %s %s %s)"
+                     fn ("(S " ++ k ++ ")") x z
+                   }
+          | otherwise =
+              call k x nt1 nt2 mv2 (NtArg nt, z)
+
 
 {- ----------------------------------------------------------------------- -}
 {- * Output for @degree@ -}
