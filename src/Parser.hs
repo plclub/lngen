@@ -18,6 +18,7 @@ import Data.Maybe ( catMaybes )
 import Text.ParserCombinators.Parsec
 import Text.ParserCombinators.Parsec.Language ( emptyDef )
 import qualified Text.ParserCombinators.Parsec.Token as P
+import Data.List.NonEmpty as NE
 
 import AST
 import MyLibrary ( getResult, manyTill1 )
@@ -58,6 +59,13 @@ reserved = P.reserved ottTokenParser
 text :: String -> CharParser st String
 text str = lexeme $ try $ string str
 
+
+{- | sepBy1, but produce a nonempty list of results -}
+ne_sepBy1 :: Parser a1 -> Parser a2 -> Parser (NonEmpty a1)
+ne_sepBy1 p sep        = do{ x <- p
+                        ; xs <- many (sep >> p)
+                        ; return (x :| xs)
+                        }
 
 {- ----------------------------------------------------------------------- -}
 {- * Parsing names -}
@@ -132,17 +140,20 @@ ignoreHoms = do { _ <- many ignoreHom ; return () }
 {- | A metavariable declaration consists of a non-empty list of
    metavariable roots and a possibly empty list of homomorphisms -}
 
+
+
+
 metavarDecl :: Parser MetavarDecl
 metavarDecl =
     do { pos <- getPosition
        ; reserved "metavar" <?> "metavariable declaration \"metavar ...\""
-       ; names <- nameHom `sepBy1` (text "," <?> "\",\" and another name")
+       ; names <- nameHom `ne_sepBy1` (text "," <?> "\",\" and another name")
        ; _ <- text "::="
        ; homs <- many metavarHom
-       ; return (MetavarDecl pos names (catMaybes homs ++ defaults))
+       ; return (MetavarDecl pos names (NE.prependList (catMaybes homs) defaults))
        }
     where
-      defaults = [ CoqMvImplHom "atom" ]
+      defaults = CoqMvImplHom "atom" :| []
 
       metavarHom =
           do { _ <- text "{{" <?> "homomorphism \"{{ ... }}\""
@@ -166,7 +177,7 @@ metavarDecl =
 rule :: Parser PreRule
 rule =
     do { pos <- getPosition
-       ; es <- nameHom `sepBy1` (text "," <?> "\",\" and another name")
+       ; es <- nameHom `ne_sepBy1` (text "," <?> "\",\" and another name")
        ; _ <- text "::"
        ; n <- ruleName
        ; _ <- text "::="

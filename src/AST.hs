@@ -14,8 +14,10 @@ module AST where
 
 import Data.Typeable ( Typeable )
 import Data.Data     ( Data(..) )
-import Data.Maybe    ( mapMaybe )
+import Data.Foldable ( msum )
+import Data.Maybe    ( fromJust )
 import Text.ParserCombinators.Parsec ( SourcePos )
+import Data.List.NonEmpty as NE
 
 import MyLibrary ( sepStrings )
 
@@ -135,7 +137,7 @@ instance Monoid RuleHom where
    type. -}
 
 data MetavarDecl
-    = MetavarDecl SourcePos [MvRoot] [MetavarHom]
+    = MetavarDecl SourcePos (NE.NonEmpty MvRoot) (NE.NonEmpty MetavarHom)
     deriving ( Show )
 
 
@@ -153,7 +155,7 @@ data MetavarDecl
    type for nonterminals. -}
 
 data GenRule a b c
-    = Rule SourcePos RuleHom [NtRoot] Name [GenProduction a b c]
+    = Rule SourcePos RuleHom (NE.NonEmpty NtRoot) Name [GenProduction a b c]
     deriving ( Data, Show, Typeable )
 
 {- | A production consists of a list of elements, a list of flags, a
@@ -165,7 +167,7 @@ data GenProduction a b c
     deriving ( Data, Typeable )
 
 instance Show a => Show (GenProduction a b c) where
-    show (Production _ es _ _ _) = sepStrings " " (map show es)
+    show (Production _ es _ _ _) = sepStrings " " (fmap show es)
 
 {- | A flag indicates that production is not a \"real\" constructor
    for the corresponding nonterminal. -}
@@ -266,10 +268,10 @@ class Nameable a where
     toShortName = toName
 
 instance Nameable MetavarDecl where
-    toName (MetavarDecl _ mvrs _) = head mvrs
+    toName (MetavarDecl _ mvrs _) = NE.head mvrs
 
 instance Nameable (GenRule a b c) where
-    toName (Rule _ _ ntrs _ _) = head ntrs
+    toName (Rule _ _ ntrs _ _) = NE.head ntrs
 
 {- | A source entity is any type for which we can extract position
    information. -}
@@ -324,8 +326,10 @@ instance Symbol Nonterminal where
 
 {- | Returns the Coq implementation type for the given metavariable. -}
 
+
+
 coqMvImplType :: MetavarDecl -> String
-coqMvImplType (MetavarDecl _ _ homs) = head $ mapMaybe f homs
+coqMvImplType (MetavarDecl _ _ homs) = fromJust (msum $ fmap f homs)
     where
       f (CoqMvImplHom s) = Just s
       f _                = Nothing

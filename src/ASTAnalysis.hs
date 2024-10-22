@@ -38,6 +38,7 @@ module ASTAnalysis (
 
 import Data.Generics       ( Data, Typeable, everything, mkQ )
 import Data.Graph          ( graphFromEdges, reachable )
+import qualified Data.List.NonEmpty as NE
 import Data.List           ( nub )
 import Data.Map            ( Map )
 import qualified Data.Map as Map
@@ -307,7 +308,7 @@ analyzeAST ast@(AST _ rs substitutions freevars) =
         phrs    = nmap crt $ map fst $ filter (isPhantomMvDecl . snd) decls
 
         smap    = Map.fromList (concatMap zipR rs)
-        zipR    = \(r@(Rule _ _ ns _ _)) -> zip ns (repeat (mungeR r))
+        zipR    = \(r@(Rule _ _ ns _ _)) -> zip (NE.toList ns) (repeat (mungeR r))
         mungeR  = getResult . fixSyntax mvm ntm mvs . toSyntax
 
         aa = ASTAnalysis
@@ -360,7 +361,7 @@ genFvMap mvm ntm = foldr add Map.empty
           let (MetavarDecl _ mvs _) = fromJust $ Map.lookup mv mvm
               (Rule _ _ nts _ _)      = fromJust $ Map.lookup nt ntm
           in
-            [ (nt', mv') | mv' <- mvs, nt' <- nts ]
+            [ (nt', mv') | mv' <- NE.toList mvs, nt' <- NE.toList nts ]
 
 {- | Generates a 'SubstMap' that can be queried without putting roots
    into canonical form first. -}
@@ -375,7 +376,7 @@ genSubstMap mvm ntm = foldr add Map.empty
           let (MetavarDecl _ mvs _) = fromJust $ Map.lookup mv mvm
               (Rule _ _ nts _ _)      = fromJust $ Map.lookup nt ntm
           in
-            [ (nt', mv') | mv' <- mvs, nt' <- nts ]
+            [ (nt', mv') | mv' <- NE.toList mvs, nt' <- NE.toList nts ]
 
 {- | Returns the canonical root for the given root. -}
 
@@ -401,9 +402,9 @@ genNtGraph ntm = nmap buildEdge (Map.keys ntm)
       -- Stage 1: Go through every rule and production and generate
       -- "singleton" edges.
 
-      addR k (Rule _ _ _ _ ps)                 = concatMap (addP k) ps
+      addR k (Rule _ _ _ _ ps)               = concatMap (addP k) ps
       addP k (Production _ es _ _ _)         = concat $ mapMaybe (addE k) es
-      addE k (NtElement (Nonterminal _ n _)) = Just $ zip (find n) (repeat k)
+      addE k (NtElement (Nonterminal _ n _)) = Just $ zip (NE.toList (find n)) (repeat k)
       addE _ _                               = Nothing
 
       -- Stage 0: Build a table for looking up all of the nonterminal

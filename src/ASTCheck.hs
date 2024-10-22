@@ -9,6 +9,7 @@ module ASTCheck ( astOfPreAST ) where
 import Control.Monad       ( foldM, when )
 import Control.Monad.Except ( MonadError )
 import Data.List           ( nub, intersect )
+import qualified Data.List.NonEmpty as NE
 -- import Monad               ( when )
 
 import AST
@@ -22,13 +23,13 @@ import ComputationMonad    ( ProgramError(..), abort )
    declarations, raising an error instead if a root is defined
    multiple times. -}
 
-getMvRoots :: (MonadError ProgramError m) => [MetavarDecl] -> m [MvRoot]
+getMvRoots :: (MonadError ProgramError m, Foldable f) => f MetavarDecl -> m [MvRoot]
 getMvRoots mvds = foldM f [] mvds
     where
       f acc (MetavarDecl pos rs _) =
-          if not $ null $ intersect rs acc
-          then abort $ ASTDupRoots pos (intersect rs acc)
-          else return $ nub rs ++ acc
+          if not $ null $ intersect (NE.toList rs) acc
+          then abort $ ASTDupRoots pos (intersect (NE.toList rs) acc)
+          else return $ nub (NE.toList rs) ++ acc
 
 {- Returns the set of nonterminal roots defined by the given list of
    declarations, raising an error instead if a root is defined
@@ -36,13 +37,13 @@ getMvRoots mvds = foldM f [] mvds
    check whether a root is defined both as a nonterminal and as a
    metavariable (an error). -}
 
-getNtRoots :: (MonadError ProgramError m) => [MvRoot] -> [PreRule] -> m [MvRoot]
+getNtRoots :: (MonadError ProgramError m, Foldable f) => [MvRoot] -> f PreRule -> m [MvRoot]
 getNtRoots mvs rls = foldM f [] rls
     where
       f acc (Rule pos _ rs _ _) =
-          if not $ null $ intersect rs (acc ++ mvs)
-          then abort $ ASTDupRoots pos (intersect rs (acc ++ mvs))
-          else return $ nub rs ++ acc
+          if not $ null $ intersect (NE.toList rs) (acc ++ mvs)
+          then abort $ ASTDupRoots pos (intersect (NE.toList rs) (acc ++ mvs))
+          else return $ nub (NE.toList rs) ++ acc
 
 {- | Disambiguates the symbols in the given rule, in the process
    checking that the rule's productions are well-formed.  Binding

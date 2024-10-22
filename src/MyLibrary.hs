@@ -73,5 +73,5 @@ sepStrings = intercalate
    by choosing the string that appears first in the input.  The input
    list must be non-empty. -}
 
-shortestStr :: [String] -> String
+shortestStr :: Foldable f => f String -> String
 shortestStr = minimumBy (\x y -> compare (length x) (length y))
